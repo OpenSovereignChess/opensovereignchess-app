@@ -1,7 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:opensovereignchess_app/src/log.dart';
 
 void main() {
-  runApp(const MyApp());
+  // logging setup
+  setupLogger();
+
+  runApp(
+    ProviderScope(
+      observers: [
+        ProviderLogger(),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
