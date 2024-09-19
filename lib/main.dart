@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:opensovereignchess_app/src/app.dart';
 import 'package:opensovereignchess_app/src/log.dart';
 
 void main() {
-  // logging setup
   setupLogger();
 
   runApp(
@@ -11,7 +11,7 @@ void main() {
       observers: [
         ProviderLogger(),
       ],
-      child: const MyApp(),
+      child: const Application(),
     ),
   );
 }
