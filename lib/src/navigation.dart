@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:opensovereignchess_app/src/chessboard/chessboard.dart';
 
 enum BottomTab {
   home,
@@ -6,7 +7,7 @@ enum BottomTab {
   settings;
 
   String get label {
-    return switch(this) {
+    return switch (this) {
       BottomTab.home => 'Home',
       BottomTab.tools => 'Tools',
       BottomTab.settings => 'Settings',
@@ -14,7 +15,7 @@ enum BottomTab {
   }
 
   IconData get icon {
-    return switch(this) {
+    return switch (this) {
       BottomTab.home => Icons.home_outlined,
       BottomTab.tools => Icons.handyman_outlined,
       BottomTab.settings => Icons.settings_outlined,
@@ -28,9 +29,7 @@ class BottomNavScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('HELLO WORLD'),
-      ),
+      body: const _TestView(),
       bottomNavigationBar: NavigationBar(
         destinations: [
           for (final tab in BottomTab.values)
@@ -39,6 +38,19 @@ class BottomNavScaffold extends StatelessWidget {
               label: tab.label,
             )
         ],
+      ),
+    );
+  }
+}
+
+class _TestView extends StatelessWidget {
+  const _TestView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Chessboard(
+        size: MediaQuery.sizeOf(context).width,
       ),
     );
   }
