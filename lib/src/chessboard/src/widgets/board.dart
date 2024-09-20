@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:opensovereignchess_app/src/dartsovereignchess/dartsovereignchess.dart';
+
 import '../board_settings.dart';
+import './positioned_square.dart';
 
 /// A Sovereign Chess board widget.
 ///
@@ -29,6 +32,9 @@ class _BoardState extends State<Chessboard> {
   /// Pieces on the board.
   //Pieces pieces = {};
 
+  /// Currently selected square.
+  Square? selected = Square.p16;
+
   @override
   Widget build(BuildContext context) {
     final background = widget.settings.colorScheme.background;
@@ -39,10 +45,16 @@ class _BoardState extends State<Chessboard> {
         dimension: widget.size,
         child: background,
       ),
+      if (selected != null)
+        PositionedSquare(
+          key: ValueKey('${selected!.name}-selected'),
+          size: widget.size,
+          square: selected!,
+          child: Text('A'),
+        ),
     ];
 
-    final List<Widget> objects = [
-    ];
+    final List<Widget> objects = [];
 
     return SizedBox.square(
       dimension: widget.size,
