@@ -11,6 +11,7 @@ class ChessboardColorScheme {
     required this.lightSquare,
     required this.darkSquare,
     required this.background,
+    required this.selected,
   });
 
   /// Light square color of the board
@@ -22,6 +23,9 @@ class ChessboardColorScheme {
   /// Board background that defines light and dark square colors
   final ChessboardBackground background;
 
+  /// Color of highlighted selected square
+  final Color selected;
+
   static const original = ChessboardColorScheme(
     lightSquare: Color(0xfff0d9b6),
     darkSquare: Color(0xffb58863),
@@ -31,5 +35,6 @@ class ChessboardColorScheme {
       // CBB393 203 179 147
       darkSquare: Color.fromRGBO(203, 179, 147, 1.0),
     ),
+    selected: Color(0x6014551e),
   );
 }

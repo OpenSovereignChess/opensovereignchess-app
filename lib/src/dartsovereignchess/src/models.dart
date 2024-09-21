@@ -157,7 +157,7 @@ extension type const Square._(int value) implements int {
   }
 
   /// Gets a [Square] from its file and rank.
-  factory Square.fromCoords(File file, Rank rank) => Square(file | (rank << 3));
+  factory Square.fromCoords(File file, Rank rank) => Square(file | (rank << 4));
 
   static const a1 = Square(0);
   static const b1 = Square(1);
