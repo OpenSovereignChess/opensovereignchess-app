@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
 import '../board_settings.dart';
@@ -19,6 +20,7 @@ class Chessboard extends StatefulWidget with ChessboardGeometry {
     super.key,
     required this.size,
     this.settings = const ChessboardSettings(),
+    required this.fen,
   });
 
   /// Size of the board in logical pixels.
@@ -27,13 +29,16 @@ class Chessboard extends StatefulWidget with ChessboardGeometry {
   /// Settings that control the theme and behavior of the board.
   final ChessboardSettings settings;
 
+  /// FEN string describing the position of the board.
+  final String fen;
+
   @override
   State<Chessboard> createState() => _BoardState();
 }
 
 class _BoardState extends State<Chessboard> {
   /// Pieces on the board.
-  //Pieces pieces = {};
+  Pieces pieces = {};
 
   /// Currently selected square.
   Square? selected;
@@ -57,7 +62,15 @@ class _BoardState extends State<Chessboard> {
         ),
     ];
 
-    final List<Widget> objects = [];
+    final List<Widget> objects = [
+      for (final entry in pieces.entries)
+        PositionedSquare(
+          key: ValueKey('${entry.key.name}-${entry.value}'),
+          size: widget.size,
+          square: entry.key,
+          child: Text('${entry.value.role.letter}'),
+        ),
+    ];
 
     return Listener(
       onPointerDown: _onPointerDown,
@@ -72,6 +85,12 @@ class _BoardState extends State<Chessboard> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pieces = readFen(widget.fen);
   }
 
   void _onPointerDown(PointerDownEvent details) {

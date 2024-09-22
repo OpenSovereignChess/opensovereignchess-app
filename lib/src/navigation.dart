@@ -51,6 +51,7 @@ class _TestView extends StatelessWidget {
     return Center(
       child: Chessboard(
         size: MediaQuery.sizeOf(context).width,
+        fen: '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15',
       ),
     );
   }

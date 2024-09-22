@@ -1,3 +1,76 @@
+import 'package:flutter/widgets.dart';
+
+/// Piece color, such as white, black, etc.
+///
+/// We cannot conflate the piece colors with the normal chess sides, i.e.
+/// black and white, since the players can switch colors during the game.
+enum PieceColor {
+  white,
+  ash,
+  slate,
+  black,
+  pink,
+  red,
+  orange,
+  yellow,
+  green,
+  cyan,
+  navy,
+  violet;
+
+  /// Gets the PieceColor from a character.
+  static PieceColor? fromChar(String ch) {
+    return switch (ch.toLowerCase()) {
+      'w' => PieceColor.white,
+      'a' => PieceColor.ash,
+      's' => PieceColor.slate,
+      'b' => PieceColor.black,
+      'p' => PieceColor.pink,
+      'r' => PieceColor.red,
+      'o' => PieceColor.orange,
+      'y' => PieceColor.yellow,
+      'g' => PieceColor.green,
+      'c' => PieceColor.cyan,
+      'n' => PieceColor.navy,
+      'v' => PieceColor.violet,
+      _ => null,
+    };
+  }
+}
+
+/// Piece role, such as pawn, knight, etc.
+enum Role {
+  bishop,
+  king,
+  knight,
+  pawn,
+  queen,
+  rook;
+
+  /// Gets the role from a character.
+  static Role? fromChar(String ch) {
+    return switch (ch.toLowerCase()) {
+      'b' => Role.bishop,
+      'k' => Role.king,
+      'n' => Role.knight,
+      'p' => Role.pawn,
+      'q' => Role.queen,
+      'r' => Role.rook,
+      _ => null,
+    };
+  }
+
+  /// Gets the role letter in lowercase.
+  String get letter => switch (this) {
+        Role.bishop => 'b',
+        Role.king => 'k',
+        Role.knight => 'n',
+        Role.pawn => 'p',
+        Role.queen => 'q',
+        Role.rook => 'r',
+      };
+}
+
 /// A file of the chessboard.
 extension type const File._(int value) implements int {
   /// Gets the chessboard [File] from a file index between 0 and 16.
@@ -444,4 +517,37 @@ extension type const Square._(int value) implements int {
 
   /// Unique identifier of the square, using pure algebraic notation.
   String get name => file.name + rank.name;
+}
+
+/// Represents a piece kind, which is a tuple of color and role.
+typedef PieceKind = (PieceColor color, Role role);
+
+/// Describes a chess piece by its color, role and promotion status.
+@immutable
+class Piece {
+  const Piece({
+    required this.color,
+    required this.role,
+    this.promoted = false,
+  });
+
+  final PieceColor color;
+  final Role role;
+  final bool promoted;
+
+  /// Gets the piece kind, which is a tuple of color and role.
+  PieceKind get kind => (color, role);
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is Piece &&
+            other.runtimeType == runtimeType &&
+            color == other.color &&
+            role == other.role &&
+            promoted == other.promoted;
+  }
+
+  @override
+  int get hashCode => Object.hash(color, role, promoted);
 }
