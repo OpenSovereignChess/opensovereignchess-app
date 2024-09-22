@@ -1,16 +1,20 @@
-# opensovereignchess_app
+# Sovereign Chess
 
-A new Flutter project.
+Flutter app for playing Sovereign Chess.
 
-## Getting Started
+## Development
 
-This project is a starting point for a Flutter application.
+To run site locally:
 
-A few resources to get you started if this is your first Flutter project:
+```
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Deployment
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+We use Firebase Hosting for the web version of the app.  To deploy:
+
+```
+flutter build web
+firebase deploy
+```
