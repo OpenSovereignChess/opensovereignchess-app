@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:opensovereignchess_app/src/dartsovereignchess/dartsovereignchess.dart';
+import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
 import '../board_settings.dart';
 import './geometry.dart';

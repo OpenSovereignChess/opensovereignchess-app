@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:opensovereignchess_app/src/chessboard/chessboard.dart';
+import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 
 enum BottomTab {
   home,
