@@ -27,13 +27,11 @@ class ChessboardColorScheme {
   final Color selected;
 
   static const original = ChessboardColorScheme(
-    lightSquare: Color(0xfff0d9b6),
-    darkSquare: Color(0xffb58863),
+    lightSquare: Color(0xAAE5E0DF),
+    darkSquare: Color(0xAACAC5C4),
     background: ChessboardBackground(
-      // DECFBA 222 207 186
-      lightSquare: Color.fromRGBO(222, 207, 186, 1.0),
-      // CBB393 203 179 147
-      darkSquare: Color.fromRGBO(203, 179, 147, 1.0),
+      lightSquare: Color(0xAAE5E0DF), // IBM color palette warm gray
+      darkSquare: Color(0xAACAC5C4), // IBM color palette warm gray
     ),
     selected: Color(0x6014551e),
   );

@@ -11,8 +11,12 @@ class ChessboardSettings {
   const ChessboardSettings({
     // theme
     this.colorScheme = ChessboardColorScheme.original,
+    //this.pieceAssets = PieceSet.cburnettAssets,
   });
 
   /// Theme of the board
   final ChessboardColorScheme colorScheme;
+
+  /// Piece set
+  //final PieceAssets pieceAssets;
 }

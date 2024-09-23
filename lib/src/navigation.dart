@@ -51,7 +51,8 @@ class _TestView extends StatelessWidget {
     return Center(
       child: Chessboard(
         size: MediaQuery.sizeOf(context).width,
-        fen: '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15',
+        //fen: '16/16/16/16/16/16/2wpapspbppprpopypgpcpnpvp2/2wpapspbppprpopypgpcpnpvp2/16/2bpnpop11/16/16/16/16/16/16',
+        fen: 'aqabvrvnbrbnbbbqbkbbbnbrynyrsbsq/aranvpvpbpbpbpbpbpbpbpbpypypsnsr/nbnp12opob/nqnp12opoq/crcp12rprr/cncp12rprn/gbgp12pppb/gqgp12pppq/yqyp12vpvq/ybyp12vpvb/onop12npnn/orop12npnr/rqrp12cpcq/rbrp12cpcb/srsnppppwpwpwpwpwpwpwpwpgpgpanar/sqsbprpnwrwnwbwqwkwbwnwrgngrabaq',
       ),
     );
   }
