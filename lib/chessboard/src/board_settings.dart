@@ -1,6 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 import 'board_color_scheme.dart';
+import 'models.dart';
+import 'piece_set.dart';
 
 /// Board settings that controls visual aspects and behavior of the board.
 ///
@@ -11,12 +13,12 @@ class ChessboardSettings {
   const ChessboardSettings({
     // theme
     this.colorScheme = ChessboardColorScheme.original,
-    //this.pieceAssets = PieceSet.cburnettAssets,
+    this.pieceAssets = PieceSet.cburnettAssets,
   });
 
   /// Theme of the board
   final ChessboardColorScheme colorScheme;
 
   /// Piece set
-  //final PieceAssets pieceAssets;
+  final PieceAssets pieceAssets;
 }

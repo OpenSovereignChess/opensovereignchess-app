@@ -4,9 +4,13 @@ import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
 import '../board_settings.dart';
-import './geometry.dart';
-import './highlight.dart';
-import './positioned_square.dart';
+import 'geometry.dart';
+import 'highlight.dart';
+import 'piece.dart';
+import 'positioned_square.dart';
+
+/// Number of logical pixels that have to be dragged before a drag starts.
+const double _kDragDistanceThreshold = 3.0;
 
 /// A Sovereign Chess board widget.
 ///
@@ -77,7 +81,12 @@ class _BoardState extends State<Chessboard> {
           key: ValueKey('${entry.key.name}-${entry.value}'),
           size: widget.size,
           square: entry.key,
-          child: _TestPiece(entry.value),
+          //child: _TestPiece(entry.value),
+          child: PieceWidget(
+            piece: entry.value,
+            size: widget.squareSize,
+            pieceAssets: widget.settings.pieceAssets,
+          ),
         ),
     ];
 

@@ -30,8 +30,12 @@ class ChessboardColorScheme {
     lightSquare: Color(0xAAE5E0DF),
     darkSquare: Color(0xAACAC5C4),
     background: ChessboardBackground(
-      lightSquare: Color(0xAAE5E0DF), // IBM color palette warm gray
-      darkSquare: Color(0xAACAC5C4), // IBM color palette warm gray
+      // IBM color palette warm gray
+      lightSquare: Color(0xAAE5E0DF),
+      darkSquare: Color(0xAACAC5C4),
+      // Flutter Material Colors
+      //lightSquare: Color(0xFFFFF8E1), // amber 50
+      //darkSquare: Color(0xFFFFECB3), // amber 100
     ),
     selected: Color(0x6014551e),
   );

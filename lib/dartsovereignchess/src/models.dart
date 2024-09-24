@@ -551,3 +551,9 @@ class Piece {
   @override
   int get hashCode => Object.hash(color, role, promoted);
 }
+
+/// The white pawn piece kind.
+const PieceKind kWhitePawnKind = (PieceColor.white, Role.pawn);
+
+/// The black rook piece kind.
+const PieceKind kBlackRookKind = (PieceColor.black, Role.rook);
