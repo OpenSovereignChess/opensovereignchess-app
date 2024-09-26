@@ -14,6 +14,8 @@ class ChessboardSettings {
     // theme
     this.colorScheme = ChessboardColorScheme.original,
     this.pieceAssets = PieceSet.cburnettAssets,
+    this.dragFeedbackScale = 2.0,
+    this.dragFeedbackOffset = const Offset(0.0, -1.0),
   });
 
   /// Theme of the board
@@ -21,4 +23,10 @@ class ChessboardSettings {
 
   /// Piece set
   final PieceAssets pieceAssets;
+
+  /// Scale up factor for the piece currently under drag
+  final double dragFeedbackScale;
+
+  /// Offset for the piece currently under drag
+  final Offset dragFeedbackOffset;
 }

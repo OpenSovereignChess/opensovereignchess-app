@@ -25,7 +25,7 @@ Pieces readFen(String fen) {
       default:
         final code = c.codeUnitAt(0);
         // Check if code is a digit, and not a letter
-        if (code < 57) {
+        if (code < 58) {
           skippedToken += c;
         } else {
           pieceToken += c;
@@ -54,4 +54,36 @@ Pieces readFen(String fen) {
   }
 
   return pieces;
+}
+
+/// Converts the pieces to the board part of a FEN string.
+String writeFen(Pieces pieces) {
+  final buffer = StringBuffer();
+  int empty = 0;
+  int lastFile = File.values.length - 1;
+  for (int rank = Rank.values.length - 1; rank >= 0; rank--) {
+    for (int file = 0; file < File.values.length; file++) {
+      final piece = pieces[Square.fromCoords(File(file), Rank(rank))];
+      if (piece == null) {
+        empty++;
+      } else {
+        if (empty > 0) {
+          buffer.write(empty.toString());
+          empty = 0;
+        }
+        buffer.write(piece.fenStr);
+      }
+
+      if (file == lastFile) {
+        if (empty > 0) {
+          buffer.write(empty.toString());
+          empty = 0;
+        }
+        if (rank != 0) {
+          buffer.write('/');
+        }
+      }
+    }
+  }
+  return buffer.toString();
 }

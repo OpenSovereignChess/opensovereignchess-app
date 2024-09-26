@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
+import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
 enum BottomTab {
   home,
@@ -43,8 +44,23 @@ class BottomNavScaffold extends StatelessWidget {
   }
 }
 
-class _TestView extends StatelessWidget {
+class _TestView extends StatefulWidget {
   const _TestView({super.key});
+
+  @override
+  State<_TestView> createState() => _TestViewState();
+}
+
+class _TestViewState extends State<_TestView> {
+  String _fen =
+      'aqabvrvnbrbnbbbqbkbbbnbrynyrsbsq/aranvpvpbpbpbpbpbpbpbpbpypypsnsr/nbnp12opob/nqnp12opoq/crcp12rprr/cncp12rprn/gbgp12pppb/gqgp12pppq/yqyp12vpvq/ybyp12vpvb/onop12npnn/orop12npnr/rqrp12cpcq/rbrp12cpcb/srsnppppwpwpwpwpwpwpwpwpgpgpanar/sqsbprpnwrwnwbwqwkwbwnwrgngrabaq';
+  Pieces _pieces = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _pieces = readFen(_fen);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +68,20 @@ class _TestView extends StatelessWidget {
       child: Chessboard(
         size: MediaQuery.sizeOf(context).width,
         //fen: '16/16/16/16/16/16/2wpapspbppprpopypgpcpnpvp2/2wpapspbppprpopypgpcpnpvp2/16/2bpnpop11/16/16/16/16/16/16',
-        fen:
-            'aqabvrvnbrbnbbbqbkbbbnbrynyrsbsq/aranvpvpbpbpbpbpbpbpbpbpypypsnsr/nbnp12opob/nqnp12opoq/crcp12rprr/cncp12rprn/gbgp12pppb/gqgp12pppq/yqyp12vpvq/ybyp12vpvb/onop12npnn/orop12npnr/rqrp12cpcq/rbrp12cpcb/srsnppppwpwpwpwpwpwpwpwpgpgpanar/sqsbprpnwrwnwbwqwkwbwnwrgngrabaq',
+        fen: _fen,
+        game: GameData(
+          onMove: _onMove,
+        ),
       ),
     );
+  }
+
+  void _onMove(NormalMove move, {bool? isDrop}) {
+    setState(() {
+      final piece = _pieces[move.from]!;
+      _pieces.remove(move.from);
+      _pieces[move.to] = piece;
+      _fen = writeFen(_pieces);
+    });
   }
 }

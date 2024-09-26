@@ -36,6 +36,22 @@ enum PieceColor {
       _ => null,
     };
   }
+
+  /// Gets the piece color letter in lowercase.
+  String get letter => switch (this) {
+        PieceColor.white => 'w',
+        PieceColor.ash => 'a',
+        PieceColor.slate => 's',
+        PieceColor.black => 'b',
+        PieceColor.pink => 'p',
+        PieceColor.red => 'r',
+        PieceColor.orange => 'o',
+        PieceColor.yellow => 'y',
+        PieceColor.green => 'g',
+        PieceColor.cyan => 'c',
+        PieceColor.navy => 'n',
+        PieceColor.violet => 'v',
+      };
 }
 
 /// Piece role, such as pawn, knight, etc.
@@ -538,6 +554,15 @@ class Piece {
   /// Gets the piece kind, which is a tuple of color and role.
   PieceKind get kind => (color, role);
 
+  /// Gets the FEN string of this piece.
+  String get fenStr {
+    String s = color.letter + role.letter;
+    if (promoted) {
+      s += '~';
+    }
+    return s;
+  }
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
@@ -550,6 +575,35 @@ class Piece {
 
   @override
   int get hashCode => Object.hash(color, role, promoted);
+}
+
+/// Base class for a chess move.
+///
+/// A move can be either a [NormalMove] or a [DropMove].
+@immutable
+sealed class Move {
+  const Move({
+    required this.to,
+  });
+
+  /// The target square of this move.
+  final Square to;
+}
+
+/// Represents a chess move, which is possibly a promotion.
+@immutable
+class NormalMove extends Move {
+  const NormalMove({
+    required this.from,
+    required super.to,
+    this.promotion,
+  });
+
+  /// The origin square of this move.
+  final Square from;
+
+  /// The role of the promoted piece, if any.
+  final Role? promotion;
 }
 
 /// The white pawn piece kind.
