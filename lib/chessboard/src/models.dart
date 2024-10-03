@@ -1,5 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
 /// Game data for an interactive chessboard.
@@ -21,7 +22,7 @@ class GameData {
 /// Describes a set of piece assets.
 ///
 /// The [PieceAssets] must be complete with all the pieces for both sides.
-typedef PieceAssets = IMap<PieceKind, AssetImage>;
+typedef PieceAssets = IMap<PieceKind, SvgPicture>;
 
 /// Representation of the piece positions on a board.
 typedef Pieces = Map<Square, Piece>;

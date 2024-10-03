@@ -13,7 +13,7 @@ class ChessboardSettings {
   const ChessboardSettings({
     // theme
     this.colorScheme = ChessboardColorScheme.original,
-    this.pieceAssets = PieceSet.cburnettAssets,
+    this.pieceAssets = PieceSet.wikimediaAssets,
     this.dragFeedbackScale = 2.0,
     this.dragFeedbackOffset = const Offset(0.0, -1.0),
   });

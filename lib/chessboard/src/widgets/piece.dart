@@ -24,24 +24,11 @@ class PieceWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final asset = pieceAssets[piece.kind]!;
-    final asset = pieceAssets[kBlackRookKind]!;
-    final deviceRatio = MediaQuery.devicePixelRatioOf(context);
-    // the ration is defined by the resolution aware image assets defined in
-    // assets/piece_sets/
-    // that's why 4 is the maximum ratio
-    final ratio = math.min(deviceRatio.ceilToDouble(), 4.0);
-    final cacheSize = (size * ratio).ceil();
-    final image = Image.asset(
-      asset.assetName,
-      bundle: asset.bundle,
-      package: asset.package,
+    final asset = pieceAssets[piece.kind]!;
+    return SizedBox(
       width: size,
       height: size,
-      cacheWidth: cacheSize,
-      cacheHeight: cacheSize,
+      child: asset,
     );
-
-    return image;
   }
 }

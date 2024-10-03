@@ -114,7 +114,6 @@ class _BoardState extends State<Chessboard> {
           key: ValueKey('${entry.key.name}-${entry.value}'),
           size: widget.size,
           square: entry.key,
-          //child: _TestPiece(entry.value),
           child: PieceWidget(
             piece: entry.value,
             size: widget.squareSize,
@@ -388,38 +387,6 @@ class _BoardState extends State<Chessboard> {
     }
     return false;
   }
-}
-
-// Temp definition of piece colors while we test them out.
-// Tol's color palette - discrete rainbow
-const _renderColorsForPieces = {
-  PieceColor.white: const Color(0xFFFFFFFF),
-  PieceColor.ash: const Color(0xFFCAACCB),
-  PieceColor.slate: const Color(0xFF777777),
-  PieceColor.black: const Color(0xFF000000),
-  // NOTE: Used pink from IBM color palette as there was no pink in Tol's.
-  PieceColor.pink: const Color(0xFFFFAFD2),
-  PieceColor.red: const Color(0xFFDC050C),
-  PieceColor.orange: const Color(0xFFF4A736),
-  PieceColor.yellow: const Color(0xFFF7F056),
-  PieceColor.green: const Color(0xFF4EB265),
-  PieceColor.cyan: const Color(0xFF7BAFDE),
-  PieceColor.navy: const Color(0xFF1965B0),
-  PieceColor.violet: const Color(0xFF882E72),
-};
-
-Widget _TestPiece(Piece piece) {
-  return Center(
-    child: Container(
-      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-      decoration: BoxDecoration(
-        color: _renderColorsForPieces[piece.color],
-        border: Border.all(width: 1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text('${piece.role.letter}'),
-    ),
-  );
 }
 
 const _coloredSquares = {
