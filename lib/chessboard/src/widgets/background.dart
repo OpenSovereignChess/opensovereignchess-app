@@ -8,12 +8,14 @@ class ChessboardBackground extends StatelessWidget {
     this.sideLengthInSquares = 16,
     required this.lightSquare,
     required this.darkSquare,
+    required this.grid,
   });
 
   final bool coordinates;
   final int sideLengthInSquares;
   final Color lightSquare;
   final Color darkSquare;
+  final Color grid;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,13 @@ class ChessboardBackground extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
-                      color: (rank + file).isEven ? lightSquare : darkSquare,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 0.25,
+                          color: grid,
+                        ),
+                        color: (rank + file).isEven ? lightSquare : darkSquare,
+                      ),
                     ),
                   ),
                 ),

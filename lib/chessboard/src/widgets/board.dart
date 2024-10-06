@@ -99,6 +99,74 @@ class _BoardState extends State<Chessboard> {
             color: entry.value,
           ),
         ),
+      // Pawn promotion box
+      PositionedSquare(
+        key: ValueKey('promotion-box'),
+        size: widget.size,
+        square: Square.g10,
+        childSize: 4,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color(0xFF000000),
+              width: 2.0,
+            ),
+          ),
+        ),
+      ),
+      // Middle lines of the board to help with pawn movement
+      PositionedSquare(
+        key: ValueKey('pawn-directional-lines-top'),
+        size: widget.size,
+        square: Square.i16,
+        childSize: 6,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: MiddleBorder(),
+            ),
+          ),
+        ),
+      ),
+      PositionedSquare(
+        key: ValueKey('pawn-directional-lines-bottom'),
+        size: widget.size,
+        square: Square.i6,
+        childSize: 6,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              left: MiddleBorder(),
+            ),
+          ),
+        ),
+      ),
+      PositionedSquare(
+        key: ValueKey('pawn-directional-lines-left'),
+        size: widget.size,
+        square: Square.a8,
+        childSize: 6,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: MiddleBorder(),
+            ),
+          ),
+        ),
+      ),
+      PositionedSquare(
+        key: ValueKey('pawn-directional-lines-right'),
+        size: widget.size,
+        square: Square.k8,
+        childSize: 6,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: MiddleBorder(),
+            ),
+          ),
+        ),
+      ),
       if (selected != null)
         PositionedSquare(
           key: ValueKey('${selected!.name}-selected'),
@@ -415,6 +483,13 @@ const _coloredSquares = {
   Square.k8: Color(0xCCF4A736),
   Square.f9: Color(0xCCF4A736),
 };
+
+BorderSide MiddleBorder() {
+  return BorderSide(
+    color: Color(0xFF42150A),
+    width: 2.0,
+  );
+}
 
 // For the logic behind this see:
 // https://github.com/flutter/flutter/blob/stable/packages/flutter/lib/src/widgets/drag_target.dart#L805

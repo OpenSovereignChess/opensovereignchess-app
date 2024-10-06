@@ -15,21 +15,29 @@ class PositionedSquare extends StatelessWidget with ChessboardGeometry {
     required this.child,
     required this.size,
     required this.square,
+    this.childSize = 1,
   });
 
   final Widget child;
 
+  /// The total size of the board.
   @override
   final double size;
 
   final Square square;
 
+  /// The width/height of the child in number of squares.
+  ///
+  /// i.e. if `childSize` is 4, then the child would span a 4x4 section of the
+  /// board.
+  final int childSize;
+
   @override
   Widget build(BuildContext context) {
     final offset = squareOffset(square);
     return Positioned(
-      width: squareSize,
-      height: squareSize,
+      width: squareSize * childSize,
+      height: squareSize * childSize,
       left: offset.dx,
       top: offset.dy,
       child: child,
