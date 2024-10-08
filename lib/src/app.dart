@@ -22,7 +22,7 @@ class Application extends StatelessWidget {
 /// This widget needs to be a descendant of [MaterialApp] to be able to handle
 /// the [Navigator] properly.
 ///
-/// This widget is responsible for setting up the bottom navigation scaffold and
+/// This widget is responsible for setting up the adaptive navigation scaffold and
 /// the main navigation routes.
 class _EntryPointWidget extends StatefulWidget {
   const _EntryPointWidget();
@@ -34,6 +34,6 @@ class _EntryPointWidget extends StatefulWidget {
 class _EntryPointState extends State<_EntryPointWidget> {
   @override
   Widget build(BuildContext context) {
-    return const BottomNavScaffold();
+    return const AppScaffold();
   }
 }

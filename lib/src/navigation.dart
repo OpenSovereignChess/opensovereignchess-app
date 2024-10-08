@@ -1,50 +1,58 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
 import 'package:opensovereignchess_app/chessboard/src/board_settings.dart';
 import 'package:opensovereignchess_app/chessboard/src/widgets/piece.dart';
 
-enum BottomTab {
+enum NavTab {
   home,
   tools,
   settings;
 
   String get label {
     return switch (this) {
-      BottomTab.home => 'Home',
-      BottomTab.tools => 'Tools',
-      BottomTab.settings => 'Settings',
+      NavTab.home => 'Home',
+      NavTab.tools => 'Tools',
+      NavTab.settings => 'Settings',
     };
   }
 
   IconData get icon {
     return switch (this) {
-      BottomTab.home => Icons.home_outlined,
-      BottomTab.tools => Icons.handyman_outlined,
-      BottomTab.settings => Icons.settings_outlined,
+      NavTab.home => Icons.home_outlined,
+      NavTab.tools => Icons.handyman_outlined,
+      NavTab.settings => Icons.settings_outlined,
+    };
+  }
+
+  IconData get activeIcon {
+    return switch (this) {
+      NavTab.home => Icons.home,
+      NavTab.tools => Icons.handyman,
+      NavTab.settings => Icons.settings,
     };
   }
 }
 
-class BottomNavScaffold extends StatelessWidget {
-  const BottomNavScaffold({super.key});
+class AppScaffold extends StatelessWidget {
+  const AppScaffold({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: const _TestView(),
-      bottomNavigationBar: NavigationBar(
-        destinations: [
-          for (final tab in BottomTab.values)
-            NavigationDestination(
-              icon: Icon(tab.icon),
-              label: tab.label,
-            )
-        ],
-      ),
+    return AdaptiveScaffold(
+      destinations: <NavigationDestination>[
+        for (final tab in NavTab.values)
+          NavigationDestination(
+            icon: Icon(tab.icon),
+            selectedIcon: Icon(tab.activeIcon),
+            label: tab.label,
+          )
+      ],
+      body: (_) => const _TestView(),
     );
   }
 }
