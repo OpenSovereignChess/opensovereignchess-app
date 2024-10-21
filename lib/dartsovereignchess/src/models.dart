@@ -535,8 +535,86 @@ extension type const Square._(int value) implements int {
   String get name => file.name + rank.name;
 }
 
-/// Represents a piece kind, which is a tuple of color and role.
-typedef PieceKind = (PieceColor color, Role role);
+/// Describes a chess piece kind by its color and role.
+enum PieceKind {
+  whitePawn(PieceColor.white, Role.pawn),
+  whiteKnight(PieceColor.white, Role.knight),
+  whiteBishop(PieceColor.white, Role.bishop),
+  whiteRook(PieceColor.white, Role.rook),
+  whiteQueen(PieceColor.white, Role.queen),
+  whiteKing(PieceColor.white, Role.king),
+  blackPawn(PieceColor.black, Role.pawn),
+  blackKnight(PieceColor.black, Role.knight),
+  blackBishop(PieceColor.black, Role.bishop),
+  blackRook(PieceColor.black, Role.rook),
+  blackQueen(PieceColor.black, Role.queen),
+  blackKing(PieceColor.black, Role.king),
+  ashPawn(PieceColor.ash, Role.pawn),
+  ashKnight(PieceColor.ash, Role.knight),
+  ashBishop(PieceColor.ash, Role.bishop),
+  ashRook(PieceColor.ash, Role.rook),
+  ashQueen(PieceColor.ash, Role.queen),
+  ashKing(PieceColor.ash, Role.king),
+  cyanPawn(PieceColor.cyan, Role.pawn),
+  cyanKnight(PieceColor.cyan, Role.knight),
+  cyanBishop(PieceColor.cyan, Role.bishop),
+  cyanRook(PieceColor.cyan, Role.rook),
+  cyanQueen(PieceColor.cyan, Role.queen),
+  cyanKing(PieceColor.cyan, Role.king),
+  greenPawn(PieceColor.green, Role.pawn),
+  greenKnight(PieceColor.green, Role.knight),
+  greenBishop(PieceColor.green, Role.bishop),
+  greenRook(PieceColor.green, Role.rook),
+  greenQueen(PieceColor.green, Role.queen),
+  greenKing(PieceColor.green, Role.king),
+  navyPawn(PieceColor.navy, Role.pawn),
+  navyKnight(PieceColor.navy, Role.knight),
+  navyBishop(PieceColor.navy, Role.bishop),
+  navyRook(PieceColor.navy, Role.rook),
+  navyQueen(PieceColor.navy, Role.queen),
+  navyKing(PieceColor.navy, Role.king),
+  orangePawn(PieceColor.orange, Role.pawn),
+  orangeKnight(PieceColor.orange, Role.knight),
+  orangeBishop(PieceColor.orange, Role.bishop),
+  orangeRook(PieceColor.orange, Role.rook),
+  orangeQueen(PieceColor.orange, Role.queen),
+  orangeKing(PieceColor.orange, Role.king),
+  pinkPawn(PieceColor.pink, Role.pawn),
+  pinkKnight(PieceColor.pink, Role.knight),
+  pinkBishop(PieceColor.pink, Role.bishop),
+  pinkRook(PieceColor.pink, Role.rook),
+  pinkQueen(PieceColor.pink, Role.queen),
+  pinkKing(PieceColor.pink, Role.king),
+  redPawn(PieceColor.red, Role.pawn),
+  redKnight(PieceColor.red, Role.knight),
+  redBishop(PieceColor.red, Role.bishop),
+  redRook(PieceColor.red, Role.rook),
+  redQueen(PieceColor.red, Role.queen),
+  redKing(PieceColor.red, Role.king),
+  slatePawn(PieceColor.slate, Role.pawn),
+  slateKnight(PieceColor.slate, Role.knight),
+  slateBishop(PieceColor.slate, Role.bishop),
+  slateRook(PieceColor.slate, Role.rook),
+  slateQueen(PieceColor.slate, Role.queen),
+  slateKing(PieceColor.slate, Role.king),
+  violetPawn(PieceColor.violet, Role.pawn),
+  violetKnight(PieceColor.violet, Role.knight),
+  violetBishop(PieceColor.violet, Role.bishop),
+  violetRook(PieceColor.violet, Role.rook),
+  violetQueen(PieceColor.violet, Role.queen),
+  violetKing(PieceColor.violet, Role.king),
+  yellowPawn(PieceColor.yellow, Role.pawn),
+  yellowKnight(PieceColor.yellow, Role.knight),
+  yellowBishop(PieceColor.yellow, Role.bishop),
+  yellowRook(PieceColor.yellow, Role.rook),
+  yellowQueen(PieceColor.yellow, Role.queen),
+  yellowKing(PieceColor.yellow, Role.king);
+
+  const PieceKind(this.pieceColor, this.role);
+
+  final PieceColor pieceColor;
+  final Role role;
+}
 
 /// Describes a chess piece by its color, role and promotion status.
 @immutable
@@ -551,8 +629,81 @@ class Piece {
   final Role role;
   final bool promoted;
 
-  /// Gets the piece kind, which is a tuple of color and role.
-  PieceKind get kind => (color, role);
+  /// Gets the piece kind.
+  PieceKind get kind => switch ((color, role)) {
+        (PieceColor.white, Role.pawn) => PieceKind.whitePawn,
+        (PieceColor.white, Role.knight) => PieceKind.whiteKnight,
+        (PieceColor.white, Role.bishop) => PieceKind.whiteBishop,
+        (PieceColor.white, Role.rook) => PieceKind.whiteRook,
+        (PieceColor.white, Role.queen) => PieceKind.whiteQueen,
+        (PieceColor.white, Role.king) => PieceKind.whiteKing,
+        (PieceColor.black, Role.pawn) => PieceKind.blackPawn,
+        (PieceColor.black, Role.knight) => PieceKind.blackKnight,
+        (PieceColor.black, Role.bishop) => PieceKind.blackBishop,
+        (PieceColor.black, Role.rook) => PieceKind.blackRook,
+        (PieceColor.black, Role.queen) => PieceKind.blackQueen,
+        (PieceColor.black, Role.king) => PieceKind.blackKing,
+        (PieceColor.ash, Role.pawn) => PieceKind.ashPawn,
+        (PieceColor.ash, Role.knight) => PieceKind.ashKnight,
+        (PieceColor.ash, Role.bishop) => PieceKind.ashBishop,
+        (PieceColor.ash, Role.rook) => PieceKind.ashRook,
+        (PieceColor.ash, Role.queen) => PieceKind.ashQueen,
+        (PieceColor.ash, Role.king) => PieceKind.ashKing,
+        (PieceColor.cyan, Role.pawn) => PieceKind.cyanPawn,
+        (PieceColor.cyan, Role.knight) => PieceKind.cyanKnight,
+        (PieceColor.cyan, Role.bishop) => PieceKind.cyanBishop,
+        (PieceColor.cyan, Role.rook) => PieceKind.cyanRook,
+        (PieceColor.cyan, Role.queen) => PieceKind.cyanQueen,
+        (PieceColor.cyan, Role.king) => PieceKind.cyanKing,
+        (PieceColor.green, Role.pawn) => PieceKind.greenPawn,
+        (PieceColor.green, Role.knight) => PieceKind.greenKnight,
+        (PieceColor.green, Role.bishop) => PieceKind.greenBishop,
+        (PieceColor.green, Role.rook) => PieceKind.greenRook,
+        (PieceColor.green, Role.queen) => PieceKind.greenQueen,
+        (PieceColor.green, Role.king) => PieceKind.greenKing,
+        (PieceColor.navy, Role.pawn) => PieceKind.navyPawn,
+        (PieceColor.navy, Role.knight) => PieceKind.navyKnight,
+        (PieceColor.navy, Role.bishop) => PieceKind.navyBishop,
+        (PieceColor.navy, Role.rook) => PieceKind.navyRook,
+        (PieceColor.navy, Role.queen) => PieceKind.navyQueen,
+        (PieceColor.navy, Role.king) => PieceKind.navyKing,
+        (PieceColor.orange, Role.pawn) => PieceKind.orangePawn,
+        (PieceColor.orange, Role.knight) => PieceKind.orangeKnight,
+        (PieceColor.orange, Role.bishop) => PieceKind.orangeBishop,
+        (PieceColor.orange, Role.rook) => PieceKind.orangeRook,
+        (PieceColor.orange, Role.queen) => PieceKind.orangeQueen,
+        (PieceColor.orange, Role.king) => PieceKind.orangeKing,
+        (PieceColor.pink, Role.pawn) => PieceKind.pinkPawn,
+        (PieceColor.pink, Role.knight) => PieceKind.pinkKnight,
+        (PieceColor.pink, Role.bishop) => PieceKind.pinkBishop,
+        (PieceColor.pink, Role.rook) => PieceKind.pinkRook,
+        (PieceColor.pink, Role.queen) => PieceKind.pinkQueen,
+        (PieceColor.pink, Role.king) => PieceKind.pinkKing,
+        (PieceColor.red, Role.pawn) => PieceKind.redPawn,
+        (PieceColor.red, Role.knight) => PieceKind.redKnight,
+        (PieceColor.red, Role.bishop) => PieceKind.redBishop,
+        (PieceColor.red, Role.rook) => PieceKind.redRook,
+        (PieceColor.red, Role.queen) => PieceKind.redQueen,
+        (PieceColor.red, Role.king) => PieceKind.redKing,
+        (PieceColor.slate, Role.pawn) => PieceKind.slatePawn,
+        (PieceColor.slate, Role.knight) => PieceKind.slateKnight,
+        (PieceColor.slate, Role.bishop) => PieceKind.slateBishop,
+        (PieceColor.slate, Role.rook) => PieceKind.slateRook,
+        (PieceColor.slate, Role.queen) => PieceKind.slateQueen,
+        (PieceColor.slate, Role.king) => PieceKind.slateKing,
+        (PieceColor.violet, Role.pawn) => PieceKind.violetPawn,
+        (PieceColor.violet, Role.knight) => PieceKind.violetKnight,
+        (PieceColor.violet, Role.bishop) => PieceKind.violetBishop,
+        (PieceColor.violet, Role.rook) => PieceKind.violetRook,
+        (PieceColor.violet, Role.queen) => PieceKind.violetQueen,
+        (PieceColor.violet, Role.king) => PieceKind.violetKing,
+        (PieceColor.yellow, Role.pawn) => PieceKind.yellowPawn,
+        (PieceColor.yellow, Role.knight) => PieceKind.yellowKnight,
+        (PieceColor.yellow, Role.bishop) => PieceKind.yellowBishop,
+        (PieceColor.yellow, Role.rook) => PieceKind.yellowRook,
+        (PieceColor.yellow, Role.queen) => PieceKind.yellowQueen,
+        (PieceColor.yellow, Role.king) => PieceKind.yellowKing,
+      };
 
   /// Gets the FEN string of this piece.
   String get fenStr {
@@ -607,222 +758,6 @@ class NormalMove extends Move {
   /// The role of the promoted piece, if any.
   final Role? promotion;
 }
-
-/// The white pawn piece kind.
-const PieceKind kWhitePawnKind = (PieceColor.white, Role.pawn);
-
-/// The white knight piece kind.
-const PieceKind kWhiteKnightKind = (PieceColor.white, Role.knight);
-
-/// The white bishop piece kind.
-const PieceKind kWhiteBishopKind = (PieceColor.white, Role.bishop);
-
-/// The white rook piece kind.
-const PieceKind kWhiteRookKind = (PieceColor.white, Role.rook);
-
-/// The white queen piece kind.
-const PieceKind kWhiteQueenKind = (PieceColor.white, Role.queen);
-
-/// The white king piece kind.
-const PieceKind kWhiteKingKind = (PieceColor.white, Role.king);
-
-/// The black pawn piece kind.
-const PieceKind kBlackPawnKind = (PieceColor.black, Role.pawn);
-
-/// The black knight piece kind.
-const PieceKind kBlackKnightKind = (PieceColor.black, Role.knight);
-
-/// The black bishop piece kind.
-const PieceKind kBlackBishopKind = (PieceColor.black, Role.bishop);
-
-/// The black rook piece kind.
-const PieceKind kBlackRookKind = (PieceColor.black, Role.rook);
-
-/// The black queen piece kind.
-const PieceKind kBlackQueenKind = (PieceColor.black, Role.queen);
-
-/// The black king piece kind.
-const PieceKind kBlackKingKind = (PieceColor.black, Role.king);
-
-/// The ash pawn piece kind.
-const PieceKind kAshPawnKind = (PieceColor.ash, Role.pawn);
-
-/// The ash knight piece kind.
-const PieceKind kAshKnightKind = (PieceColor.ash, Role.knight);
-
-/// The ash bishop piece kind.
-const PieceKind kAshBishopKind = (PieceColor.ash, Role.bishop);
-
-/// The ash rook piece kind.
-const PieceKind kAshRookKind = (PieceColor.ash, Role.rook);
-
-/// The ash queen piece kind.
-const PieceKind kAshQueenKind = (PieceColor.ash, Role.queen);
-
-/// The ash king piece kind.
-const PieceKind kAshKingKind = (PieceColor.ash, Role.king);
-
-/// The cyan pawn piece kind.
-const PieceKind kCyanPawnKind = (PieceColor.cyan, Role.pawn);
-
-/// The cyan knight piece kind.
-const PieceKind kCyanKnightKind = (PieceColor.cyan, Role.knight);
-
-/// The cyan bishop piece kind.
-const PieceKind kCyanBishopKind = (PieceColor.cyan, Role.bishop);
-
-/// The cyan rook piece kind.
-const PieceKind kCyanRookKind = (PieceColor.cyan, Role.rook);
-
-/// The cyan queen piece kind.
-const PieceKind kCyanQueenKind = (PieceColor.cyan, Role.queen);
-
-/// The cyan king piece kind.
-const PieceKind kCyanKingKind = (PieceColor.cyan, Role.king);
-
-/// The green pawn piece kind.
-const PieceKind kGreenPawnKind = (PieceColor.green, Role.pawn);
-
-/// The green knight piece kind.
-const PieceKind kGreenKnightKind = (PieceColor.green, Role.knight);
-
-/// The green bishop piece kind.
-const PieceKind kGreenBishopKind = (PieceColor.green, Role.bishop);
-
-/// The green rook piece kind.
-const PieceKind kGreenRookKind = (PieceColor.green, Role.rook);
-
-/// The green queen piece kind.
-const PieceKind kGreenQueenKind = (PieceColor.green, Role.queen);
-
-/// The green king piece kind.
-const PieceKind kGreenKingKind = (PieceColor.green, Role.king);
-
-/// The navy pawn piece kind.
-const PieceKind kNavyPawnKind = (PieceColor.navy, Role.pawn);
-
-/// The navy knight piece kind.
-const PieceKind kNavyKnightKind = (PieceColor.navy, Role.knight);
-
-/// The navy bishop piece kind.
-const PieceKind kNavyBishopKind = (PieceColor.navy, Role.bishop);
-
-/// The navy rook piece kind.
-const PieceKind kNavyRookKind = (PieceColor.navy, Role.rook);
-
-/// The navy queen piece kind.
-const PieceKind kNavyQueenKind = (PieceColor.navy, Role.queen);
-
-/// The navy king piece kind.
-const PieceKind kNavyKingKind = (PieceColor.navy, Role.king);
-
-/// The orange pawn piece kind.
-const PieceKind kOrangePawnKind = (PieceColor.orange, Role.pawn);
-
-/// The orange knight piece kind.
-const PieceKind kOrangeKnightKind = (PieceColor.orange, Role.knight);
-
-/// The orange bishop piece kind.
-const PieceKind kOrangeBishopKind = (PieceColor.orange, Role.bishop);
-
-/// The orange rook piece kind.
-const PieceKind kOrangeRookKind = (PieceColor.orange, Role.rook);
-
-/// The orange queen piece kind.
-const PieceKind kOrangeQueenKind = (PieceColor.orange, Role.queen);
-
-/// The orange king piece kind.
-const PieceKind kOrangeKingKind = (PieceColor.orange, Role.king);
-
-/// The pink pawn piece kind.
-const PieceKind kPinkPawnKind = (PieceColor.pink, Role.pawn);
-
-/// The pink knight piece kind.
-const PieceKind kPinkKnightKind = (PieceColor.pink, Role.knight);
-
-/// The pink bishop piece kind.
-const PieceKind kPinkBishopKind = (PieceColor.pink, Role.bishop);
-
-/// The pink rook piece kind.
-const PieceKind kPinkRookKind = (PieceColor.pink, Role.rook);
-
-/// The pink queen piece kind.
-const PieceKind kPinkQueenKind = (PieceColor.pink, Role.queen);
-
-/// The pink king piece kind.
-const PieceKind kPinkKingKind = (PieceColor.pink, Role.king);
-
-/// The red pawn piece kind.
-const PieceKind kRedPawnKind = (PieceColor.red, Role.pawn);
-
-/// The red knight piece kind.
-const PieceKind kRedKnightKind = (PieceColor.red, Role.knight);
-
-/// The red bishop piece kind.
-const PieceKind kRedBishopKind = (PieceColor.red, Role.bishop);
-
-/// The red rook piece kind.
-const PieceKind kRedRookKind = (PieceColor.red, Role.rook);
-
-/// The red queen piece kind.
-const PieceKind kRedQueenKind = (PieceColor.red, Role.queen);
-
-/// The red king piece kind.
-const PieceKind kRedKingKind = (PieceColor.red, Role.king);
-
-/// The slate pawn piece kind.
-const PieceKind kSlatePawnKind = (PieceColor.slate, Role.pawn);
-
-/// The slate knight piece kind.
-const PieceKind kSlateKnightKind = (PieceColor.slate, Role.knight);
-
-/// The slate bishop piece kind.
-const PieceKind kSlateBishopKind = (PieceColor.slate, Role.bishop);
-
-/// The slate rook piece kind.
-const PieceKind kSlateRookKind = (PieceColor.slate, Role.rook);
-
-/// The slate queen piece kind.
-const PieceKind kSlateQueenKind = (PieceColor.slate, Role.queen);
-
-/// The slate king piece kind.
-const PieceKind kSlateKingKind = (PieceColor.slate, Role.king);
-
-/// The violet pawn piece kind.
-const PieceKind kVioletPawnKind = (PieceColor.violet, Role.pawn);
-
-/// The violet knight piece kind.
-const PieceKind kVioletKnightKind = (PieceColor.violet, Role.knight);
-
-/// The violet bishop piece kind.
-const PieceKind kVioletBishopKind = (PieceColor.violet, Role.bishop);
-
-/// The violet rook piece kind.
-const PieceKind kVioletRookKind = (PieceColor.violet, Role.rook);
-
-/// The violet queen piece kind.
-const PieceKind kVioletQueenKind = (PieceColor.violet, Role.queen);
-
-/// The violet king piece kind.
-const PieceKind kVioletKingKind = (PieceColor.violet, Role.king);
-
-/// The yellow pawn piece kind.
-const PieceKind kYellowPawnKind = (PieceColor.yellow, Role.pawn);
-
-/// The yellow knight piece kind.
-const PieceKind kYellowKnightKind = (PieceColor.yellow, Role.knight);
-
-/// The yellow bishop piece kind.
-const PieceKind kYellowBishopKind = (PieceColor.yellow, Role.bishop);
-
-/// The yellow rook piece kind.
-const PieceKind kYellowRookKind = (PieceColor.yellow, Role.rook);
-
-/// The yellow queen piece kind.
-const PieceKind kYellowQueenKind = (PieceColor.yellow, Role.queen);
-
-/// The yellow king piece kind.
-const PieceKind kYellowKingKind = (PieceColor.yellow, Role.king);
 
 /// An enumeration of the possible causes of an illegal FEN string.
 enum IllegalFenCause {

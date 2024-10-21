@@ -9,13 +9,13 @@ void main() {
   test('Read fen', () {
     final pieces = readFen(initialFen);
     expect(pieces.length, 11);
-    expect(pieces[Square.a1]!.kind, equals((PieceColor.pink, Role.rook)));
-    expect(pieces[Square.a16]!.kind, equals((PieceColor.ash, Role.queen)));
-    expect(pieces[Square.p14]!.kind, equals((PieceColor.green, Role.bishop)));
-    expect(pieces[Square.f12]!.kind, equals((PieceColor.white, Role.pawn)));
-    expect(pieces[Square.l12]!.kind, equals((PieceColor.white, Role.pawn)));
-    expect(pieces[Square.c16]!.kind, equals((PieceColor.black, Role.king)));
-    expect(pieces[Square.e10]!.kind, equals((PieceColor.white, Role.pawn)));
+    expect(pieces[Square.a1]!.kind, PieceKind.pinkRook);
+    expect(pieces[Square.a16]!.kind, PieceKind.ashQueen);
+    expect(pieces[Square.p14]!.kind, PieceKind.greenBishop);
+    expect(pieces[Square.f12]!.kind, PieceKind.whitePawn);
+    expect(pieces[Square.l12]!.kind, PieceKind.whitePawn);
+    expect(pieces[Square.c16]!.kind, PieceKind.blackKing);
+    expect(pieces[Square.e10]!.kind, PieceKind.whitePawn);
   });
 
   test('Write fen', () {

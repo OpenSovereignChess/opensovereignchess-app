@@ -79,7 +79,7 @@ class SquareSet {
   /// Allows us to access the integers by index.  We cannot store them in a
   /// list because we want constant SquareSet values.
   int _get(int i) {
-    return switch(i) {
+    return switch (i) {
       0 => a,
       1 => b,
       2 => c,

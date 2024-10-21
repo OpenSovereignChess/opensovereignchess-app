@@ -22,313 +22,313 @@ enum PieceSet {
   /// The [PieceAssets] for the 'Wikimedia Commons' piece set.
   static const PieceAssets wikimediaAssets = IMapConst({
     // Ash
-    kAshBishopKind: SvgPicture(
+    PieceKind.ashBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/aB.svg.vec'),
       semanticsLabel: 'ash bishop',
     ),
-    kAshKingKind: SvgPicture(
+    PieceKind.ashKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/aK.svg.vec'),
       semanticsLabel: 'ash king',
     ),
-    kAshKnightKind: SvgPicture(
+    PieceKind.ashKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/aN.svg.vec'),
       semanticsLabel: 'ash knight',
     ),
-    kAshPawnKind: SvgPicture(
+    PieceKind.ashPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/aP.svg.vec'),
       semanticsLabel: 'ash pawn',
     ),
-    kAshQueenKind: SvgPicture(
+    PieceKind.ashQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/aQ.svg.vec'),
       semanticsLabel: 'ash queen',
     ),
-    kAshRookKind: SvgPicture(
+    PieceKind.ashRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/aR.svg.vec'),
       semanticsLabel: 'ash rook',
     ),
 
     // Black
-    kBlackBishopKind: SvgPicture(
+    PieceKind.blackBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/bB.svg.vec'),
       semanticsLabel: 'black bishop',
     ),
-    kBlackKingKind: SvgPicture(
+    PieceKind.blackKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/bK.svg.vec'),
       semanticsLabel: 'black king',
     ),
-    kBlackKnightKind: SvgPicture(
+    PieceKind.blackKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/bN.svg.vec'),
       semanticsLabel: 'black knight',
     ),
-    kBlackPawnKind: SvgPicture(
+    PieceKind.blackPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/bP.svg.vec'),
       semanticsLabel: 'black pawn',
     ),
-    kBlackQueenKind: SvgPicture(
+    PieceKind.blackQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/bQ.svg.vec'),
       semanticsLabel: 'black queen',
     ),
-    kBlackRookKind: SvgPicture(
+    PieceKind.blackRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/bR.svg.vec'),
       semanticsLabel: 'black rook',
     ),
 
     // Cyan
-    kCyanBishopKind: SvgPicture(
+    PieceKind.cyanBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/cB.svg.vec'),
       semanticsLabel: 'cyan bishop',
     ),
-    kCyanKingKind: SvgPicture(
+    PieceKind.cyanKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/cK.svg.vec'),
       semanticsLabel: 'cyan king',
     ),
-    kCyanKnightKind: SvgPicture(
+    PieceKind.cyanKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/cN.svg.vec'),
       semanticsLabel: 'cyan knight',
     ),
-    kCyanPawnKind: SvgPicture(
+    PieceKind.cyanPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/cP.svg.vec'),
       semanticsLabel: 'cyan pawn',
     ),
-    kCyanQueenKind: SvgPicture(
+    PieceKind.cyanQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/cQ.svg.vec'),
       semanticsLabel: 'cyan queen',
     ),
-    kCyanRookKind: SvgPicture(
+    PieceKind.cyanRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/cR.svg.vec'),
       semanticsLabel: 'cyan rook',
     ),
 
     // Green
-    kGreenBishopKind: SvgPicture(
+    PieceKind.greenBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/gB.svg.vec'),
       semanticsLabel: 'green bishop',
     ),
-    kGreenKingKind: SvgPicture(
+    PieceKind.greenKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/gK.svg.vec'),
       semanticsLabel: 'green king',
     ),
-    kGreenKnightKind: SvgPicture(
+    PieceKind.greenKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/gN.svg.vec'),
       semanticsLabel: 'green knight',
     ),
-    kGreenPawnKind: SvgPicture(
+    PieceKind.greenPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/gP.svg.vec'),
       semanticsLabel: 'green pawn',
     ),
-    kGreenQueenKind: SvgPicture(
+    PieceKind.greenQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/gQ.svg.vec'),
       semanticsLabel: 'green queen',
     ),
-    kGreenRookKind: SvgPicture(
+    PieceKind.greenRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/gR.svg.vec'),
       semanticsLabel: 'green rook',
     ),
 
     // Navy
-    kNavyBishopKind: SvgPicture(
+    PieceKind.navyBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/nB.svg.vec'),
       semanticsLabel: 'navy bishop',
     ),
-    kNavyKingKind: SvgPicture(
+    PieceKind.navyKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/nK.svg.vec'),
       semanticsLabel: 'navy king',
     ),
-    kNavyKnightKind: SvgPicture(
+    PieceKind.navyKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/nN.svg.vec'),
       semanticsLabel: 'navy knight',
     ),
-    kNavyPawnKind: SvgPicture(
+    PieceKind.navyPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/nP.svg.vec'),
       semanticsLabel: 'navy pawn',
     ),
-    kNavyQueenKind: SvgPicture(
+    PieceKind.navyQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/nQ.svg.vec'),
       semanticsLabel: 'navy queen',
     ),
-    kNavyRookKind: SvgPicture(
+    PieceKind.navyRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/nR.svg.vec'),
       semanticsLabel: 'navy rook',
     ),
 
     // Orange
-    kOrangeBishopKind: SvgPicture(
+    PieceKind.orangeBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/oB.svg.vec'),
       semanticsLabel: 'orange bishop',
     ),
-    kOrangeKingKind: SvgPicture(
+    PieceKind.orangeKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/oK.svg.vec'),
       semanticsLabel: 'orange king',
     ),
-    kOrangeKnightKind: SvgPicture(
+    PieceKind.orangeKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/oN.svg.vec'),
       semanticsLabel: 'orange knight',
     ),
-    kOrangePawnKind: SvgPicture(
+    PieceKind.orangePawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/oP.svg.vec'),
       semanticsLabel: 'orange pawn',
     ),
-    kOrangeQueenKind: SvgPicture(
+    PieceKind.orangeQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/oQ.svg.vec'),
       semanticsLabel: 'orange queen',
     ),
-    kOrangeRookKind: SvgPicture(
+    PieceKind.orangeRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/oR.svg.vec'),
       semanticsLabel: 'orange rook',
     ),
 
     // Pink
-    kPinkBishopKind: SvgPicture(
+    PieceKind.pinkBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/pB.svg.vec'),
       semanticsLabel: 'pink bishop',
     ),
-    kPinkKingKind: SvgPicture(
+    PieceKind.pinkKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/pK.svg.vec'),
       semanticsLabel: 'pink king',
     ),
-    kPinkKnightKind: SvgPicture(
+    PieceKind.pinkKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/pN.svg.vec'),
       semanticsLabel: 'pink knight',
     ),
-    kPinkPawnKind: SvgPicture(
+    PieceKind.pinkPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/pP.svg.vec'),
       semanticsLabel: 'pink pawn',
     ),
-    kPinkQueenKind: SvgPicture(
+    PieceKind.pinkQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/pQ.svg.vec'),
       semanticsLabel: 'pink queen',
     ),
-    kPinkRookKind: SvgPicture(
+    PieceKind.pinkRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/pR.svg.vec'),
       semanticsLabel: 'pink rook',
     ),
 
     // Red
-    kRedBishopKind: SvgPicture(
+    PieceKind.redBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/rB.svg.vec'),
       semanticsLabel: 'red bishop',
     ),
-    kRedKingKind: SvgPicture(
+    PieceKind.redKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/rK.svg.vec'),
       semanticsLabel: 'red king',
     ),
-    kRedKnightKind: SvgPicture(
+    PieceKind.redKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/rN.svg.vec'),
       semanticsLabel: 'red knight',
     ),
-    kRedPawnKind: SvgPicture(
+    PieceKind.redPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/rP.svg.vec'),
       semanticsLabel: 'red pawn',
     ),
-    kRedQueenKind: SvgPicture(
+    PieceKind.redQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/rQ.svg.vec'),
       semanticsLabel: 'red queen',
     ),
-    kRedRookKind: SvgPicture(
+    PieceKind.redRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/rR.svg.vec'),
       semanticsLabel: 'red rook',
     ),
 
     // Slate
-    kSlateBishopKind: SvgPicture(
+    PieceKind.slateBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/sB.svg.vec'),
       semanticsLabel: 'slate bishop',
     ),
-    kSlateKingKind: SvgPicture(
+    PieceKind.slateKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/sK.svg.vec'),
       semanticsLabel: 'slate king',
     ),
-    kSlateKnightKind: SvgPicture(
+    PieceKind.slateKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/sN.svg.vec'),
       semanticsLabel: 'slate knight',
     ),
-    kSlatePawnKind: SvgPicture(
+    PieceKind.slatePawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/sP.svg.vec'),
       semanticsLabel: 'slate pawn',
     ),
-    kSlateQueenKind: SvgPicture(
+    PieceKind.slateQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/sQ.svg.vec'),
       semanticsLabel: 'slate queen',
     ),
-    kSlateRookKind: SvgPicture(
+    PieceKind.slateRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/sR.svg.vec'),
       semanticsLabel: 'slate rook',
     ),
 
     // Violet
-    kVioletBishopKind: SvgPicture(
+    PieceKind.violetBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/vB.svg.vec'),
       semanticsLabel: 'violet bishop',
     ),
-    kVioletKingKind: SvgPicture(
+    PieceKind.violetKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/vK.svg.vec'),
       semanticsLabel: 'violet king',
     ),
-    kVioletKnightKind: SvgPicture(
+    PieceKind.violetKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/vN.svg.vec'),
       semanticsLabel: 'violet knight',
     ),
-    kVioletPawnKind: SvgPicture(
+    PieceKind.violetPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/vP.svg.vec'),
       semanticsLabel: 'violet pawn',
     ),
-    kVioletQueenKind: SvgPicture(
+    PieceKind.violetQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/vQ.svg.vec'),
       semanticsLabel: 'violet queen',
     ),
-    kVioletRookKind: SvgPicture(
+    PieceKind.violetRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/vR.svg.vec'),
       semanticsLabel: 'violet rook',
     ),
 
     // White
-    kWhiteBishopKind: SvgPicture(
+    PieceKind.whiteBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/wB.svg.vec'),
       semanticsLabel: 'white bishop',
     ),
-    kWhiteKingKind: SvgPicture(
+    PieceKind.whiteKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/wK.svg.vec'),
       semanticsLabel: 'white king',
     ),
-    kWhiteKnightKind: SvgPicture(
+    PieceKind.whiteKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/wN.svg.vec'),
       semanticsLabel: 'white knight',
     ),
-    kWhitePawnKind: SvgPicture(
+    PieceKind.whitePawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/wP.svg.vec'),
       semanticsLabel: 'white pawn',
     ),
-    kWhiteQueenKind: SvgPicture(
+    PieceKind.whiteQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/wQ.svg.vec'),
       semanticsLabel: 'white queen',
     ),
-    kWhiteRookKind: SvgPicture(
+    PieceKind.whiteRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/wR.svg.vec'),
       semanticsLabel: 'white rook',
     ),
 
     // Yellow
-    kYellowBishopKind: SvgPicture(
+    PieceKind.yellowBishop: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/yB.svg.vec'),
       semanticsLabel: 'yellow bishop',
     ),
-    kYellowKingKind: SvgPicture(
+    PieceKind.yellowKing: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/yK.svg.vec'),
       semanticsLabel: 'yellow king',
     ),
-    kYellowKnightKind: SvgPicture(
+    PieceKind.yellowKnight: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/yN.svg.vec'),
       semanticsLabel: 'yellow knight',
     ),
-    kYellowPawnKind: SvgPicture(
+    PieceKind.yellowPawn: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/yP.svg.vec'),
       semanticsLabel: 'yellow pawn',
     ),
-    kYellowQueenKind: SvgPicture(
+    PieceKind.yellowQueen: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/yQ.svg.vec'),
       semanticsLabel: 'yellow queen',
     ),
-    kYellowRookKind: SvgPicture(
+    PieceKind.yellowRook: SvgPicture(
       const AssetBytesLoader('$_pieceSetsPath/wikimedia/yR.svg.vec'),
       semanticsLabel: 'yellow rook',
     ),

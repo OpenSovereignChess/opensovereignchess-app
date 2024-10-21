@@ -2,9 +2,9 @@
 @immutable
 class Setup {
   /// Creates a new [Setup] with the provided values.
-  const Setup({
-
-  });
+  //const Setup({
+  //
+  //});
 
   /// Parses a Sovereign Chess FEN string and returns a [Setup].
   ///
