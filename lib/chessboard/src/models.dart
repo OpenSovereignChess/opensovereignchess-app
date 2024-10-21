@@ -10,8 +10,12 @@ import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dar
 class GameData {
   /// Creates a new [GameData] with the provided values.
   const GameData({
+    required this.validMoves,
     required this.onMove,
   });
+
+  /// Set of moves allowed to be played by current side to move.
+  final ValidMoves validMoves;
 
   /// Callback called after a move has been made.
   ///
@@ -26,3 +30,6 @@ typedef PieceAssets = IMap<PieceKind, SvgPicture>;
 
 /// Representation of the piece positions on a board.
 typedef Pieces = Map<Square, Piece>;
+
+/// Sets of each valid destinations for an origin square.
+typedef ValidMoves = IMap<Square, ISet<Square>>;

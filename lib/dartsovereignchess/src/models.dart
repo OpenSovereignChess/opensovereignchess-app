@@ -823,3 +823,22 @@ const PieceKind kYellowQueenKind = (PieceColor.yellow, Role.queen);
 
 /// The yellow king piece kind.
 const PieceKind kYellowKingKind = (PieceColor.yellow, Role.king);
+
+/// An enumeration of the possible causes of an illegal FEN string.
+enum IllegalFenCause {
+  /// The FEN string is not in the correct format.
+  format,
+}
+
+/// An exception thrown when trying to parse an invalid FEN string.
+@immutable
+class FenException implements Exception {
+  /// Constructs a [FenException] with a [cause].
+  const FenException(this.cause);
+
+  /// The cause of the exception.
+  final IllegalFenCause cause;
+
+  @override
+  String toString() => 'FenException: ${cause.name}';
+}

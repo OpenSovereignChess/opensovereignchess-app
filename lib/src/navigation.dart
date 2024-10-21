@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:fast_immutable_collections/fast_immutable_collections.dart'; // For testing purposes
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
@@ -84,6 +85,7 @@ class _TestViewState extends State<_TestView> {
             size: math.min(constraints.maxWidth, constraints.maxHeight),
             fen: _fen,
             game: GameData(
+              validMoves: IMap.empty(),
               onMove: _onMove,
             ),
           );
