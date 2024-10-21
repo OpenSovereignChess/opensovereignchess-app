@@ -507,22 +507,246 @@ extension type const Square._(int value) implements int {
 
   /// All squares on the chessboard, from a1 to p16.
   static const values = [
-    a1, b1, c1, d1, e1, f1, g1, h1, j1, k1, l1, m1, n1, o1, p1,
-    a2, b2, c2, d2, e2, f2, g2, h2, j2, k2, l2, m2, n2, o2, p2,
-    a3, b3, c3, d3, e3, f3, g3, h3, j3, k3, l3, m3, n3, o3, p3,
-    a4, b4, c4, d4, e4, f4, g4, h4, j4, k4, l4, m4, n4, o4, p4,
-    a5, b5, c5, d5, e5, f5, g5, h5, j5, k5, l5, m5, n5, o5, p5,
-    a6, b6, c6, d6, e6, f6, g6, h6, j6, k6, l6, m6, n6, o6, p6,
-    a7, b7, c7, d7, e7, f7, g7, h7, j7, k7, l7, m7, n7, o7, p7,
-    a8, b8, c8, d8, e8, f8, g8, h8, j8, k8, l8, m8, n8, o8, p8,
-    a9, b9, c9, d9, e9, f9, g9, h9, j9, k9, l9, m9, n9, o9, p9,
-    a10, b10, c10, d10, e10, f10, g10, h10, j10, k10, l10, m10, n10, o10, p10,
-    a11, b11, c11, d11, e11, f11, g11, h11, j11, k11, l11, m11, n11, o11, p11,
-    a12, b12, c12, d12, e12, f12, g12, h12, j12, k12, l12, m12, n12, o12, p12,
-    a13, b13, c13, d13, e13, f13, g13, h13, j13, k13, l13, m13, n13, o13, p13,
-    a14, b14, c14, d14, e14, f14, g14, h14, j14, k14, l14, m14, n14, o14, p14,
-    a15, b15, c15, d15, e15, f15, g15, h15, j15, k15, l15, m15, n15, o15, p15,
-    a16, b16, c16, d16, e16, f16, g16, h16, j16, k16, l16, m16, n16, o16, p16,
+    a1,
+    b1,
+    c1,
+    d1,
+    e1,
+    f1,
+    g1,
+    h1,
+    j1,
+    k1,
+    l1,
+    m1,
+    n1,
+    o1,
+    p1,
+    a2,
+    b2,
+    c2,
+    d2,
+    e2,
+    f2,
+    g2,
+    h2,
+    j2,
+    k2,
+    l2,
+    m2,
+    n2,
+    o2,
+    p2,
+    a3,
+    b3,
+    c3,
+    d3,
+    e3,
+    f3,
+    g3,
+    h3,
+    j3,
+    k3,
+    l3,
+    m3,
+    n3,
+    o3,
+    p3,
+    a4,
+    b4,
+    c4,
+    d4,
+    e4,
+    f4,
+    g4,
+    h4,
+    j4,
+    k4,
+    l4,
+    m4,
+    n4,
+    o4,
+    p4,
+    a5,
+    b5,
+    c5,
+    d5,
+    e5,
+    f5,
+    g5,
+    h5,
+    j5,
+    k5,
+    l5,
+    m5,
+    n5,
+    o5,
+    p5,
+    a6,
+    b6,
+    c6,
+    d6,
+    e6,
+    f6,
+    g6,
+    h6,
+    j6,
+    k6,
+    l6,
+    m6,
+    n6,
+    o6,
+    p6,
+    a7,
+    b7,
+    c7,
+    d7,
+    e7,
+    f7,
+    g7,
+    h7,
+    j7,
+    k7,
+    l7,
+    m7,
+    n7,
+    o7,
+    p7,
+    a8,
+    b8,
+    c8,
+    d8,
+    e8,
+    f8,
+    g8,
+    h8,
+    j8,
+    k8,
+    l8,
+    m8,
+    n8,
+    o8,
+    p8,
+    a9,
+    b9,
+    c9,
+    d9,
+    e9,
+    f9,
+    g9,
+    h9,
+    j9,
+    k9,
+    l9,
+    m9,
+    n9,
+    o9,
+    p9,
+    a10,
+    b10,
+    c10,
+    d10,
+    e10,
+    f10,
+    g10,
+    h10,
+    j10,
+    k10,
+    l10,
+    m10,
+    n10,
+    o10,
+    p10,
+    a11,
+    b11,
+    c11,
+    d11,
+    e11,
+    f11,
+    g11,
+    h11,
+    j11,
+    k11,
+    l11,
+    m11,
+    n11,
+    o11,
+    p11,
+    a12,
+    b12,
+    c12,
+    d12,
+    e12,
+    f12,
+    g12,
+    h12,
+    j12,
+    k12,
+    l12,
+    m12,
+    n12,
+    o12,
+    p12,
+    a13,
+    b13,
+    c13,
+    d13,
+    e13,
+    f13,
+    g13,
+    h13,
+    j13,
+    k13,
+    l13,
+    m13,
+    n13,
+    o13,
+    p13,
+    a14,
+    b14,
+    c14,
+    d14,
+    e14,
+    f14,
+    g14,
+    h14,
+    j14,
+    k14,
+    l14,
+    m14,
+    n14,
+    o14,
+    p14,
+    a15,
+    b15,
+    c15,
+    d15,
+    e15,
+    f15,
+    g15,
+    h15,
+    j15,
+    k15,
+    l15,
+    m15,
+    n15,
+    o15,
+    p15,
+    a16,
+    b16,
+    c16,
+    d16,
+    e16,
+    f16,
+    g16,
+    h16,
+    j16,
+    k16,
+    l16,
+    m16,
+    n16,
+    o16,
+    p16,
   ];
 
   /// The file of the square on the board.
@@ -616,18 +840,16 @@ enum PieceKind {
   final Role role;
 }
 
-/// Describes a chess piece by its color, role and promotion status.
+/// Describes a chess piece by its color, role.
 @immutable
 class Piece {
   const Piece({
     required this.color,
     required this.role,
-    this.promoted = false,
   });
 
   final PieceColor color;
   final Role role;
-  final bool promoted;
 
   /// Gets the piece kind.
   PieceKind get kind => switch ((color, role)) {
@@ -707,11 +929,7 @@ class Piece {
 
   /// Gets the FEN string of this piece.
   String get fenStr {
-    String s = color.letter + role.letter;
-    if (promoted) {
-      s += '~';
-    }
-    return s;
+    return color.letter + role.letter;
   }
 
   @override
@@ -720,14 +938,90 @@ class Piece {
         other is Piece &&
             other.runtimeType == runtimeType &&
             color == other.color &&
-            role == other.role &&
-            promoted == other.promoted;
+            role == other.role;
   }
 
   @override
-  int get hashCode => Object.hash(color, role, promoted);
+  int get hashCode => Object.hash(color, role);
 
   static const whitePawn = Piece(color: PieceColor.white, role: Role.pawn);
+  static const whiteKnight = Piece(color: PieceColor.white, role: Role.knight);
+  static const whiteBishop = Piece(color: PieceColor.white, role: Role.bishop);
+  static const whiteRook = Piece(color: PieceColor.white, role: Role.rook);
+  static const whiteQueen = Piece(color: PieceColor.white, role: Role.queen);
+  static const whiteKing = Piece(color: PieceColor.white, role: Role.king);
+  static const blackPawn = Piece(color: PieceColor.black, role: Role.pawn);
+  static const blackKnight = Piece(color: PieceColor.black, role: Role.knight);
+  static const blackBishop = Piece(color: PieceColor.black, role: Role.bishop);
+  static const blackRook = Piece(color: PieceColor.black, role: Role.rook);
+  static const blackQueen = Piece(color: PieceColor.black, role: Role.queen);
+  static const blackKing = Piece(color: PieceColor.black, role: Role.king);
+  static const ashPawn = Piece(color: PieceColor.ash, role: Role.pawn);
+  static const ashKnight = Piece(color: PieceColor.ash, role: Role.knight);
+  static const ashBishop = Piece(color: PieceColor.ash, role: Role.bishop);
+  static const ashRook = Piece(color: PieceColor.ash, role: Role.rook);
+  static const ashQueen = Piece(color: PieceColor.ash, role: Role.queen);
+  static const ashKing = Piece(color: PieceColor.ash, role: Role.king);
+  static const cyanPawn = Piece(color: PieceColor.cyan, role: Role.pawn);
+  static const cyanKnight = Piece(color: PieceColor.cyan, role: Role.knight);
+  static const cyanBishop = Piece(color: PieceColor.cyan, role: Role.bishop);
+  static const cyanRook = Piece(color: PieceColor.cyan, role: Role.rook);
+  static const cyanQueen = Piece(color: PieceColor.cyan, role: Role.queen);
+  static const cyanKing = Piece(color: PieceColor.cyan, role: Role.king);
+  static const greenPawn = Piece(color: PieceColor.green, role: Role.pawn);
+  static const greenKnight = Piece(color: PieceColor.green, role: Role.knight);
+  static const greenBishop = Piece(color: PieceColor.green, role: Role.bishop);
+  static const greenRook = Piece(color: PieceColor.green, role: Role.rook);
+  static const greenQueen = Piece(color: PieceColor.green, role: Role.queen);
+  static const greenKing = Piece(color: PieceColor.green, role: Role.king);
+  static const navyPawn = Piece(color: PieceColor.navy, role: Role.pawn);
+  static const navyKnight = Piece(color: PieceColor.navy, role: Role.knight);
+  static const navyBishop = Piece(color: PieceColor.navy, role: Role.bishop);
+  static const navyRook = Piece(color: PieceColor.navy, role: Role.rook);
+  static const navyQueen = Piece(color: PieceColor.navy, role: Role.queen);
+  static const navyKing = Piece(color: PieceColor.navy, role: Role.king);
+  static const orangePawn = Piece(color: PieceColor.orange, role: Role.pawn);
+  static const orangeKnight =
+      Piece(color: PieceColor.orange, role: Role.knight);
+  static const orangeBishop =
+      Piece(color: PieceColor.orange, role: Role.bishop);
+  static const orangeRook = Piece(color: PieceColor.orange, role: Role.rook);
+  static const orangeQueen = Piece(color: PieceColor.orange, role: Role.queen);
+  static const orangeKing = Piece(color: PieceColor.orange, role: Role.king);
+  static const pinkPawn = Piece(color: PieceColor.pink, role: Role.pawn);
+  static const pinkKnight = Piece(color: PieceColor.pink, role: Role.knight);
+  static const pinkBishop = Piece(color: PieceColor.pink, role: Role.bishop);
+  static const pinkRook = Piece(color: PieceColor.pink, role: Role.rook);
+  static const pinkQueen = Piece(color: PieceColor.pink, role: Role.queen);
+  static const pinkKing = Piece(color: PieceColor.pink, role: Role.king);
+  static const redPawn = Piece(color: PieceColor.red, role: Role.pawn);
+  static const redKnight = Piece(color: PieceColor.red, role: Role.knight);
+  static const redBishop = Piece(color: PieceColor.red, role: Role.bishop);
+  static const redRook = Piece(color: PieceColor.red, role: Role.rook);
+  static const redQueen = Piece(color: PieceColor.red, role: Role.queen);
+  static const redKing = Piece(color: PieceColor.red, role: Role.king);
+  static const slatePawn = Piece(color: PieceColor.slate, role: Role.pawn);
+  static const slateKnight = Piece(color: PieceColor.slate, role: Role.knight);
+  static const slateBishop = Piece(color: PieceColor.slate, role: Role.bishop);
+  static const slateRook = Piece(color: PieceColor.slate, role: Role.rook);
+  static const slateQueen = Piece(color: PieceColor.slate, role: Role.queen);
+  static const slateKing = Piece(color: PieceColor.slate, role: Role.king);
+  static const violetPawn = Piece(color: PieceColor.violet, role: Role.pawn);
+  static const violetKnight =
+      Piece(color: PieceColor.violet, role: Role.knight);
+  static const violetBishop =
+      Piece(color: PieceColor.violet, role: Role.bishop);
+  static const violetRook = Piece(color: PieceColor.violet, role: Role.rook);
+  static const violetQueen = Piece(color: PieceColor.violet, role: Role.queen);
+  static const violetKing = Piece(color: PieceColor.violet, role: Role.king);
+  static const yellowPawn = Piece(color: PieceColor.yellow, role: Role.pawn);
+  static const yellowKnight =
+      Piece(color: PieceColor.yellow, role: Role.knight);
+  static const yellowBishop =
+      Piece(color: PieceColor.yellow, role: Role.bishop);
+  static const yellowRook = Piece(color: PieceColor.yellow, role: Role.rook);
+  static const yellowQueen = Piece(color: PieceColor.yellow, role: Role.queen);
+  static const yellowKing = Piece(color: PieceColor.yellow, role: Role.king);
 }
 
 /// Base class for a chess move.
@@ -763,6 +1057,9 @@ class NormalMove extends Move {
 enum IllegalFenCause {
   /// The FEN string is not in the correct format.
   format,
+
+  /// The board part of the FEN string is invalid.
+  board,
 }
 
 /// An exception thrown when trying to parse an invalid FEN string.

@@ -112,4 +112,19 @@ class SquareSet {
       s.index == 0 ? a | (1 << s.offset) : a,
     );
   }
+
+  /// Returns a new [SquareSet] with the given [square] removed.
+  SquareSet withoutSquare(Square square) {
+    final s = _squareToSegment(square);
+    return SquareSet(
+      s.index == 7 ? h & ~(1 << s.offset) : h,
+      s.index == 6 ? g & ~(1 << s.offset) : g,
+      s.index == 5 ? f & ~(1 << s.offset) : f,
+      s.index == 4 ? e & ~(1 << s.offset) : e,
+      s.index == 3 ? d & ~(1 << s.offset) : d,
+      s.index == 2 ? c & ~(1 << s.offset) : c,
+      s.index == 1 ? b & ~(1 << s.offset) : b,
+      s.index == 0 ? a & ~(1 << s.offset) : a,
+    );
+  }
 }
