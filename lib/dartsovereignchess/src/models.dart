@@ -1,5 +1,17 @@
 import 'package:flutter/widgets.dart';
 
+/// The chessboard side.
+///
+/// This is not simply white or black, since the players can switch colors.
+/// TODO: Figure out how to support 4 players.
+enum Side {
+  player1,
+  player2;
+
+  /// Gets the opposite side.
+  Side get opposite => this == Side.player1 ? Side.player2 : Side.player1;
+}
+
 /// Piece color, such as white, black, etc.
 ///
 /// We cannot conflate the piece colors with the normal chess sides, i.e.
@@ -1060,6 +1072,21 @@ enum IllegalFenCause {
 
   /// The board part of the FEN string is invalid.
   board,
+
+  /// The turn part of the FEN string is invalid.
+  turn,
+
+  /// The p1 owned part of the FEN string is invalid.
+  p1Owned,
+
+  /// The p1 controlled part of the FEN string is invalid.
+  p1Controlled,
+
+  /// The p2 owned part of the FEN string is invalid.
+  p2Owned,
+
+  /// The p2 controlled part of the FEN string is invalid.
+  p2Controlled,
 }
 
 /// An exception thrown when trying to parse an invalid FEN string.
@@ -1073,4 +1100,9 @@ class FenException implements Exception {
 
   @override
   String toString() => 'FenException: ${cause.name}';
+}
+
+/// Represents the different possible rules of chess and its variants.
+enum Rule {
+  sovereignChess,
 }

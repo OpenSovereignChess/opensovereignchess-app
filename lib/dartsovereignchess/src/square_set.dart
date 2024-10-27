@@ -61,6 +61,20 @@ class SquareSet {
   final int g;
   final int h;
 
+  factory SquareSet.fromSquare(Square square) {
+    final (index, offset) = _squareToKey(square);
+    return SquareSet(
+      index == 7 ? (1 << offset) : 0,
+      index == 6 ? (1 << offset) : 0,
+      index == 5 ? (1 << offset) : 0,
+      index == 4 ? (1 << offset) : 0,
+      index == 3 ? (1 << offset) : 0,
+      index == 2 ? (1 << offset) : 0,
+      index == 1 ? (1 << offset) : 0,
+      index == 0 ? (1 << offset) : 0,
+    );
+  }
+
   static const empty = SquareSet(0, 0, 0, 0, 0, 0, 0, 0);
 
   _SquareSetSegment _squareToSegment(Square square) {
@@ -92,39 +106,79 @@ class SquareSet {
     };
   }
 
+  /// Returns the squares in the set as an iterable.
+  Iterable<Square> get squares => _iterateSquares();
+
   /// Returns true if the [SquareSet] contains the given [square].
   bool has(Square square) {
-    final s = _squareToSegment(square);
-    return s.data & (1 << s.offset) != 0;
+    final (index, offset) = _squareToKey(square);
+    final integer = _get(index);
+    return integer & (1 << offset) != 0;
   }
 
   /// Returns a new [SquareSet] with the given [square] added.
   SquareSet withSquare(Square square) {
-    final s = _squareToSegment(square);
+    final (index, offset) = _squareToKey(square);
     return SquareSet(
-      s.index == 7 ? h | (1 << s.offset) : h,
-      s.index == 6 ? g | (1 << s.offset) : g,
-      s.index == 5 ? f | (1 << s.offset) : f,
-      s.index == 4 ? e | (1 << s.offset) : e,
-      s.index == 3 ? d | (1 << s.offset) : d,
-      s.index == 2 ? c | (1 << s.offset) : c,
-      s.index == 1 ? b | (1 << s.offset) : b,
-      s.index == 0 ? a | (1 << s.offset) : a,
+      index == 7 ? h | (1 << offset) : h,
+      index == 6 ? g | (1 << offset) : g,
+      index == 5 ? f | (1 << offset) : f,
+      index == 4 ? e | (1 << offset) : e,
+      index == 3 ? d | (1 << offset) : d,
+      index == 2 ? c | (1 << offset) : c,
+      index == 1 ? b | (1 << offset) : b,
+      index == 0 ? a | (1 << offset) : a,
     );
   }
 
   /// Returns a new [SquareSet] with the given [square] removed.
   SquareSet withoutSquare(Square square) {
-    final s = _squareToSegment(square);
+    final (index, offset) = _squareToKey(square);
     return SquareSet(
-      s.index == 7 ? h & ~(1 << s.offset) : h,
-      s.index == 6 ? g & ~(1 << s.offset) : g,
-      s.index == 5 ? f & ~(1 << s.offset) : f,
-      s.index == 4 ? e & ~(1 << s.offset) : e,
-      s.index == 3 ? d & ~(1 << s.offset) : d,
-      s.index == 2 ? c & ~(1 << s.offset) : c,
-      s.index == 1 ? b & ~(1 << s.offset) : b,
-      s.index == 0 ? a & ~(1 << s.offset) : a,
+      index == 7 ? h & ~(1 << offset) : h,
+      index == 6 ? g & ~(1 << offset) : g,
+      index == 5 ? f & ~(1 << offset) : f,
+      index == 4 ? e & ~(1 << offset) : e,
+      index == 3 ? d & ~(1 << offset) : d,
+      index == 2 ? c & ~(1 << offset) : c,
+      index == 1 ? b & ~(1 << offset) : b,
+      index == 0 ? a & ~(1 << offset) : a,
     );
   }
+
+  Iterable<Square> _iterateSquares() sync* {
+    // TODO: Iterate through the rest of the segments.
+    int bitboard = a;
+    while (bitboard != 0) {
+      final square = Square(_getFirstBit(bitboard)!);
+      bitboard ^= 1 << square!;
+      yield square;
+    }
+  }
+
+  int? _getFirstBit(int bitboard) {
+    final ntz = _ntz32(bitboard);
+    return ntz >= 0 && ntz < intSize ? ntz : null;
+  }
 }
+
+(int, int) _squareToKey(Square square) {
+  int index = square ~/ intSize;
+  int offset = square % intSize;
+  return (index, offset);
+}
+
+// from https://gist.github.com/jtmcdole/297434f327077dbfe5fb19da3b4ef5be
+// Returns the number of trailing zeros in a 32bit unsigned integer.
+int _ntz32(int x) {
+  assert(x < 0x100000000, "only 32bit numbers supported");
+  return _ntzLut32[(x & -x) % 37];
+}
+
+const _ntzLut32 = [
+  32, 0, 1, 26, 2, 23, 27, 0, //
+  3, 16, 24, 30, 28, 11, 0, 13,
+  4, 7, 17, 0, 25, 22, 31, 15,
+  29, 10, 12, 6, 0, 21, 14, 9,
+  5, 20, 8, 19, 18
+];

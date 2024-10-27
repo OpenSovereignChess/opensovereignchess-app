@@ -179,6 +179,11 @@ class Board {
     return board;
   }
 
+  ///// Gets all squares occupied by [Side].
+  //SquareSet bySide(Side side) {
+
+  //}
+
   /// Gets all squares occupied by pieces of [PieceColor].
   SquareSet byColor(PieceColor color) {
     return switch (color) {
@@ -237,6 +242,10 @@ class Board {
     }
     final role = roleAt(square)!;
     return Piece(color: color, role: role);
+  }
+
+  /// Finds the unique king [Square] of the given [Side], if any.
+  Square? kingOf(Side side) {
   }
 
   /// Puts a [Piece] on a [Square] overriding the existing one, if any.
