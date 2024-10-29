@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/src/debug.dart';
-import 'package:opensovereignchess_app/dartsovereignchess/src/square_set.dart';
 
 void main() {
   test('SquareSet.has returns true if the SquareSet contains the given square',
@@ -20,5 +19,33 @@ void main() {
     final result = squareSet.withSquare(Square.a1);
     //print(humanReadableSquareSet(result));
     expect(result.has(Square.a1), true);
+  });
+
+  test('squares', () {
+    expect(makeSquareSet('''
+. . . . . . . . . . . . . . . 1
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . 1
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+1 . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+1 . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+1 . . . . . . . . . . . . . . .
+''').squares.toList(), [
+      Square.a1,
+      Square.a3,
+      Square.a6,
+      Square.p9,
+      Square.h13,
+      Square.p16,
+    ]);
   });
 }

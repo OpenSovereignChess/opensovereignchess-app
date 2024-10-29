@@ -3,25 +3,6 @@ import './models.dart';
 
 const intSize = 32;
 
-/// A segment of a [SquareSet] representing part of the board.
-@immutable
-class _SquareSetSegment {
-  const _SquareSetSegment({
-    required this.data,
-    required this.index,
-    required this.offset,
-  });
-
-  /// The 32-bit integer representing 32 squares of the board.
-  final int data;
-
-  /// The index of the segment in the SquareSet.
-  final int index;
-
-  /// The bit representing the square in this segment.
-  final int offset;
-}
-
 /// A finite set of all squares on a chessboard.
 ///
 /// Dart uses 32-bit integers when compiled for web:
@@ -152,13 +133,26 @@ class SquareSet {
     );
   }
 
+  Iterable<int> _iterateSegments() sync* {
+    yield a;
+    yield b;
+    yield c;
+    yield d;
+    yield e;
+    yield f;
+    yield g;
+    yield h;
+  }
+
   Iterable<Square> _iterateSquares() sync* {
-    // TODO: Iterate through the rest of the segments.
-    int bitboard = a;
-    while (bitboard != 0) {
-      final square = Square(_getFirstBit(bitboard)!);
-      bitboard ^= 1 << square!;
-      yield square;
+    for (final (index, segment) in _iterateSegments().indexed) {
+      int bitboard = segment;
+      int offset = index * intSize;
+      while (bitboard != 0) {
+        final square = _getFirstBit(bitboard);
+        bitboard ^= 1 << square!;
+        yield Square(square + offset);
+      }
     }
   }
 
