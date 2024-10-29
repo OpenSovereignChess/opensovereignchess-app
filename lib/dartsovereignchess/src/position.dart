@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
+import './attacks.dart';
 import './board.dart';
 import './models.dart';
 import './setup.dart';
@@ -15,9 +16,9 @@ abstract class Position<T extends Position<T>> {
     required this.board,
     required this.turn,
     required this.p1Owned,
-    this.p1Controlled,
+    required this.p1Controlled,
     required this.p2Owned,
-    this.p2Controlled,
+    required this.p2Controlled,
   });
 
   /// Piece positions on the board.
@@ -30,13 +31,13 @@ abstract class Position<T extends Position<T>> {
   final PieceColor p1Owned;
 
   /// The color armies that player 1 controls.
-  final ISet<PieceColor>? p1Controlled;
+  final ISet<PieceColor> p1Controlled;
 
   /// The color army player 2 owns.
   final PieceColor p2Owned;
 
   /// The color armies that player 2 controls.
-  final ISet<PieceColor>? p2Controlled;
+  final ISet<PieceColor> p2Controlled;
 
   /// The [Rule] of this position.
   Rule get rule;
@@ -59,20 +60,20 @@ abstract class Position<T extends Position<T>> {
     };
   }
 
-  List<PieceColor> _sideColors(Side turn) {
+  ISet<PieceColor> _sideColors(Side turn) {
     if (turn == Side.player1) {
       return [
         p1Owned,
-        ...(p1Controlled ?? []),
-      ];
+        ...p1Controlled,
+      ].toISet();
     }
     if (turn == Side.player2) {
       return [
         p2Owned,
-        ...(p2Controlled ?? []),
-      ];
+        ...p2Controlled,
+      ].toISet();
     }
-    return [];
+    return ISet.empty();
   }
 
   /// Gets all the legal moves of this position.
@@ -100,14 +101,19 @@ abstract class Position<T extends Position<T>> {
   /// calling this method several times.
   SquareSet _legalMovesOf(Square square, {_Context? context}) {
     final ctx = context ?? _makeContext();
-    // TODO
-    return SquareSet.empty;
-  }
+    final piece = board.pieceAt(square);
+    if (piece == null || !_sideColors(turn).contains(piece.color)) {
+      return SquareSet.empty;
+    }
 
-  SquareSet _pseudoLegalMoves(Position pos, Square square, _Context context) {
-    final piece = pos.board.pieceAt(square);
-    //SquareSet pseudo = attacks(piece, square, pos.board.occupied);
-    return SquareSet.empty;
+    SquareSet pseudo;
+    if (piece.role == Role.king) {
+      pseudo = kingAttacks(square);
+    } else {
+      pseudo = SquareSet.empty;
+    }
+
+    return pseudo;
   }
 
   _Context _makeContext() {
@@ -125,9 +131,9 @@ class SovereignChess extends Position<SovereignChess> {
     required super.board,
     required super.turn,
     required super.p1Owned,
-    super.p1Controlled,
+    required super.p1Controlled,
     required super.p2Owned,
-    super.p2Controlled,
+    required super.p2Controlled,
   });
 
   @override
@@ -162,9 +168,9 @@ class SovereignChess extends Position<SovereignChess> {
       board: board ?? this.board,
       turn: turn ?? this.turn,
       p1Owned: p1Owned ?? this.p1Owned,
-      p1Controlled: p1Controlled,
+      p1Controlled: p1Controlled ?? this.p1Controlled,
       p2Owned: p2Owned ?? this.p2Owned,
-      p2Controlled: p2Controlled,
+      p2Controlled: p2Controlled ?? this.p2Controlled,
     );
   }
 }

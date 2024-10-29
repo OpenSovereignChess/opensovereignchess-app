@@ -77,16 +77,22 @@ class SquareSet {
 
   static const empty = SquareSet(0, 0, 0, 0, 0, 0, 0, 0);
 
-  _SquareSetSegment _squareToSegment(Square square) {
-    int index = square ~/ intSize;
-    int offset = square % intSize;
-    int data = _get(index);
-    return _SquareSetSegment(
-      index: index,
-      offset: offset,
-      data: data,
-    );
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is SquareSet &&
+            other.a == a &&
+            other.b == b &&
+            other.c == c &&
+            other.d == d &&
+            other.e == e &&
+            other.f == f &&
+            other.g == g &&
+            other.h == h;
   }
+
+  @override
+  int get hashCode => Object.hash(a, b, c, d, e, f, g, h);
 
   /// Method to retrieve a specific integer representing part of the board.
   ///

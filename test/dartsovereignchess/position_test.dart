@@ -9,10 +9,26 @@ void main() {
       final pos = SovereignChess.fromSetup(Setup.parseFen(
           '16/16/16/16/16/16/16/16/16/16/16/16/16/16/1wk14/16 1 w - b -'));
       final moves = IMap({
-        Square.b2: SquareSet.fromSquare(Square.a1),
+        Square.b2: makeSquareSet('''
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . 
+1 1 1 . . . . . . . . . . . . . 
+1 . 1 . . . . . . . . . . . . . 
+1 1 1 . . . . . . . . . . . . . 
+'''),
       });
       final legalMoves = pos.legalMoves;
-      print(humanReadableSquareSet(legalMoves[Square.b2]!));
       expect(legalMoves, equals(moves));
     });
   });
