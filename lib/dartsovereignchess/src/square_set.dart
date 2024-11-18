@@ -67,10 +67,6 @@ class SquareSet {
   }
 
   static const empty = SquareSet(0, 0, 0, 0, 0, 0, 0, 0);
-  static const diagonal = SquareSet(0x80004000, 0x20001000, 0x8000400,
-      0x2000100, 0x800040, 0x200010, 0x80004, 0x20001);
-  static const antidiagonal = SquareSet(0x10002, 0x40008, 0x100020, 0x400080,
-      0x1000200, 0x4000800, 0x10002000, 0x40008000);
 
   // North or east rays start from a1
   // South or west rays start from p16
@@ -209,10 +205,6 @@ class SquareSet {
   SquareSet intersect(SquareSet other) => _intersect(other);
   SquareSet operator &(SquareSet other) => _intersect(other);
 
-  /// Returns a new [SquareSet] with the [other] squares removed from this set.
-  SquareSet minus(SquareSet other) => _minus(other);
-  SquareSet operator -(SquareSet other) => _minus(other);
-
   /// Flips the set vertically.
   SquareSet flipVertical() {
     return SquareSet(
@@ -303,8 +295,9 @@ class SquareSet {
   }
 
   /// Returns the least significant bit as a [Square].
-  Square lsb() {
-    return _iterateSquares().first;
+  Square? lsb() {
+    final it = _iterateSquares();
+    return it.isEmpty ? null : it.first;
   }
 
   Iterable<int> _iterateSegments() sync* {
@@ -396,19 +389,6 @@ class SquareSet {
       c & other.c,
       b & other.b,
       a & other.a,
-    );
-  }
-
-  SquareSet _minus(SquareSet other) {
-    return SquareSet(
-      h - other.h,
-      g - other.g,
-      f - other.f,
-      e - other.e,
-      d - other.d,
-      c - other.c,
-      b - other.b,
-      a - other.a,
     );
   }
 

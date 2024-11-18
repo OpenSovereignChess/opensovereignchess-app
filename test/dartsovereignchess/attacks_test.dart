@@ -60,16 +60,17 @@ void main() {
 . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . .
 . . . . . . . . . . . . . . . .
+. . . . . . . . . . 1 . . . . .
+. 1 . . . . . . . 1 . . . . . .
+. . 1 . . . . . 1 . . . . . . .
+. . . 1 . . . 1 . . . . . . . .
+. . . . 1 . 1 . . . . . . . . .
 . . . . . . . . . . . . . . . .
-. . . . . . . . . . . . . . . .
-. . . . . . . . . . . . . . . .
-. . . . . . . . . . . . . . . .
-. . . . . . . . . . . . . . . .
-. . . . . . . . . . . . . . . .
-. . . . . . . . . . . . . . . .
-. . . . . . . . . . . . . . . .
+. . . . 1 . 1 . . . . . . . . .
+. . . 1 . . . . . . . . . . . .
 ''');
-    final occupied = SquareSet.empty;
+    final occupied =
+        SquareSet.fromSquares([Square.d1, Square.g2, Square.b7, Square.k8]);
     final result = bishopAttacks(Square.f3, occupied);
     print(humanReadableSquareSet(result));
     expect(result, attacks);
