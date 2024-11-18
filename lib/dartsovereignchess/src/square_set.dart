@@ -44,6 +44,7 @@ class SquareSet {
   final int g;
   final int h;
 
+  /// Creates a [SquareSet] with a single [Square].
   factory SquareSet.fromSquare(Square square) {
     final (index, offset) = _squareToKey(square);
     return SquareSet(
@@ -58,11 +59,89 @@ class SquareSet {
     );
   }
 
+  /// Creates a [SquareSet] from several [Square]s.
+  factory SquareSet.fromSquares(Iterable<Square> squares) {
+    return squares
+        .map((square) => SquareSet.fromSquare(square))
+        .fold(SquareSet.empty, (left, right) => left | right);
+  }
+
   static const empty = SquareSet(0, 0, 0, 0, 0, 0, 0, 0);
   static const diagonal = SquareSet(0x80004000, 0x20001000, 0x8000400,
       0x2000100, 0x800040, 0x200010, 0x80004, 0x20001);
   static const antidiagonal = SquareSet(0x10002, 0x40008, 0x100020, 0x400080,
       0x1000200, 0x4000800, 0x10002000, 0x40008000);
+
+  // North or east rays start from a1
+  // South or west rays start from p16
+  // Northwest ray starts from i1
+  // Southeast ray starts from h16
+  static const northRay =
+      SquareSet(0, 0, 0, 1, 0x10001, 0x10001, 0x10001, 0x10000);
+  static const eastRay = SquareSet(0, 0, 0, 0, 0, 0, 0, 0x1FE);
+  static const southRay = SquareSet(
+      0x8000, 0x80008000, 0x80008000, 0x80008000, 0x80000000, 0, 0, 0);
+  static const westRay = SquareSet(0x7F800000, 0, 0, 0, 0, 0, 0, 0);
+  static const northwestRay =
+      SquareSet(0, 0, 0, 1, 0x20004, 0x80010, 0x200040, 0x800000);
+  static const northeastRay =
+      SquareSet(0, 0, 0, 0x100, 0x800040, 0x200010, 0x80004, 0x20000);
+  static const southeastRay =
+      SquareSet(0x100, 0x2000400, 0x8001000, 0x20004000, 0x80000000, 0, 0, 0);
+  static const southwestRay =
+      SquareSet(0x4000, 0x20001000, 0x8000400, 0x2000100, 0x800000, 0, 0, 0);
+
+  // Rank masks
+  static const firstRankMask = SquareSet(0, 0, 0, 0, 0, 0, 0, 0xFFFF);
+  static const secondRankMask = SquareSet(0, 0, 0, 0, 0, 0, 0, 0xFFFF0000);
+  static const thirdRankMask = SquareSet(0, 0, 0, 0, 0, 0, 0xFFFF, 0);
+  static const fourthRankMask = SquareSet(0, 0, 0, 0, 0, 0, 0xFFFF0000, 0);
+  static const fifthRankMask = SquareSet(0, 0, 0, 0, 0, 0xFFFF, 0, 0);
+  static const sixthRankMask = SquareSet(0, 0, 0, 0, 0, 0xFFFF0000, 0, 0);
+  static const seventhRankMask = SquareSet(0, 0, 0, 0, 0xFFFF, 0, 0, 0);
+  static const eigthRankMask = SquareSet(0, 0, 0, 0, 0xFFFF0000, 0, 0, 0);
+  static const ninthRankMask = SquareSet(0, 0, 0, 0xFFFF, 0, 0, 0, 0);
+  static const tenthRankMask = SquareSet(0, 0, 0, 0xFFFF0000, 0, 0, 0, 0);
+  static const eleventhRankMask = SquareSet(0, 0, 0xFFFF, 0, 0, 0, 0, 0);
+  static const twelvthRankMask = SquareSet(0, 0, 0xFFFF0000, 0, 0, 0, 0, 0);
+  static const thirteenthRankMask = SquareSet(0, 0xFFFF, 0, 0, 0, 0, 0, 0);
+  static const fourteenthRankMask = SquareSet(0, 0xFFFF0000, 0, 0, 0, 0, 0, 0);
+  static const fifteenthRankMask = SquareSet(0xFFFF, 0, 0, 0, 0, 0, 0, 0);
+  static const sixteenthRankMask = SquareSet(0xFFFF0000, 0, 0, 0, 0, 0, 0, 0);
+
+  // File masks
+  static const aFileMask = SquareSet(
+      0x10001, 0x10001, 0x10001, 0x10001, 0x10001, 0x10001, 0x10001, 0x10001);
+  static const bFileMask = SquareSet(
+      0x20002, 0x20002, 0x20002, 0x20002, 0x20002, 0x20002, 0x20002, 0x20002);
+  static const cFileMask = SquareSet(
+      0x40004, 0x40004, 0x40004, 0x40004, 0x40004, 0x40004, 0x40004, 0x40004);
+  static const dFileMask = SquareSet(
+      0x80008, 0x80008, 0x80008, 0x80008, 0x80008, 0x80008, 0x80008, 0x80008);
+  static const eFileMask = SquareSet(0x100010, 0x100010, 0x100010, 0x100010,
+      0x100010, 0x100010, 0x100010, 0x100010);
+  static const fFileMask = SquareSet(0x200020, 0x200020, 0x200020, 0x200020,
+      0x200020, 0x200020, 0x200020, 0x200020);
+  static const gFileMask = SquareSet(0x400040, 0x400040, 0x400040, 0x400040,
+      0x400040, 0x400040, 0x400040, 0x400040);
+  static const hFileMask = SquareSet(0x800080, 0x800080, 0x800080, 0x800080,
+      0x800080, 0x800080, 0x800080, 0x800080);
+  static const iFileMask = SquareSet(0x1000100, 0x1000100, 0x1000100, 0x1000100,
+      0x1000100, 0x1000100, 0x1000100, 0x1000100);
+  static const jFileMask = SquareSet(0x2000200, 0x2000200, 0x2000200, 0x2000200,
+      0x2000200, 0x2000200, 0x2000200, 0x2000200);
+  static const kFileMask = SquareSet(0x4000400, 0x4000400, 0x4000400, 0x4000400,
+      0x4000400, 0x4000400, 0x4000400, 0x4000400);
+  static const lFileMask = SquareSet(0x8000800, 0x8000800, 0x8000800, 0x8000800,
+      0x8000800, 0x8000800, 0x8000800, 0x8000800);
+  static const mFileMask = SquareSet(0x10001000, 0x10001000, 0x10001000,
+      0x10001000, 0x10001000, 0x10001000, 0x10001000, 0x10001000);
+  static const nFileMask = SquareSet(0x20002000, 0x20002000, 0x20002000,
+      0x20002000, 0x20002000, 0x20002000, 0x20002000, 0x20002000);
+  static const oFileMask = SquareSet(0x40004000, 0x40004000, 0x40004000,
+      0x40004000, 0x40004000, 0x40004000, 0x40004000, 0x40004000);
+  static const pFileMask = SquareSet(0x80008000, 0x80008000, 0x80008000,
+      0x80008000, 0x80008000, 0x80008000, 0x80008000, 0x80008000);
 
   /// Bitwise right shift
   SquareSet shr(int shift) {
@@ -221,6 +300,11 @@ class SquareSet {
       index == 1 ? b & ~(1 << offset) : b,
       index == 0 ? a & ~(1 << offset) : a,
     );
+  }
+
+  /// Returns the least significant bit as a [Square].
+  Square lsb() {
+    return _iterateSquares().first;
   }
 
   Iterable<int> _iterateSegments() sync* {

@@ -45,10 +45,33 @@ void main() {
 . . . . 1 . 1 . . . . . . . . .
 . . . 1 . . . 1 . . . . . . . .
 ''');
-    //final occupied = SquareSet.fromSquare(Square.f3);
     final occupied = SquareSet.empty;
     final result = bishopAttacks(Square.f3, occupied);
-    //print(humanReadableSquareSet(result));
+    expect(result, attacks);
+  });
+
+  test('Bishop attacks, occupied board', () {
+    final attacks = makeSquareSet('''
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+''');
+    final occupied = SquareSet.empty;
+    final result = bishopAttacks(Square.f3, occupied);
+    print(humanReadableSquareSet(result));
     expect(result, attacks);
   });
 }
