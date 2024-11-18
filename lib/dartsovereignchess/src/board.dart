@@ -245,8 +245,7 @@ class Board {
   }
 
   /// Finds the unique king [Square] of the given [Side], if any.
-  Square? kingOf(Side side) {
-  }
+  Square? kingOf(Side side) {}
 
   /// Puts a [Piece] on a [Square] overriding the existing one, if any.
   Board setPieceAt(Square square, Piece piece) {

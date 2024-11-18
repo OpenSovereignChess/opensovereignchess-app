@@ -1,14 +1,16 @@
 import 'package:flutter/widgets.dart';
 import './models.dart';
+import './debug.dart';
 
 const intSize = 32;
+const rowSize = 16;
 
 /// A finite set of all squares on a chessboard.
 ///
 /// Dart uses 32-bit integers when compiled for web:
 ///   https://dart.dev/guides/language/numbers#bitwise-operations.
 /// Our board has 256 squares.  To emulate a normal chess bitboard,
-/// we will stitch together 8 32-bit integers to get our 256 squares,
+/// we will stitch together 8 32 bit integers to get our 256 squares,
 /// using a little-endian rank-file mapping.
 /// See also [Square].
 ///
@@ -28,7 +30,7 @@ class SquareSet {
     this.a,
   );
 
-  /// The 8 32-bit integers representing the parts of our board.
+  /// The 8 32 bit integers representing the parts of our board.
   ///
   /// `a` represents squares a1, b1 ... o2, p2.
   /// `b` represents squares a3, b3 ... o4, p4.
@@ -57,6 +59,94 @@ class SquareSet {
   }
 
   static const empty = SquareSet(0, 0, 0, 0, 0, 0, 0, 0);
+  static const diagonal = SquareSet(0x80004000, 0x20001000, 0x8000400,
+      0x2000100, 0x800040, 0x200010, 0x80004, 0x20001);
+  static const antidiagonal = SquareSet(0x10002, 0x40008, 0x100020, 0x400080,
+      0x1000200, 0x4000800, 0x10002000, 0x40008000);
+
+  /// Bitwise right shift
+  SquareSet shr(int shift) {
+    if (shift >= Square.values.length) {
+      return SquareSet.empty;
+    }
+    if (shift > 0) {
+      // Circular shift, but onto the next integer instead of the same integer
+      if (shift > intSize) {
+        // Naive implementation: don't shift more than 32 bits at a time,
+        // or else we have to do a more complicated algorithm.
+        final rounds = shift ~/ intSize;
+        SquareSet result = this;
+        for (var i = 1; i <= rounds; i++) {
+          result = result._shr(intSize);
+        }
+        final remainder = shift % intSize;
+        if (remainder > 0) {
+          result = result._shr(remainder);
+        }
+        return result;
+      } else {
+        return _shr(shift);
+      }
+    }
+    return this;
+  }
+
+  /// Bitwise left shift
+  SquareSet shl(int shift) {
+    if (shift >= Square.values.length) {
+      return SquareSet.empty;
+    }
+    if (shift > 0) {
+      // Circular shift, but onto the next integer instead of the same integer
+      if (shift > intSize) {
+        // Naive implementation: don't shift more than 32 bits at a time,
+        // or else we have to do a more complicated algorithm.
+        final rounds = shift ~/ intSize;
+        SquareSet result = this;
+        for (var i = 1; i <= rounds; i++) {
+          result = result._shl(intSize);
+        }
+        final remainder = shift % intSize;
+        if (remainder > 0) {
+          result = result._shl(remainder);
+        }
+        return result;
+      } else {
+        return _shl(shift);
+      }
+    }
+    return this;
+  }
+
+  /// Returns a new [SquareSet] with a bitwise XOR of this set and [other].
+  SquareSet xor(SquareSet other) => _xor(other);
+  SquareSet operator ^(SquareSet other) => _xor(other);
+
+  /// Returns a new [SquareSet] with the squares that are in either this set or [other].
+  SquareSet union(SquareSet other) => _union(other);
+  SquareSet operator |(SquareSet other) => _union(other);
+
+  /// Returns a new [SquareSet] with the squares that are in both this set and [other].
+  SquareSet intersect(SquareSet other) => _intersect(other);
+  SquareSet operator &(SquareSet other) => _intersect(other);
+
+  /// Returns a new [SquareSet] with the [other] squares removed from this set.
+  SquareSet minus(SquareSet other) => _minus(other);
+  SquareSet operator -(SquareSet other) => _minus(other);
+
+  /// Flips the set vertically.
+  SquareSet flipVertical() {
+    return SquareSet(
+      ((a >>> rowSize) | (a << rowSize)).toUnsigned(intSize),
+      ((b >>> rowSize) | (b << rowSize)).toUnsigned(intSize),
+      ((c >>> rowSize) | (c << rowSize)).toUnsigned(intSize),
+      ((d >>> rowSize) | (d << rowSize)).toUnsigned(intSize),
+      ((e >>> rowSize) | (e << rowSize)).toUnsigned(intSize),
+      ((f >>> rowSize) | (f << rowSize)).toUnsigned(intSize),
+      ((g >>> rowSize) | (g << rowSize)).toUnsigned(intSize),
+      ((h >>> rowSize) | (h << rowSize)).toUnsigned(intSize),
+    );
+  }
 
   @override
   bool operator ==(Object other) {
@@ -154,6 +244,88 @@ class SquareSet {
         yield Square(square + offset);
       }
     }
+  }
+
+  SquareSet _shr(int shift) {
+    assert(shift >= 0 && shift <= intSize,
+        'cannot shift more than 32 bits at a time');
+    return SquareSet(
+      (h >>> shift).toUnsigned(intSize),
+      (g >>> shift | h << (intSize - shift)).toUnsigned(intSize),
+      (f >>> shift | g << (intSize - shift)).toUnsigned(intSize),
+      (e >>> shift | f << (intSize - shift)).toUnsigned(intSize),
+      (d >>> shift | e << (intSize - shift)).toUnsigned(intSize),
+      (c >>> shift | d << (intSize - shift)).toUnsigned(intSize),
+      (b >>> shift | c << (intSize - shift)).toUnsigned(intSize),
+      (a >>> shift | b << (intSize - shift)).toUnsigned(intSize),
+    );
+  }
+
+  SquareSet _shl(int shift) {
+    assert(shift >= 0 && shift <= intSize,
+        'cannot shift more than 32 bits at a time');
+    return SquareSet(
+      (h << shift | g >> (intSize - shift)).toUnsigned(intSize),
+      (g << shift | f >> (intSize - shift)).toUnsigned(intSize),
+      (f << shift | e >> (intSize - shift)).toUnsigned(intSize),
+      (e << shift | d >> (intSize - shift)).toUnsigned(intSize),
+      (d << shift | c >> (intSize - shift)).toUnsigned(intSize),
+      (c << shift | b >> (intSize - shift)).toUnsigned(intSize),
+      (b << shift | a >> (intSize - shift)).toUnsigned(intSize),
+      (a << shift).toUnsigned(intSize),
+    );
+  }
+
+  SquareSet _xor(SquareSet other) {
+    return SquareSet(
+      h ^ other.h,
+      g ^ other.g,
+      f ^ other.f,
+      e ^ other.e,
+      d ^ other.d,
+      c ^ other.c,
+      b ^ other.b,
+      a ^ other.a,
+    );
+  }
+
+  SquareSet _union(SquareSet other) {
+    return SquareSet(
+      h | other.h,
+      g | other.g,
+      f | other.f,
+      e | other.e,
+      d | other.d,
+      c | other.c,
+      b | other.b,
+      a | other.a,
+    );
+  }
+
+  SquareSet _intersect(SquareSet other) {
+    return SquareSet(
+      h & other.h,
+      g & other.g,
+      f & other.f,
+      e & other.e,
+      d & other.d,
+      c & other.c,
+      b & other.b,
+      a & other.a,
+    );
+  }
+
+  SquareSet _minus(SquareSet other) {
+    return SquareSet(
+      h - other.h,
+      g - other.g,
+      f - other.f,
+      e - other.e,
+      d - other.d,
+      c - other.c,
+      b - other.b,
+      a - other.a,
+    );
   }
 
   int? _getFirstBit(int bitboard) {

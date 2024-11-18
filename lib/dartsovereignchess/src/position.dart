@@ -107,10 +107,12 @@ abstract class Position<T extends Position<T>> {
     }
 
     SquareSet pseudo;
-    if (piece.role == Role.king) {
+    if (piece.role == Role.pawn) {
       pseudo = kingAttacks(square);
+    } else if (piece.role == Role.bishop) {
+      pseudo = bishopAttacks(square, board.occupied);
     } else {
-      pseudo = SquareSet.empty;
+      pseudo = kingAttacks(square);
     }
 
     return pseudo;
