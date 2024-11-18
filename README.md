@@ -7,7 +7,7 @@ Flutter app for playing Sovereign Chess.
 To run site locally:
 
 ```
-flutter run
+flutter run -d chrome
 ```
 
 ### Adding piece assets

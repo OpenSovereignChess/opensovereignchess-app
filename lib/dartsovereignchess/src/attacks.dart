@@ -7,10 +7,14 @@ SquareSet kingAttacks(Square square) {
   return _kingAttacks[square];
 }
 
+/// Gets squares attacked or defended by a knight on [Square].
+SquareSet knightAttacks(Square square) {
+  return _knightAttacks[square];
+}
+
 /// Gets squares attacked or defended by a bishop on [Square], given `occupied`
 /// squares.
 SquareSet bishopAttacks(Square square, SquareSet occupied) {
-  final bit = SquareSet.fromSquare(square);
   final nwRay =
       _computeRayAttack(_northwestRange[square], occupied, _northwestRange);
   final neRay =
@@ -20,6 +24,24 @@ SquareSet bishopAttacks(Square square, SquareSet occupied) {
   final swRay = _computeRayAttack(
       _southwestRange[square], occupied, _northwestRange, true);
   return nwRay | neRay | seRay | swRay;
+}
+
+/// Gets squares attacked or defended by a rook on [Square], given `occupied`
+/// squares.
+SquareSet rookAttacks(Square square, SquareSet occupied) {
+  final northRay =
+      _computeRayAttack(_northRange[square], occupied, _northRange);
+  final eastRay = _computeRayAttack(_eastRange[square], occupied, _eastRange);
+  final southRay =
+      _computeRayAttack(_southRange[square], occupied, _northRange, true);
+  final westRay = _computeWestRayAttack(_westRange[square], occupied);
+  return northRay | eastRay | southRay | westRay;
+}
+
+/// Gets squares attacked or defended by a queen on [Square], given `occupied`
+/// squares.
+SquareSet queenAttacks(Square square, SquareSet occupied) {
+  return bishopAttacks(square, occupied) ^ rookAttacks(square, occupied);
 }
 
 SquareSet _computeRange(Square square, List<int> deltas) {
@@ -46,6 +68,8 @@ List<T> _tabulate<T>(T Function(Square square) f) {
 final _kingAttacks =
     _tabulate((sq) => _computeRange(sq, [-17, -16, -15, -1, 1, 15, 16, 17]));
 
+final _knightAttacks =
+    _tabulate((sq) => _computeRange(sq, [-33, -31, -18, -14, 14, 18, 31, 33]));
 final _northRange = _tabulate((sq) {
   return SquareSet.northRay.shl(sq);
 });
@@ -111,7 +135,9 @@ final _southwestRange = _tabulate((sq) {
   return SquareSet.southwestRay.shr(shift) & mask;
 });
 
-// ranges should be the flipped version
+// `ranges` should be the northern version, when `reverse` is true, i.e.
+// - for southeast rays, `_northeastRange`
+// - for southwest rays, `_northwestRange`
 SquareSet _computeRayAttack(
     SquareSet ray, SquareSet occupied, List<SquareSet> ranges,
     [bool reverse = false]) {
@@ -120,10 +146,18 @@ SquareSet _computeRayAttack(
   final intersection = _occupied & _ray;
   final lsb = intersection.lsb();
   final blocked = (lsb != null ? ranges[lsb] : SquareSet.empty) & _ray;
-  //print('blocked');
-  //print(humanReadableSquareSet(blocked));
   final result = _ray ^ blocked;
   return reverse ? result.flipVertical() : result;
+}
+
+SquareSet _computeWestRayAttack(SquareSet ray, SquareSet occupied) {
+  final _ray = ray.mirrorHorizontal();
+  final _occupied = occupied.mirrorHorizontal();
+  final intersection = _occupied & _ray;
+  final lsb = intersection.lsb();
+  final blocked = (lsb != null ? _eastRange[lsb] : SquareSet.empty) & _ray;
+  final result = _ray ^ blocked;
+  return result.mirrorHorizontal();
 }
 
 final _rankMask = <SquareSet>[

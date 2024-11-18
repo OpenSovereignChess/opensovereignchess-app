@@ -26,6 +26,30 @@ void main() {
     expect(kingAttacks(Square.f3), attacks);
   });
 
+  test('Knight attacks', () {
+    expect(
+      knightAttacks(Square.d4),
+      makeSquareSet('''
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . 1 . 1 . . . . . . . . . . .
+. 1 . . . 1 . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. 1 . . . 1 . . . . . . . . . .
+. . 1 . 1 . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+'''),
+    );
+  });
+
   test('Bishop attacks, empty board', () {
     final attacks = makeSquareSet('''
 . . . . . . . . . . . . . . . .
@@ -72,7 +96,78 @@ void main() {
     final occupied =
         SquareSet.fromSquares([Square.d1, Square.g2, Square.b7, Square.k8]);
     final result = bishopAttacks(Square.f3, occupied);
-    print(humanReadableSquareSet(result));
     expect(result, attacks);
+  });
+
+  test('Rook attacks, empty board', () {
+    final attacks = makeSquareSet('''
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+1 1 1 1 1 1 1 . 1 1 1 1 1 1 1 1
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+''');
+    final result = rookAttacks(Square.h9, SquareSet.empty);
+    expect(result, attacks);
+  });
+
+  test('Rook attacks, occupied board', () {
+    final attacks = makeSquareSet('''
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . 1 . 1 1 1 1 1 1 1 .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . 1 . . . . . . . .
+. . . . . . . . . . . . . . . .
+''');
+    final occupied =
+        SquareSet.fromSquares([Square.g9, Square.h2, Square.h12, Square.o9]);
+    final result = rookAttacks(Square.h9, occupied);
+    expect(result, attacks);
+  });
+
+  test('Queen attacks', () {
+    expect(
+      queenAttacks(Square.d4, SquareSet.empty),
+      makeSquareSet('''
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . 1 . . . . . . . 1 . . . .
+. . . 1 . . . . . . 1 . . . . .
+. . . 1 . . . . . 1 . . . . . .
+. . . 1 . . . . 1 . . . . . . .
+. . . 1 . . . 1 . . . . . . . .
+1 . . 1 . . 1 . . . . . . . . .
+. 1 . 1 . 1 . . . . . . . . . .
+. . 1 1 1 . . . . . . . . . . .
+1 1 1 . 1 1 1 1 1 1 1 1 . . . .
+. . 1 1 1 . . . . . . . . . . .
+. 1 . 1 . 1 . . . . . . . . . .
+1 . . 1 . . 1 . . . . . . . . .
+'''),
+    );
   });
 }

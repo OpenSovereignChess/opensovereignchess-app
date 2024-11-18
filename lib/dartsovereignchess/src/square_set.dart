@@ -219,6 +219,34 @@ class SquareSet {
     );
   }
 
+  /// Flips the set horizontally.
+  SquareSet mirrorHorizontal() {
+    return SquareSet(
+      _mirrorHorizontal(h).toUnsigned(intSize),
+      _mirrorHorizontal(g).toUnsigned(intSize),
+      _mirrorHorizontal(f).toUnsigned(intSize),
+      _mirrorHorizontal(e).toUnsigned(intSize),
+      _mirrorHorizontal(d).toUnsigned(intSize),
+      _mirrorHorizontal(c).toUnsigned(intSize),
+      _mirrorHorizontal(b).toUnsigned(intSize),
+      _mirrorHorizontal(a).toUnsigned(intSize),
+    );
+  }
+
+  // https://www.chessprogramming.org/Flipping_Mirroring_and_Rotating#Horizontal
+  int _mirrorHorizontal(int val) {
+    final k1 = 0x55555555;
+    final k2 = 0x33333333;
+    final k4 = 0xF0F0F0F;
+    final k8 = 0xFF00FF;
+    int x = val;
+    x = ((x >> 1) & k1) | ((x & k1) << 1);
+    x = ((x >> 2) & k2) | ((x & k2) << 2);
+    x = ((x >> 4) & k4) | ((x & k4) << 4);
+    x = ((x >> 8) & k8) | ((x & k8) << 8);
+    return x;
+  }
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
