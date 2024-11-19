@@ -12,6 +12,7 @@ class ChessboardColorScheme {
     required this.darkSquare,
     required this.background,
     required this.selected,
+    required this.validMoves,
   });
 
   /// Light square color of the board
@@ -26,6 +27,9 @@ class ChessboardColorScheme {
   /// Color of highlighted selected square
   final Color selected;
 
+  /// Color of squares occupied with valid moves dots
+  final Color validMoves;
+
   static const original = ChessboardColorScheme(
     lightSquare: Color(0xAAE5E0DF),
     darkSquare: Color(0xAACAC5C4),
@@ -39,5 +43,6 @@ class ChessboardColorScheme {
       //darkSquare: Color(0xFFFFECB3), // amber 100
     ),
     selected: Color(0x6014551e),
+    validMoves: Color(0x4014551e),
   );
 }

@@ -14,6 +14,7 @@ class ChessboardSettings {
     // theme
     this.colorScheme = ChessboardColorScheme.original,
     this.pieceAssets = PieceSet.wikimediaAssets,
+    this.showValidMoves = true,
     this.dragFeedbackScale = 2.0,
     this.dragFeedbackOffset = const Offset(0.0, -1.0),
   });
@@ -23,6 +24,9 @@ class ChessboardSettings {
 
   /// Piece set
   final PieceAssets pieceAssets;
+
+  /// Whether to show valid moves
+  final bool showValidMoves;
 
   /// Scale up factor for the piece currently under drag
   final double dragFeedbackScale;

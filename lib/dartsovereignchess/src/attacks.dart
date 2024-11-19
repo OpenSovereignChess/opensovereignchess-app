@@ -15,6 +15,7 @@ SquareSet knightAttacks(Square square) {
 /// Gets squares attacked or defended by a bishop on [Square], given `occupied`
 /// squares.
 SquareSet bishopAttacks(Square square, SquareSet occupied) {
+  // https://www.chessprogramming.org/Classical_Approach
   final nwRay =
       _computeRayAttack(_northwestRange[square], occupied, _northwestRange);
   final neRay =

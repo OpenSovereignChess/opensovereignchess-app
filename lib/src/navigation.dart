@@ -78,6 +78,7 @@ class _TestViewState extends State<_TestView> {
 
   @override
   Widget build(BuildContext context) {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(_fen));
     return Center(
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -85,7 +86,7 @@ class _TestViewState extends State<_TestView> {
             size: math.min(constraints.maxWidth, constraints.maxHeight),
             fen: _fen,
             game: GameData(
-              validMoves: IMap.empty(),
+              validMoves: makeLegalMoves(pos),
               onMove: _onMove,
             ),
           );

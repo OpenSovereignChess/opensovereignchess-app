@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
@@ -83,6 +84,11 @@ class _BoardState extends State<Chessboard> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = widget.settings.colorScheme;
+    final ISet<Square> moveDests = widget.settings.showValidMoves &&
+            selected != null &&
+            widget.game?.validMoves != null
+        ? widget.game?.validMoves[selected!] ?? _emptyValidMoves
+        : _emptyValidMoves;
 
     final List<Widget> highlightedBackground = [
       SizedBox.square(
@@ -173,6 +179,17 @@ class _BoardState extends State<Chessboard> {
           size: widget.size,
           square: selected!,
           child: SquareHighlight(color: colorScheme.selected),
+        ),
+      for (final dest in moveDests)
+        PositionedSquare(
+          key: ValueKey('${dest.name}-dest'),
+          size: widget.size,
+          square: dest,
+          child: ValidMoveHighlight(
+            size: widget.squareSize,
+            color: colorScheme.validMoves,
+            occupied: pieces.containsKey(dest),
+          ),
         ),
     ];
 
@@ -440,7 +457,8 @@ class _BoardState extends State<Chessboard> {
 
   /// Whether the piece is allowed to be moved to the target square.
   bool _canMoveTo(Square orig, Square dest) {
-    return true;
+    final validDests = widget.game?.validMoves[orig];
+    return orig != dest && validDests != null && validDests.contains(dest);
   }
 
   /// Tries to move the selected piece to the target square.
@@ -572,3 +590,5 @@ class _DragAvatar {
     }
   }
 }
+
+const ISet<Square> _emptyValidMoves = ISetConst({});

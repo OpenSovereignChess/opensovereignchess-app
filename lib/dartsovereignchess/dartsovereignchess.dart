@@ -7,3 +7,4 @@ export 'src/models.dart';
 export 'src/position.dart';
 export 'src/setup.dart' show Setup;
 export 'src/square_set.dart' show SquareSet;
+export 'src/utils.dart' show makeLegalMoves;
