@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
 import './models.dart';
@@ -179,10 +180,26 @@ class Board {
     return board;
   }
 
-  ///// Gets all squares occupied by [Side].
-  //SquareSet bySide(Side side) {
-
-  //}
+  /// Gets all occupied squares excluding [colors].
+  SquareSet exclude(ISet<PieceColor> colors) {
+    Map<PieceColor, SquareSet> pieces = {
+      PieceColor.white: white,
+      PieceColor.ash: ash,
+      PieceColor.slate: slate,
+      PieceColor.black: black,
+      PieceColor.pink: pink,
+      PieceColor.red: red,
+      PieceColor.orange: orange,
+      PieceColor.yellow: yellow,
+      PieceColor.green: green,
+      PieceColor.cyan: cyan,
+      PieceColor.navy: navy,
+      PieceColor.violet: violet,
+    };
+    return pieces.entries
+        .where((entry) => !colors.contains(entry.key))
+        .fold<SquareSet>(SquareSet.empty, (prev, entry) => prev | entry.value);
+  }
 
   /// Gets all squares occupied by pieces of [PieceColor].
   SquareSet byColor(PieceColor color) {

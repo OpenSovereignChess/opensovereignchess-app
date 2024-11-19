@@ -12,6 +12,11 @@ SquareSet knightAttacks(Square square) {
   return _knightAttacks[square];
 }
 
+/// Gets squares attacked or defended by a pawn on [Square].
+SquareSet pawnAttacks(Square square) {
+  return _pawnAttacks[square];
+}
+
 /// Gets squares attacked or defended by a bishop on [Square], given `occupied`
 /// squares.
 SquareSet bishopAttacks(Square square, SquareSet occupied) {
@@ -71,6 +76,16 @@ final _kingAttacks =
 
 final _knightAttacks =
     _tabulate((sq) => _computeRange(sq, [-33, -31, -18, -14, 14, 18, 31, 33]));
+
+final _pawnAttacks = _tabulate((sq) {
+  switch (sq.rank) {
+    case < Rank.ninth:
+      return _computeRange(sq, [15, 17]);
+    default:
+      return _computeRange(sq, [-17, -15]);
+  }
+});
+
 final _northRange = _tabulate((sq) {
   return SquareSet.northRay.shl(sq);
 });

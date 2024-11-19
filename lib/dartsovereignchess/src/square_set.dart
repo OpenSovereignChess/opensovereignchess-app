@@ -205,6 +205,9 @@ class SquareSet {
   SquareSet intersect(SquareSet other) => _intersect(other);
   SquareSet operator &(SquareSet other) => _intersect(other);
 
+  /// Returns the set difference of this set and [other].
+  SquareSet diff(SquareSet other) => _diff(other);
+
   /// Flips the set vertically.
   SquareSet flipVertical() {
     return SquareSet(
@@ -417,6 +420,19 @@ class SquareSet {
       c & other.c,
       b & other.b,
       a & other.a,
+    );
+  }
+
+  SquareSet _diff(SquareSet other) {
+    return SquareSet(
+      h & ~other.h,
+      g & ~other.g,
+      f & ~other.f,
+      e & ~other.e,
+      d & ~other.d,
+      c & ~other.c,
+      b & ~other.b,
+      a & ~other.a,
     );
   }
 

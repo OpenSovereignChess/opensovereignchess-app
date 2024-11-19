@@ -108,8 +108,7 @@ abstract class Position<T extends Position<T>> {
 
     SquareSet pseudo;
     if (piece.role == Role.pawn) {
-      // TODO: Implement
-      pseudo = kingAttacks(square);
+      pseudo = pawnAttacks(square);
     } else if (piece.role == Role.bishop) {
       pseudo = bishopAttacks(square, board.occupied);
     } else if (piece.role == Role.knight) {
@@ -122,6 +121,8 @@ abstract class Position<T extends Position<T>> {
       pseudo = kingAttacks(square);
     }
 
+    // Include colors that aren't controlled because we cannot attack those pieces
+    pseudo = pseudo.diff(board.exclude(_sideColors(turn.opposite)));
     return pseudo;
   }
 
