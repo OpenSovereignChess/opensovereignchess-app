@@ -69,6 +69,7 @@ class _TestViewState extends State<_TestView> {
   String _fen =
       'aqabvrvnbrbnbbbqbkbbbnbrynyrsbsq/aranvpvpbpbpbpbpbpbpbpbpypypsnsr/nbnp12opob/nqnp12opoq/crcp12rprr/cncp12rprn/gbgp12pppb/gqgp12pppq/yqyp12vpvq/ybyp12vpvb/onop12npnn/orop12npnr/rqrp12cpcq/rbrp12cpcb/srsnppppwpwpwpwpwpwpwpwpgpgpanar/sqsbprpnwrwnwbwqwkwbwnwrgngrabaq';
   Pieces _pieces = {};
+  int _activePlayer = 1;
 
   @override
   void initState() {
@@ -78,7 +79,8 @@ class _TestViewState extends State<_TestView> {
 
   @override
   Widget build(BuildContext context) {
-    final pos = SovereignChess.fromSetup(Setup.parseFen(_fen));
+    final pos =
+        SovereignChess.fromSetup(Setup.parseFen(_fen + ' $_activePlayer'));
     return Center(
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
@@ -101,6 +103,7 @@ class _TestViewState extends State<_TestView> {
       _pieces.remove(move.from);
       _pieces[move.to] = piece;
       _fen = writeFen(_pieces);
+      _activePlayer = _activePlayer == 1 ? 2 : 1;
     });
   }
 }
