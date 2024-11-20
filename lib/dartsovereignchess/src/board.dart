@@ -180,23 +180,25 @@ class Board {
     return board;
   }
 
-  /// Gets all occupied squares excluding [colors].
+  IMap<PieceColor, SquareSet> _colorMap() => (IMap({
+        PieceColor.white: white,
+        PieceColor.ash: ash,
+        PieceColor.slate: slate,
+        PieceColor.black: black,
+        PieceColor.pink: pink,
+        PieceColor.red: red,
+        PieceColor.orange: orange,
+        PieceColor.yellow: yellow,
+        PieceColor.green: green,
+        PieceColor.cyan: cyan,
+        PieceColor.navy: navy,
+        PieceColor.violet: violet,
+      }));
+
+  /// Gets all occupied squares excluding pieces of [PieceColor]s.
   SquareSet exclude(ISet<PieceColor> colors) {
-    Map<PieceColor, SquareSet> pieces = {
-      PieceColor.white: white,
-      PieceColor.ash: ash,
-      PieceColor.slate: slate,
-      PieceColor.black: black,
-      PieceColor.pink: pink,
-      PieceColor.red: red,
-      PieceColor.orange: orange,
-      PieceColor.yellow: yellow,
-      PieceColor.green: green,
-      PieceColor.cyan: cyan,
-      PieceColor.navy: navy,
-      PieceColor.violet: violet,
-    };
-    return pieces.entries
+    return _colorMap()
+        .entries
         .where((entry) => !colors.contains(entry.key))
         .fold<SquareSet>(SquareSet.empty, (prev, entry) => prev | entry.value);
   }
@@ -217,6 +219,14 @@ class Board {
       PieceColor.navy => navy,
       PieceColor.violet => violet,
     };
+  }
+
+  /// Gets all squares occupied by pieces of [PieceColor]s.
+  SquareSet byColors(ISet<PieceColor> colors) {
+    return _colorMap()
+        .entries
+        .where((entry) => colors.contains(entry.key))
+        .fold<SquareSet>(SquareSet.empty, (prev, entry) => prev | entry.value);
   }
 
   /// Gets all squares occupied by [Role].

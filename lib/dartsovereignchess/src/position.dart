@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import './attacks.dart';
 import './board.dart';
 import './models.dart';
+import './pawn_moves.dart';
 import './setup.dart';
 import './square_set.dart';
 
@@ -108,7 +109,8 @@ abstract class Position<T extends Position<T>> {
 
     SquareSet pseudo;
     if (piece.role == Role.pawn) {
-      pseudo = pawnAttacks(square);
+      pseudo = (pawnAttacks(square) & board.occupied) |
+          pawnMoves(square, board.occupied);
     } else if (piece.role == Role.bishop) {
       pseudo = bishopAttacks(square, board.occupied);
     } else if (piece.role == Role.knight) {
