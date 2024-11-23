@@ -139,6 +139,20 @@ class SquareSet {
   static const pFileMask = SquareSet(0x80008000, 0x80008000, 0x80008000,
       0x80008000, 0x80008000, 0x80008000, 0x80008000, 0x80008000);
 
+  // Colored square masks
+  static const whiteSquares = SquareSet(0, 0, 0, 0x80, 0x1000000, 0, 0, 0);
+  static const blackSquares = SquareSet(0, 0, 0, 0x100, 0x800000, 0, 0, 0);
+  static const ashSquares = SquareSet(0, 0, 0, 0x2000000, 0x40, 0, 0, 0);
+  static const slateSquares = SquareSet(0, 0, 0, 0x400000, 0x200, 0, 0, 0);
+  static const cyanSquares = SquareSet(0, 0, 0, 0x400, 0x200000, 0, 0, 0);
+  static const greenSquares = SquareSet(0, 0, 0x400, 0, 0, 0x200000, 0, 0);
+  static const navySquares = SquareSet(0, 0, 0x8000000, 0, 0, 0x10, 0, 0);
+  static const orangeSquares = SquareSet(0, 0, 0, 0x20, 0x4000000, 0, 0, 0);
+  static const pinkSquares = SquareSet(0, 0, 0x80, 0, 0, 0x1000000, 0, 0);
+  static const redSquares = SquareSet(0, 0, 0x100000, 0, 0, 0x800, 0, 0);
+  static const violetSquares = SquareSet(0, 0, 0x100, 0, 0, 0x800000, 0, 0);
+  static const yellowSquares = SquareSet(0, 0, 0x20, 0, 0, 0x4000000, 0, 0);
+
   /// Bitwise right shift
   SquareSet shr(int shift) {
     if (shift >= Square.values.length) {

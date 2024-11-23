@@ -123,9 +123,34 @@ abstract class Position<T extends Position<T>> {
       pseudo = kingAttacks(square);
     }
 
+    // Only one square of each color may be occupied at a time.
+    pseudo = pseudo.diff(_occupiedColoredSquares());
+
     // Include colors that aren't controlled because we cannot attack those pieces
     pseudo = pseudo.diff(board.exclude(_sideColors(turn.opposite)));
     return pseudo;
+  }
+
+  // Create a mask of colored squares we cannot move onto.
+  SquareSet _occupiedColoredSquares() {
+    final coloredSquares = [
+      SquareSet.whiteSquares,
+      SquareSet.blackSquares,
+      SquareSet.ashSquares,
+      SquareSet.slateSquares,
+      SquareSet.cyanSquares,
+      SquareSet.greenSquares,
+      SquareSet.navySquares,
+      SquareSet.orangeSquares,
+      SquareSet.pinkSquares,
+      SquareSet.redSquares,
+      SquareSet.violetSquares,
+      SquareSet.yellowSquares,
+    ];
+    return coloredSquares.fold(
+        SquareSet.empty,
+        (prev, mask) =>
+            (mask & board.occupied).lsb() != null ? (prev | mask) : prev);
   }
 
   _Context _makeContext() {
