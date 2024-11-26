@@ -20,6 +20,7 @@ abstract class Position<T extends Position<T>> {
     required this.p1Controlled,
     required this.p2Owned,
     required this.p2Controlled,
+    required this.ply,
   });
 
   /// Piece positions on the board.
@@ -40,6 +41,9 @@ abstract class Position<T extends Position<T>> {
   /// The color armies that player 2 controls.
   final ISet<PieceColor> p2Controlled;
 
+  // Current half-move number.
+  final int ply;
+
   /// The [Rule] of this position.
   Rule get rule;
 
@@ -51,6 +55,7 @@ abstract class Position<T extends Position<T>> {
     ISet<PieceColor>? p1Controlled,
     PieceColor? p2Owned,
     ISet<PieceColor>? p2Controlled,
+    int? ply,
   });
 
   /// Create a [Position] from a [Setup] and [Rule].
@@ -61,20 +66,34 @@ abstract class Position<T extends Position<T>> {
     };
   }
 
-  ISet<PieceColor> _sideColors(Side turn) {
-    if (turn == Side.player1) {
-      return [
-        p1Owned,
-        ...p1Controlled,
-      ].toISet();
+  /// Gets the FEN string of this position.
+  ///
+  /// Contrary to the FEN given by [Setup], this should always be a legal
+  /// position.
+  String get fen {
+    return Setup(
+      board: board,
+      turn: turn,
+      p1Owned: p1Owned,
+      p1Controlled: p1Controlled,
+      p2Owned: p2Owned,
+      p2Controlled: p2Controlled,
+      ply: ply,
+    ).fen;
+  }
+
+  /// Tests a move for legality.
+  bool isLegal(Move move) {
+    switch (move) {
+      case NormalMove(from: final f, to: final t, promotion: final p):
+        final legalMoves = _legalMovesOf(f);
+        return legalMoves.has(t);
     }
-    if (turn == Side.player2) {
-      return [
-        p2Owned,
-        ...p2Controlled,
-      ].toISet();
-    }
-    return ISet.empty();
+  }
+
+  /// Gets the legal moves for that [Square].
+  SquareSet legalMovesOf(Square square) {
+    return _legalMovesOf(square);
   }
 
   /// Gets all the legal moves of this position.
@@ -94,6 +113,56 @@ abstract class Position<T extends Position<T>> {
       }))
         s: _legalMovesOf(s, context: context)
     });
+  }
+
+  /// Plays a move and returns the updated [Position].
+  ///
+  /// Throws a [PlayException] if the move is not legal.
+  Position<T> play(Move move) {
+    if (isLegal(move)) {
+      return playUnchecked(move);
+    } else {
+      throw PlayException('Invalid move $move');
+    }
+  }
+
+  /// Plays a move without checking if the move is legal and returns the
+  /// updated [Position].
+  Position<T> playUnchecked(Move move) {
+    switch (move) {
+      case NormalMove(
+          from: final from,
+          to: final to,
+          promotion: final promotion
+        ):
+        final piece = board.pieceAt(from);
+        if (piece == null) {
+          return copyWith();
+        }
+        Board newBoard = board.removePieceAt(from);
+        newBoard = newBoard.setPieceAt(to, piece);
+        return copyWith(
+          ply: ply + 1,
+          board: newBoard,
+          turn: turn.opposite,
+        );
+    }
+  }
+
+  ISet<PieceColor> _sideColors(Side turn) {
+    if (turn == Side.player1) {
+      return [
+        p1Owned,
+        ...p1Controlled,
+      ].toISet();
+    }
+    if (turn == Side.player2) {
+      return [
+        p2Owned,
+        ...p2Controlled,
+      ].toISet();
+    }
+    return ISet.empty();
   }
 
   /// Gets the legal moves for that [Square].
@@ -171,6 +240,7 @@ class SovereignChess extends Position<SovereignChess> {
     required super.p1Controlled,
     required super.p2Owned,
     required super.p2Controlled,
+    required super.ply,
   });
 
   @override
@@ -188,6 +258,7 @@ class SovereignChess extends Position<SovereignChess> {
       p1Controlled: setup.p1Controlled,
       p2Owned: setup.p2Owned,
       p2Controlled: setup.p2Controlled,
+      ply: setup.ply,
     );
     return pos;
   }
@@ -200,6 +271,7 @@ class SovereignChess extends Position<SovereignChess> {
     ISet<PieceColor>? p1Controlled,
     PieceColor? p2Owned,
     ISet<PieceColor>? p2Controlled,
+    int? ply,
   }) {
     return SovereignChess(
       board: board ?? this.board,
@@ -208,6 +280,7 @@ class SovereignChess extends Position<SovereignChess> {
       p1Controlled: p1Controlled ?? this.p1Controlled,
       p2Owned: p2Owned ?? this.p2Owned,
       p2Controlled: p2Controlled ?? this.p2Controlled,
+      ply: ply ?? this.ply,
     );
   }
 }

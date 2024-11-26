@@ -14,6 +14,7 @@ class Setup {
     required this.p1Controlled,
     required this.p2Owned,
     required this.p2Controlled,
+    required this.ply,
   });
 
   /// Piece positions on the board.
@@ -33,6 +34,11 @@ class Setup {
 
   /// The color armies that player 2 controls.
   final ISet<PieceColor> p2Controlled;
+
+  /// Current half-move number.
+  ///
+  /// Gets incremented after any player makes a turn.
+  final int ply;
 
   /// Parses a Sovereign Chess FEN string and returns a [Setup].
   ///
@@ -134,6 +140,13 @@ class Setup {
       }
     }
 
+    int ply;
+    if (parts.isEmpty) {
+      ply = 0;
+    } else {
+      ply = int.parse(parts.removeAt(0));
+    }
+
     return Setup(
       board: board,
       turn: turn,
@@ -141,6 +154,22 @@ class Setup {
       p1Controlled: p1Controlled,
       p2Owned: p2Owned,
       p2Controlled: p2Controlled,
+      ply: ply,
     );
   }
+
+  /// FEN representation of the setup.
+  String get fen => [
+        board.fen,
+        turn.name[turn.name.length - 1],
+        p1Owned.letter,
+        p1Controlled.isNotEmpty
+            ? p1Controlled.fold('', (prev, i) => prev + i.letter)
+            : '-',
+        p2Owned.letter,
+        p2Controlled.isNotEmpty
+            ? p2Controlled.fold('', (prev, i) => prev + i.letter)
+            : '-',
+        ply,
+      ].join(' ');
 }

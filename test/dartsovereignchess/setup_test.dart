@@ -13,4 +13,10 @@ void main() {
     expect(setup.p1Controlled, ISet({PieceColor.navy, PieceColor.cyan}));
     expect(setup.p2Controlled, ISet({PieceColor.pink}));
   });
+
+  test('fen', () {
+    final fen = '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w - b - 0';
+    final setup = Setup.parseFen(fen);
+    expect(setup.fen, fen);
+  });
 }

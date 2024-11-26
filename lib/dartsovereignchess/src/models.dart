@@ -1118,6 +1118,19 @@ class FenException implements Exception {
   String toString() => 'FenException: ${cause.name}';
 }
 
+/// Exception thrown when trying to play an illegal move.
+@immutable
+class PlayException implements Exception {
+  /// Constructs a [PlayException] with a [message].
+  const PlayException(this.message);
+
+  /// The exception message.
+  final String message;
+
+  @override
+  String toString() => 'PlayException: $message';
+}
+
 /// Represents the different possible rules of chess and its variants.
 enum Rule {
   sovereignChess,

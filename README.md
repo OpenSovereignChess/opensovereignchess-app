@@ -7,6 +7,7 @@ Flutter app for playing Sovereign Chess.
 To run site locally:
 
 ```
+dart run build_runner watch # in separate terminal
 flutter run -d chrome
 ```
 

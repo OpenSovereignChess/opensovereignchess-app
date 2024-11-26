@@ -3,11 +3,14 @@ import 'dart:math' as math;
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'; // For testing purposes
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
 import 'package:opensovereignchess_app/chessboard/src/board_settings.dart';
 import 'package:opensovereignchess_app/chessboard/src/widgets/piece.dart';
+
+import './model/over_the_board/over_the_board_game_controller.dart';
 
 enum NavTab {
   home,
@@ -58,37 +61,25 @@ class AppScaffold extends StatelessWidget {
   }
 }
 
-class _TestView extends StatefulWidget {
+class _TestView extends ConsumerStatefulWidget {
   const _TestView({super.key});
 
   @override
-  State<_TestView> createState() => _TestViewState();
+  _TestViewState createState() => _TestViewState();
 }
 
-class _TestViewState extends State<_TestView> {
-  String _fen =
-      'aqabvrvnbrbnbbbqbkbbbnbrynyrsbsq/aranvpvpbpbpbpbpbpbpbpbpypypsnsr/nbnp12opob/nqnp12opoq/crcp12rprr/cncp12rprn/gbgp12pppb/gqgp12pppq/yqyp12vpvq/ybyp12vpvb/onop12npnn/orop12npnr/rqrp12cpcq/rbrp12cpcb/srsnppppwpwpwpwpwpwpwpwpgpgpanar/sqsbprpnwrwnwbwqwkwbwnwrgngrabaq';
-  Pieces _pieces = {};
-  int _activePlayer = 1;
-
-  @override
-  void initState() {
-    super.initState();
-    _pieces = readFen(_fen);
-  }
-
+class _TestViewState extends ConsumerState<_TestView> {
   @override
   Widget build(BuildContext context) {
-    final pos =
-        SovereignChess.fromSetup(Setup.parseFen(_fen + ' $_activePlayer'));
+    final gameState = ref.watch(overTheBoardGameControllerProvider);
     return Center(
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Chessboard(
             size: math.min(constraints.maxWidth, constraints.maxHeight),
-            fen: _fen,
+            fen: gameState.position.fen,
             game: GameData(
-              validMoves: makeLegalMoves(pos),
+              validMoves: gameState.legalMoves,
               onMove: _onMove,
             ),
           );
@@ -98,12 +89,6 @@ class _TestViewState extends State<_TestView> {
   }
 
   void _onMove(NormalMove move, {bool? isDrop}) {
-    setState(() {
-      final piece = _pieces[move.from]!;
-      _pieces.remove(move.from);
-      _pieces[move.to] = piece;
-      _fen = writeFen(_pieces);
-      _activePlayer = _activePlayer == 1 ? 2 : 1;
-    });
+    ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
   }
 }

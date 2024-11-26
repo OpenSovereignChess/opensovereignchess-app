@@ -46,3 +46,6 @@ app.*.map.json
 
 # Firebase hosting
 .firebase/
+
+# Code generation output
+*.g.dart

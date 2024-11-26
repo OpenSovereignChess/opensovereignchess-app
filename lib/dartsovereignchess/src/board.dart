@@ -180,6 +180,39 @@ class Board {
     return board;
   }
 
+  /// Board part of the FEN.
+  String get fen {
+    final buffer = StringBuffer();
+    int empty = 0;
+    int lastFile = File.values.length - 1;
+    for (int rank = Rank.values.length - 1; rank >= 0; rank--) {
+      for (int file = 0; file < File.values.length; file++) {
+        final square = Square.fromCoords(File(file), Rank(rank));
+        final piece = pieceAt(square);
+        if (piece == null) {
+          empty++;
+        } else {
+          if (empty > 0) {
+            buffer.write(empty.toString());
+            empty = 0;
+          }
+          buffer.write(piece.fenStr);
+        }
+
+        if (file == lastFile) {
+          if (empty > 0) {
+            buffer.write(empty.toString());
+            empty = 0;
+          }
+          if (rank != 0) {
+            buffer.write('/');
+          }
+        }
+      }
+    }
+    return buffer.toString();
+  }
+
   IMap<PieceColor, SquareSet> _colorMap() => (IMap({
         PieceColor.white: white,
         PieceColor.ash: ash,
