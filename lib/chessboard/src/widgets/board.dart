@@ -96,13 +96,15 @@ class _BoardState extends State<Chessboard> {
         dimension: widget.size,
         child: colorScheme.background,
       ),
-      for (final entry in _coloredSquares.entries)
+      for (final (sq, color) in Square.values
+          .where((s) => s.color != null)
+          .map((s) => (s, _colorCodes[s.color!]!)))
         PositionedSquare(
-          key: ValueKey('${entry.key.name}-${entry.value}'),
+          key: ValueKey('${sq}-${color}'),
           size: widget.size,
-          square: entry.key,
+          square: sq,
           child: SquareHighlight(
-            color: entry.value,
+            color: color,
           ),
         ),
       // Pawn promotion box
@@ -475,31 +477,20 @@ class _BoardState extends State<Chessboard> {
   }
 }
 
-const _coloredSquares = {
-  Square.e5: Color(0xCC1965B0),
-  Square.l12: Color(0xCC1965B0),
-  Square.l5: Color(0xCCDC050C),
-  Square.e12: Color(0xCCDC050C),
-  Square.f6: Color(0xCC4EB265),
-  Square.k11: Color(0xCC4EB265),
-  Square.h6: Color(0xCC882E72),
-  Square.i11: Color(0xCC882E72),
-  Square.i6: Color(0xCCFFAFD2),
-  Square.h11: Color(0xCCFFAFD2),
-  Square.k6: Color(0xCCF7F056),
-  Square.f11: Color(0xCCF7F056),
-  Square.g7: Color(0xCCCAACCB),
-  Square.j10: Color(0xCCCAACCB),
-  Square.j7: Color(0xCC777777),
-  Square.g10: Color(0xCC777777),
-  Square.f8: Color(0xCC7BAFDE),
-  Square.k9: Color(0xCC7BAFDE),
-  Square.h8: Color(0xCC000000),
-  Square.i9: Color(0xCC000000),
-  Square.i8: Color(0xCCFFFFFF),
-  Square.h9: Color(0xCCFFFFFF),
-  Square.k8: Color(0xCCF4A736),
-  Square.f9: Color(0xCCF4A736),
+// Colors for colored squares
+const _colorCodes = {
+  PieceColor.navy: Color(0xCC1965B0),
+  PieceColor.red: Color(0xCCDC050C),
+  PieceColor.green: Color(0xCC4EB265),
+  PieceColor.violet: Color(0xCC882E72),
+  PieceColor.pink: Color(0xCCFFAFD2),
+  PieceColor.yellow: Color(0xCCF7F056),
+  PieceColor.ash: Color(0xCCCAACCB),
+  PieceColor.slate: Color(0xCC777777),
+  PieceColor.cyan: Color(0xCC7BAFDE),
+  PieceColor.black: Color(0xCC000000),
+  PieceColor.white: Color(0xCCFFFFFF),
+  PieceColor.orange: Color(0xCCF4A736),
 };
 
 BorderSide MiddleBorder() {

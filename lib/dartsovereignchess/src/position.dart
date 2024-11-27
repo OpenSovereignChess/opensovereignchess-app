@@ -141,11 +141,41 @@ abstract class Position<T extends Position<T>> {
         }
         Board newBoard = board.removePieceAt(from);
         newBoard = newBoard.setPieceAt(to, piece);
+
+        // Update armies if we're moving on or off of colored squares
+        var controlledArmies = (p1Controlled, p2Controlled);
+        if (from.color != null) {
+          controlledArmies = _removeControlledArmy(from.color!);
+        }
+        if (to.color != null) {
+          controlledArmies = _addControlledArmy(to.color!);
+        }
+
         return copyWith(
           ply: ply + 1,
           board: newBoard,
           turn: turn.opposite,
+          p1Controlled: controlledArmies.$1,
+          p2Controlled: controlledArmies.$2,
         );
+    }
+  }
+
+  (ISet<PieceColor>, ISet<PieceColor>) _removeControlledArmy(PieceColor color) {
+    switch (turn) {
+      case Side.player1:
+        return (p1Controlled.remove(color), p2Controlled);
+      case Side.player2:
+        return (p1Controlled, p2Controlled.remove(color));
+    }
+  }
+
+  (ISet<PieceColor>, ISet<PieceColor>) _addControlledArmy(PieceColor color) {
+    switch (turn) {
+      case Side.player1:
+        return (p1Controlled.add(color), p2Controlled);
+      case Side.player2:
+        return (p1Controlled, p2Controlled.add(color));
     }
   }
 

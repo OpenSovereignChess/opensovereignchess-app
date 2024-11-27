@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
 /// The chessboard side.
@@ -785,7 +786,38 @@ extension type const Square._(int value) implements int {
 
   /// Unique identifier of the square, using pure algebraic notation.
   String get name => file.name + rank.name;
+
+  /// Gets the color of the square if it is a colored square that lets you
+  /// control another army.
+  PieceColor? get color => coloredSquares[Square(value)];
 }
+
+const IMap<Square, PieceColor> coloredSquares = IMapConst({
+  Square.e5: PieceColor.navy,
+  Square.l5: PieceColor.red,
+  Square.f6: PieceColor.green,
+  Square.h6: PieceColor.violet,
+  Square.i6: PieceColor.pink,
+  Square.k6: PieceColor.yellow,
+  Square.g7: PieceColor.ash,
+  Square.j7: PieceColor.slate,
+  Square.f8: PieceColor.cyan,
+  Square.h8: PieceColor.black,
+  Square.i8: PieceColor.white,
+  Square.k8: PieceColor.orange,
+  Square.f9: PieceColor.orange,
+  Square.h9: PieceColor.white,
+  Square.i9: PieceColor.black,
+  Square.k9: PieceColor.cyan,
+  Square.g10: PieceColor.slate,
+  Square.j10: PieceColor.ash,
+  Square.f11: PieceColor.yellow,
+  Square.h11: PieceColor.pink,
+  Square.i11: PieceColor.violet,
+  Square.k11: PieceColor.green,
+  Square.e12: PieceColor.red,
+  Square.l12: PieceColor.navy,
+});
 
 /// Describes a chess piece kind by its color and role.
 enum PieceKind {
