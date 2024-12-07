@@ -115,7 +115,6 @@ abstract class Position<T extends Position<T>> {
       for (final s
           in _sideColors(turn).fold<List<Square>>([], (previousValue, color) {
         final squares = board.byColor(color).squares;
-        //print('DEBUG=== color=$color squares=$squares');
         return [...previousValue, ...squares];
       }))
         s: _legalMovesOf(s, context: context)
@@ -231,6 +230,10 @@ abstract class Position<T extends Position<T>> {
       pseudo = kingAttacks(square);
     }
 
+    // Cannot move onto a square of its own color
+    final ownColorSquares = _getOwnColoredSquares(piece);
+    pseudo = pseudo.diff(ownColorSquares);
+
     // Only one square of each color may be occupied at a time.
     pseudo = pseudo.diff(_occupiedColoredSquares());
 
@@ -258,8 +261,25 @@ abstract class Position<T extends Position<T>> {
     return coloredSquares.fold(
         SquareSet.empty,
         (prev, mask) => (mask & board.occupied).lsb() != null
-            ? (prev | (mask ^ board.occupied))
+            ? (prev | (mask.diff(board.occupied)))
             : prev);
+  }
+
+  SquareSet _getOwnColoredSquares(Piece piece) {
+    return switch (piece.color) {
+      PieceColor.white => SquareSet.whiteSquares,
+      PieceColor.black => SquareSet.blackSquares,
+      PieceColor.ash => SquareSet.ashSquares,
+      PieceColor.slate => SquareSet.slateSquares,
+      PieceColor.cyan => SquareSet.cyanSquares,
+      PieceColor.green => SquareSet.greenSquares,
+      PieceColor.navy => SquareSet.navySquares,
+      PieceColor.orange => SquareSet.orangeSquares,
+      PieceColor.pink => SquareSet.pinkSquares,
+      PieceColor.red => SquareSet.redSquares,
+      PieceColor.violet => SquareSet.violetSquares,
+      PieceColor.yellow => SquareSet.yellowSquares,
+    };
   }
 
   _Context _makeContext() {

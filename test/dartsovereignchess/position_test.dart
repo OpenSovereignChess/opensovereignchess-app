@@ -61,7 +61,13 @@ void main() {
 
   test('legalMoves, can capture a piece on colored square', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
-        '16/16/16/16/4bpwq10/16/16/16/16/16/16/16/16/16/16/16 1 w - b -'));
-    expect(pos.legalMoves[Square.f12]!.has(Square.e12), true);
+        '16/16/16/16/16/16/9bq6/16/16/9wq6/16/16/16/16/16/16 1 w - b -'));
+    expect(pos.legalMoves[Square.j7]!.has(Square.j10), true);
+  });
+
+  test('legalMoves, cannot move onto a square of its own color', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        '8bq7/16/16/16/16/16/16/16/16/16/16/16/16/16/16/16 2 w - b -'));
+    expect(pos.legalMoves[Square.i16]!.has(Square.i9), false);
   });
 }
