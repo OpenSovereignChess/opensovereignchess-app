@@ -5,10 +5,11 @@ import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
 import '../board_settings.dart';
-import 'geometry.dart';
-import 'highlight.dart';
-import 'piece.dart';
-import 'positioned_square.dart';
+import './geometry.dart';
+import './highlight.dart';
+import './piece.dart';
+import './positioned_square.dart';
+import './promotion.dart';
 
 /// Number of logical pixels that have to be dragged before a drag starts.
 const double _kDragDistanceThreshold = 3.0;
@@ -221,6 +222,17 @@ class _BoardState extends State<Chessboard> {
           children: [
             ...highlightedBackground,
             ...objects,
+            if (widget.game?.promotionMove != null)
+              PromotionSelector(
+                pieceAssets: widget.settings.pieceAssets,
+                move: widget.game!.promotionMove!,
+                size: widget.size,
+                color: widget.game!.promotionColor!,
+                onSelect: widget.game!.onPromotionSelection,
+                onCancel: () {
+                  widget.game!.onPromotionSelection(null);
+                },
+              )
           ],
         ),
       ),
@@ -470,7 +482,7 @@ class _BoardState extends State<Chessboard> {
     final selectedPiece = selected != null ? pieces[selected] : null;
     if (selectedPiece != null && _canMoveTo(selected!, square)) {
       final move = NormalMove(from: selected!, to: square);
-      widget.game?.onMove.call(move, isDrop: drop);
+      widget.game?.onMove.call(move, isDrop: drop, color: selectedPiece.color);
       return true;
     }
     return false;

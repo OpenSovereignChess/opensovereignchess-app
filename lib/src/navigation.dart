@@ -81,6 +81,11 @@ class _TestViewState extends ConsumerState<_TestView> {
             game: GameData(
               validMoves: gameState.legalMoves,
               onMove: _onMove,
+              promotionMove: gameState.promotionMove,
+              promotionColor: gameState.promotionColor,
+              onPromotionSelection: ref
+                  .read(overTheBoardGameControllerProvider.notifier)
+                  .onPromotionSelection,
             ),
           );
         },
@@ -88,7 +93,9 @@ class _TestViewState extends ConsumerState<_TestView> {
     );
   }
 
-  void _onMove(NormalMove move, {bool? isDrop}) {
-    ref.read(overTheBoardGameControllerProvider.notifier).makeMove(move);
+  void _onMove(NormalMove move, {bool? isDrop, PieceColor? color}) {
+    ref
+        .read(overTheBoardGameControllerProvider.notifier)
+        .makeMove(move, color: color);
   }
 }

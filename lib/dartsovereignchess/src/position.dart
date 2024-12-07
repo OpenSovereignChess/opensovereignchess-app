@@ -86,6 +86,13 @@ abstract class Position<T extends Position<T>> {
   bool isLegal(Move move) {
     switch (move) {
       case NormalMove(from: final f, to: final t, promotion: final p):
+        if (p == Role.pawn) {
+          return false;
+        }
+        if (p != null &&
+            (!board.pawns.has(f) || !promotionSquares.contains(t))) {
+          return false;
+        }
         final legalMoves = _legalMovesOf(f);
         return legalMoves.has(t);
     }
@@ -140,7 +147,9 @@ abstract class Position<T extends Position<T>> {
           return copyWith();
         }
         Board newBoard = board.removePieceAt(from);
-        newBoard = newBoard.setPieceAt(to, piece);
+        final newPiece =
+            promotion != null ? piece.copyWith(role: promotion) : piece;
+        newBoard = newBoard.setPieceAt(to, newPiece);
 
         // Update armies if we're moving on or off of colored squares
         var controlledArmies = (p1Controlled, p2Controlled);

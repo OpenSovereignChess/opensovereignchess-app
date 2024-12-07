@@ -12,6 +12,9 @@ class GameData {
   const GameData({
     required this.validMoves,
     required this.onMove,
+    required this.promotionMove,
+    required this.promotionColor,
+    required this.onPromotionSelection,
   });
 
   /// Set of moves allowed to be played by current side to move.
@@ -20,7 +23,22 @@ class GameData {
   /// Callback called after a move has been made.
   ///
   /// If the move has been made with drag and drop, `isDrop` will be true.
-  final void Function(NormalMove, {bool? isDrop}) onMove;
+  final void Function(NormalMove, {bool? isDrop, PieceColor color}) onMove;
+
+  /// A pawn move that should be promoted.
+  ///
+  /// Will show a promotion dialog if not null.
+  final NormalMove? promotionMove;
+
+  /// We're keeping track of the color here, instead of modifying the core
+  /// NormalMove class.  If it seems like we need it elsewhere, then we
+  /// can refactor the logic accordingly.
+  final PieceColor? promotionColor;
+
+  /// Callback called after a piece has been selected for promotion.
+  ///
+  /// If the argument is `null`, the promotion should be canceled.
+  final void Function(Role? role) onPromotionSelection;
 }
 
 /// Describes a set of piece assets.

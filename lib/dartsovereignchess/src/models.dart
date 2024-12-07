@@ -792,6 +792,21 @@ extension type const Square._(int value) implements int {
   PieceColor? get color => coloredSquares[Square(value)];
 }
 
+const ISet<Square> promotionSquares = ISetConst({
+  Square.g7,
+  Square.h7,
+  Square.i7,
+  Square.j7,
+  Square.g8,
+  Square.j8,
+  Square.g9,
+  Square.j9,
+  Square.g10,
+  Square.h10,
+  Square.i10,
+  Square.j10,
+});
+
 const IMap<Square, PieceColor> coloredSquares = IMapConst({
   Square.e5: PieceColor.navy,
   Square.l5: PieceColor.red,
@@ -906,10 +921,12 @@ class Piece {
   const Piece({
     required this.color,
     required this.role,
+    this.promoted = false,
   });
 
   final PieceColor color;
   final Role role;
+  final bool promoted;
 
   /// Gets the piece kind.
   PieceKind get kind => switch ((color, role)) {
@@ -989,7 +1006,23 @@ class Piece {
 
   /// Gets the FEN string of this piece.
   String get fenStr {
-    return color.letter + role.letter;
+    String s = color.letter + role.letter;
+    if (promoted) {
+      s += '~';
+    }
+    return s;
+  }
+
+  Piece copyWith({
+    PieceColor? color,
+    Role? role,
+    bool? promoted,
+  }) {
+    return Piece(
+      color: color ?? this.color,
+      role: role ?? this.role,
+      promoted: promoted ?? this.promoted,
+    );
   }
 
   @override
@@ -998,11 +1031,12 @@ class Piece {
         other is Piece &&
             other.runtimeType == runtimeType &&
             color == other.color &&
-            role == other.role;
+            role == other.role &&
+            promoted == other.promoted;
   }
 
   @override
-  int get hashCode => Object.hash(color, role);
+  int get hashCode => Object.hash(color, role, promoted);
 
   static const whitePawn = Piece(color: PieceColor.white, role: Role.pawn);
   static const whiteKnight = Piece(color: PieceColor.white, role: Role.knight);
@@ -1111,6 +1145,10 @@ class NormalMove extends Move {
 
   /// The role of the promoted piece, if any.
   final Role? promotion;
+
+  /// Returns a copy of this move with a [promotion] role.
+  NormalMove withPromotion(Role? promotion) =>
+      NormalMove(from: from, to: to, promotion: promotion);
 }
 
 /// An enumeration of the possible causes of an illegal FEN string.
