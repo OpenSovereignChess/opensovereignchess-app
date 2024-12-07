@@ -485,7 +485,7 @@ const _colorCodes = {
   PieceColor.violet: Color(0xCC882E72),
   PieceColor.pink: Color(0xCCFFAFD2),
   PieceColor.yellow: Color(0xCCF7F056),
-  PieceColor.ash: Color(0xCCCAACCB),
+  PieceColor.ash: Color(0xCCDDDDDD),
   PieceColor.slate: Color(0xCC777777),
   PieceColor.cyan: Color(0xCC7BAFDE),
   PieceColor.black: Color(0xCC000000),

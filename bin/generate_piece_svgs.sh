@@ -13,7 +13,7 @@ declare -A colors
 # Reference:
 # - https://personal.sron.nl/~pault/data/colourschemes.pdf
 # - https://www.ibm.com/design/language/color/
-colors["ash"]="0xFFCAACCB"
+colors["ash"]="0xFFDDDDDD"
 colors["cyan"]="0xFF7BAFDE"
 colors["green"]="0xFF4EB265"
 colors["navy"]="0xFF1965B0"

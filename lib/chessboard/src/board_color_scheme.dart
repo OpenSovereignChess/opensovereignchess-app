@@ -8,18 +8,10 @@ import './widgets/background.dart';
 @immutable
 class ChessboardColorScheme {
   const ChessboardColorScheme({
-    required this.lightSquare,
-    required this.darkSquare,
     required this.background,
     required this.selected,
     required this.validMoves,
   });
-
-  /// Light square color of the board
-  final Color lightSquare;
-
-  /// Dark square color of the board
-  final Color darkSquare;
 
   /// Board background that defines light and dark square colors
   final ChessboardBackground background;
@@ -31,16 +23,11 @@ class ChessboardColorScheme {
   final Color validMoves;
 
   static const original = ChessboardColorScheme(
-    lightSquare: Color(0xAAE5E0DF),
-    darkSquare: Color(0xAACAC5C4),
     background: ChessboardBackground(
-      // IBM color palette warm gray
-      lightSquare: Color(0xAAE5E0DF),
-      darkSquare: Color(0xAACAC5C4),
       grid: Color(0x88000000),
       // Flutter Material Colors
-      //lightSquare: Color(0xFFFFF8E1), // amber 50
-      //darkSquare: Color(0xFFFFECB3), // amber 100
+      lightSquare: Color(0xFFFFF8E1), // amber 50
+      darkSquare: Color(0xFFFFECB3), // amber 100
     ),
     selected: Color(0x6014551e),
     validMoves: Color(0x4014551e),
