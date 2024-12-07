@@ -257,8 +257,9 @@ abstract class Position<T extends Position<T>> {
     ];
     return coloredSquares.fold(
         SquareSet.empty,
-        (prev, mask) =>
-            (mask & board.occupied).lsb() != null ? (prev | mask) : prev);
+        (prev, mask) => (mask & board.occupied).lsb() != null
+            ? (prev | (mask ^ board.occupied))
+            : prev);
   }
 
   _Context _makeContext() {

@@ -58,4 +58,10 @@ void main() {
     expect(pos1.board.white.has(Square.l6), true);
     expect(pos1.p1Controlled.contains(PieceColor.red), false);
   });
+
+  test('legalMoves, can capture a piece on colored square', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        '16/16/16/16/4bpwq10/16/16/16/16/16/16/16/16/16/16/16 1 w - b -'));
+    expect(pos.legalMoves[Square.f12]!.has(Square.e12), true);
+  });
 }
