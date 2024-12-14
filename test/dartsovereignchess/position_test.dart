@@ -39,6 +39,18 @@ void main() {
     expect(pos.legalMoves[Square.l4]!.has(Square.l5), false);
   });
 
+  test('legalMoves, can capture a piece on colored square', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        '16/16/16/16/16/16/9bq6/16/16/9wq6/16/16/16/16/16/16 1 w - b -'));
+    expect(pos.legalMoves[Square.j7]!.has(Square.j10), true);
+  });
+
+  test('legalMoves, cannot move onto a square of its own color', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        '8bq7/16/16/16/16/16/16/16/16/16/16/16/16/16/16/16 2 w - b -'));
+    expect(pos.legalMoves[Square.i16]!.has(Square.i9), false);
+  });
+
   test('play, move onto colored squares', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '16/16/16/16/3bp12/16/16/16/16/16/16/16/11wp4/16/16/16 1 w - b -'));
@@ -59,15 +71,14 @@ void main() {
     expect(pos1.p1Controlled.contains(PieceColor.red), false);
   });
 
-  test('legalMoves, can capture a piece on colored square', () {
+  test('play, promoting to king', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
-        '16/16/16/16/16/16/9bq6/16/16/9wq6/16/16/16/16/16/16 1 w - b -'));
-    expect(pos.legalMoves[Square.j7]!.has(Square.j10), true);
-  });
-
-  test('legalMoves, cannot move onto a square of its own color', () {
-    final pos = SovereignChess.fromSetup(Setup.parseFen(
-        '8bq7/16/16/16/16/16/16/16/16/16/16/16/16/16/16/16 2 w - b -'));
-    expect(pos.legalMoves[Square.i16]!.has(Square.i9), false);
+        '16/16/16/16/16/16/16/16/16/16/7wp8/16/16/16/16/8wk7 1 w - b -'));
+    final move =
+        NormalMove(from: Square.h6, to: Square.h7, promotion: Role.king);
+    expect(pos.board.kings.has(Square.i1), true);
+    final result = pos.play(move);
+    expect(result.board.kings.has(Square.h7), true);
+    expect(result.board.kings.has(Square.i1), false);
   });
 }

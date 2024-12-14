@@ -274,6 +274,11 @@ class Board {
     };
   }
 
+  /// Gets all squares occupied by [Piece].
+  SquareSet byPiece(Piece piece) {
+    return byColor(piece.color) & byRole(piece.role);
+  }
+
   /// Gets the [PieceColor] at this [Square], if any.
   PieceColor? colorAt(Square square) {
     for (final color in PieceColor.values) {
@@ -305,7 +310,9 @@ class Board {
   }
 
   /// Finds the unique king [Square] of the given [Side], if any.
-  Square? kingOf(Side side) {}
+  Square? kingOf(PieceColor color) {
+    return byPiece(Piece(color: color, role: Role.king)).lsb();
+  }
 
   /// Puts a [Piece] on a [Square] overriding the existing one, if any.
   Board setPieceAt(Square square, Piece piece) {

@@ -145,7 +145,16 @@ abstract class Position<T extends Position<T>> {
         if (piece == null) {
           return copyWith();
         }
+
         Board newBoard = board.removePieceAt(from);
+
+        // Remove existing king if we're promoting to a king
+        if (promotion == Role.king) {
+          // TODO: If it's a controlled pawn, then we have to update the owned army.
+          final kingSquare = board.kingOf(_turnColor());
+          newBoard = board.removePieceAt(kingSquare!);
+        }
+
         final newPiece =
             promotion != null ? piece.copyWith(role: promotion) : piece;
         newBoard = newBoard.setPieceAt(to, newPiece);
@@ -201,6 +210,13 @@ abstract class Position<T extends Position<T>> {
       ].toISet();
     }
     return ISet.empty();
+  }
+
+  PieceColor _turnColor() {
+    return switch (turn) {
+      Side.player1 => p1Owned,
+      Side.player2 => p2Owned,
+    };
   }
 
   /// Gets the legal moves for that [Square].
@@ -283,7 +299,7 @@ abstract class Position<T extends Position<T>> {
   }
 
   _Context _makeContext() {
-    final king = board.kingOf(turn);
+    final king = board.kingOf(_turnColor());
     return _Context(
       king: king,
     );
