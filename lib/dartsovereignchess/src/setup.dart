@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
+import './army_manager.dart';
 import './board.dart';
 import './models.dart';
 
@@ -10,10 +11,7 @@ class Setup {
   const Setup({
     required this.board,
     required this.turn,
-    required this.p1Owned,
-    required this.p1Controlled,
-    required this.p2Owned,
-    required this.p2Controlled,
+    required this.armyManager,
     required this.ply,
   });
 
@@ -23,17 +21,8 @@ class Setup {
   /// Side to move.
   final Side turn;
 
-  /// The color army player 1 owns.
-  final PieceColor p1Owned;
-
-  /// The color armies that player 1 controls.
-  final ISet<PieceColor> p1Controlled;
-
-  /// The color army player 2 owns.
-  final PieceColor p2Owned;
-
-  /// The color armies that player 2 controls.
-  final ISet<PieceColor> p2Controlled;
+  /// Manager for each player's owned and controlled armies.
+  final ArmyManager armyManager;
 
   /// Current half-move number.
   ///
@@ -140,6 +129,13 @@ class Setup {
       }
     }
 
+    final armyManager = ArmyManager(
+      p1Owned: p1Owned,
+      p2Owned: p2Owned,
+      p1Controlled: p1Controlled,
+      p2Controlled: p2Controlled,
+    );
+
     int ply;
     if (parts.isEmpty) {
       ply = 0;
@@ -150,25 +146,23 @@ class Setup {
     return Setup(
       board: board,
       turn: turn,
-      p1Owned: p1Owned,
-      p1Controlled: p1Controlled,
-      p2Owned: p2Owned,
-      p2Controlled: p2Controlled,
+      armyManager: armyManager,
       ply: ply,
     );
   }
 
   /// FEN representation of the setup.
+  // TODO: Sort controlled armies letters
   String get fen => [
         board.fen,
         turn.name[turn.name.length - 1],
-        p1Owned.letter,
-        p1Controlled.isNotEmpty
-            ? p1Controlled.fold('', (prev, i) => prev + i.letter)
+        armyManager.p1Owned.letter,
+        armyManager.p1Controlled.isNotEmpty
+            ? armyManager.p1Controlled.fold('', (prev, i) => prev + i.letter)
             : '-',
-        p2Owned.letter,
-        p2Controlled.isNotEmpty
-            ? p2Controlled.fold('', (prev, i) => prev + i.letter)
+        armyManager.p2Owned.letter,
+        armyManager.p2Controlled.isNotEmpty
+            ? armyManager.p2Controlled.fold('', (prev, i) => prev + i.letter)
             : '-',
         ply,
       ].join(' ');

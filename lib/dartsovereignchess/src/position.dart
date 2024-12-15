@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
+import './army_manager.dart';
 import './attacks.dart';
 import './board.dart';
 import './models.dart';
@@ -16,10 +17,7 @@ abstract class Position<T extends Position<T>> {
   const Position({
     required this.board,
     required this.turn,
-    required this.p1Owned,
-    required this.p1Controlled,
-    required this.p2Owned,
-    required this.p2Controlled,
+    required this.armyManager,
     required this.ply,
   });
 
@@ -29,17 +27,8 @@ abstract class Position<T extends Position<T>> {
   /// Side to move.
   final Side turn;
 
-  /// The color army player 1 owns.
-  final PieceColor p1Owned;
-
-  /// The color armies that player 1 controls.
-  final ISet<PieceColor> p1Controlled;
-
-  /// The color army player 2 owns.
-  final PieceColor p2Owned;
-
-  /// The color armies that player 2 controls.
-  final ISet<PieceColor> p2Controlled;
+  /// Manager for each player's owned and controlled armies.
+  final ArmyManager armyManager;
 
   // Current half-move number.
   final int ply;
@@ -51,10 +40,7 @@ abstract class Position<T extends Position<T>> {
   Position<T> copyWith({
     Board? board,
     Side? turn,
-    PieceColor? p1Owned,
-    ISet<PieceColor>? p1Controlled,
-    PieceColor? p2Owned,
-    ISet<PieceColor>? p2Controlled,
+    ArmyManager? armyManager,
     int? ply,
   });
 
@@ -74,10 +60,7 @@ abstract class Position<T extends Position<T>> {
     return Setup(
       board: board,
       turn: turn,
-      p1Owned: p1Owned,
-      p1Controlled: p1Controlled,
-      p2Owned: p2Owned,
-      p2Controlled: p2Controlled,
+      armyManager: armyManager,
       ply: ply,
     ).fen;
   }
@@ -112,8 +95,8 @@ abstract class Position<T extends Position<T>> {
   IMap<Square, SquareSet> get legalMoves {
     final context = _makeContext();
     return IMap({
-      for (final s
-          in _sideColors(turn).fold<List<Square>>([], (previousValue, color) {
+      for (final s in armyManager.allColorsOf(turn).fold<List<Square>>([],
+          (previousValue, color) {
         final squares = board.byColor(color).squares;
         return [...previousValue, ...squares];
       }))
@@ -147,12 +130,13 @@ abstract class Position<T extends Position<T>> {
         }
 
         Board newBoard = board.removePieceAt(from);
+        ArmyManager newArmyManager = armyManager;
 
         // Remove existing king if we're promoting to a king
         if (promotion == Role.king) {
-          // TODO: If it's a controlled pawn, then we have to update the owned army.
-          final kingSquare = board.kingOf(_turnColor());
+          final kingSquare = board.kingOf(armyManager.colorOf(turn));
           newBoard = board.removePieceAt(kingSquare!);
+          newArmyManager = newArmyManager.setOwnedColor(turn, piece.color);
         }
 
         final newPiece =
@@ -160,63 +144,21 @@ abstract class Position<T extends Position<T>> {
         newBoard = newBoard.setPieceAt(to, newPiece);
 
         // Update armies if we're moving on or off of colored squares
-        var controlledArmies = (p1Controlled, p2Controlled);
         if (from.color != null) {
-          controlledArmies = _removeControlledArmy(from.color!);
+          newArmyManager =
+              newArmyManager.removeControlledArmy(turn, from.color!);
         }
         if (to.color != null) {
-          controlledArmies = _addControlledArmy(to.color!);
+          newArmyManager = newArmyManager.addControlledArmy(turn, to.color!);
         }
 
         return copyWith(
           ply: ply + 1,
           board: newBoard,
           turn: turn.opposite,
-          p1Controlled: controlledArmies.$1,
-          p2Controlled: controlledArmies.$2,
+          armyManager: newArmyManager,
         );
     }
-  }
-
-  (ISet<PieceColor>, ISet<PieceColor>) _removeControlledArmy(PieceColor color) {
-    switch (turn) {
-      case Side.player1:
-        return (p1Controlled.remove(color), p2Controlled);
-      case Side.player2:
-        return (p1Controlled, p2Controlled.remove(color));
-    }
-  }
-
-  (ISet<PieceColor>, ISet<PieceColor>) _addControlledArmy(PieceColor color) {
-    switch (turn) {
-      case Side.player1:
-        return (p1Controlled.add(color), p2Controlled);
-      case Side.player2:
-        return (p1Controlled, p2Controlled.add(color));
-    }
-  }
-
-  ISet<PieceColor> _sideColors(Side turn) {
-    if (turn == Side.player1) {
-      return [
-        p1Owned,
-        ...p1Controlled,
-      ].toISet();
-    }
-    if (turn == Side.player2) {
-      return [
-        p2Owned,
-        ...p2Controlled,
-      ].toISet();
-    }
-    return ISet.empty();
-  }
-
-  PieceColor _turnColor() {
-    return switch (turn) {
-      Side.player1 => p1Owned,
-      Side.player2 => p2Owned,
-    };
   }
 
   /// Gets the legal moves for that [Square].
@@ -226,7 +168,7 @@ abstract class Position<T extends Position<T>> {
   SquareSet _legalMovesOf(Square square, {_Context? context}) {
     final ctx = context ?? _makeContext();
     final piece = board.pieceAt(square);
-    if (piece == null || !_sideColors(turn).contains(piece.color)) {
+    if (piece == null || !armyManager.allColorsOf(turn).contains(piece.color)) {
       return SquareSet.empty;
     }
 
@@ -254,7 +196,7 @@ abstract class Position<T extends Position<T>> {
     pseudo = pseudo.diff(_occupiedColoredSquares());
 
     // Include colors that aren't controlled because we cannot attack those pieces
-    pseudo = pseudo.diff(board.exclude(_sideColors(turn.opposite)));
+    pseudo = pseudo.diff(board.exclude(armyManager.allColorsOf(turn.opposite)));
     return pseudo;
   }
 
@@ -299,7 +241,7 @@ abstract class Position<T extends Position<T>> {
   }
 
   _Context _makeContext() {
-    final king = board.kingOf(_turnColor());
+    final king = board.kingOf(armyManager.colorOf(turn));
     return _Context(
       king: king,
     );
@@ -312,10 +254,7 @@ class SovereignChess extends Position<SovereignChess> {
   const SovereignChess({
     required super.board,
     required super.turn,
-    required super.p1Owned,
-    required super.p1Controlled,
-    required super.p2Owned,
-    required super.p2Controlled,
+    required super.armyManager,
     required super.ply,
   });
 
@@ -330,10 +269,7 @@ class SovereignChess extends Position<SovereignChess> {
     final pos = SovereignChess(
       board: setup.board,
       turn: setup.turn,
-      p1Owned: setup.p1Owned,
-      p1Controlled: setup.p1Controlled,
-      p2Owned: setup.p2Owned,
-      p2Controlled: setup.p2Controlled,
+      armyManager: setup.armyManager,
       ply: setup.ply,
     );
     return pos;
@@ -343,19 +279,13 @@ class SovereignChess extends Position<SovereignChess> {
   SovereignChess copyWith({
     Board? board,
     Side? turn,
-    PieceColor? p1Owned,
-    ISet<PieceColor>? p1Controlled,
-    PieceColor? p2Owned,
-    ISet<PieceColor>? p2Controlled,
+    ArmyManager? armyManager,
     int? ply,
   }) {
     return SovereignChess(
       board: board ?? this.board,
       turn: turn ?? this.turn,
-      p1Owned: p1Owned ?? this.p1Owned,
-      p1Controlled: p1Controlled ?? this.p1Controlled,
-      p2Owned: p2Owned ?? this.p2Owned,
-      p2Controlled: p2Controlled ?? this.p2Controlled,
+      armyManager: armyManager ?? this.armyManager,
       ply: ply ?? this.ply,
     );
   }
