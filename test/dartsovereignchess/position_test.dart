@@ -84,6 +84,7 @@ void main() {
         NormalMove(from: Square.h6, to: Square.h7, promotion: Role.king);
     expect(pos.board.kings.has(Square.i1), true);
     final result = pos.play(move);
+    expect(result.board.pawns.has(Square.h6), false);
     expect(result.board.kings.has(Square.h7), true);
     expect(result.board.kings.has(Square.i1), false);
   });

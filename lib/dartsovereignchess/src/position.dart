@@ -140,8 +140,8 @@ abstract class Position<T extends Position<T>> {
 
         // Remove existing king if we're promoting to a king
         if (promotion == Role.king) {
-          final kingSquare = board.kingOf(armyManager.colorOf(turn));
-          newBoard = board.removePieceAt(kingSquare!);
+          final kingSquare = newBoard.kingOf(armyManager.colorOf(turn));
+          newBoard = newBoard.removePieceAt(kingSquare!);
           newArmyManager = newArmyManager.setOwnedColor(turn, piece.color);
         }
 
