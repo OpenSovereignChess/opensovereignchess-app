@@ -79,7 +79,10 @@ class _TestViewState extends ConsumerState<_TestView> {
             size: math.min(constraints.maxWidth, constraints.maxHeight),
             fen: gameState.position.fen,
             game: GameData(
+              sideToMove: gameState.position.turn,
               validMoves: gameState.legalMoves,
+              isCheck: gameState.position.isCheck,
+              checkedKingColor: gameState.position.checkedKingColor,
               onMove: _onMove,
               promotionMove: gameState.promotionMove,
               promotionColor: gameState.promotionColor,

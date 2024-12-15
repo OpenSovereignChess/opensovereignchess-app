@@ -65,6 +65,16 @@ abstract class Position<T extends Position<T>> {
     ).fen;
   }
 
+  /// Tests if the king is in check.
+  bool get isCheck {
+    final king = board.kingOf(armyManager.colorOf(turn));
+    return king != null && checkers.isNotEmpty;
+  }
+
+  /// [PieceColor] of the king in check, if any.
+  PieceColor? get checkedKingColor =>
+      isCheck ? armyManager.colorOf(turn) : null;
+
   /// Tests a move for legality.
   bool isLegal(Move move) {
     switch (move) {
@@ -102,6 +112,12 @@ abstract class Position<T extends Position<T>> {
       }))
         s: _legalMovesOf(s, context: context)
     });
+  }
+
+  /// Square set of pieces giving check.
+  SquareSet get checkers {
+    final king = board.kingOf(armyManager.colorOf(turn));
+    return king != null ? kingAttackers(king, turn.opposite) : SquareSet.empty;
   }
 
   /// Attacks that a king on `square` would have to deal with.

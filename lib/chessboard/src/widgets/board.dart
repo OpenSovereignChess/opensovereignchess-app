@@ -90,6 +90,7 @@ class _BoardState extends State<Chessboard> {
             widget.game?.validMoves != null
         ? widget.game?.validMoves[selected!] ?? _emptyValidMoves
         : _emptyValidMoves;
+    final checkSquare = widget.game?.isCheck == true ? _getKingSquare() : null;
 
     final List<Widget> highlightedBackground = [
       SizedBox.square(
@@ -194,6 +195,13 @@ class _BoardState extends State<Chessboard> {
             occupied: pieces.containsKey(dest),
           ),
         ),
+      if (checkSquare != null)
+        PositionedSquare(
+          key: ValueKey('${checkSquare.name}-check'),
+          size: widget.size,
+          square: checkSquare,
+          child: CheckHighlight(size: widget.squareSize),
+        ),
     ];
 
     final List<Widget> objects = [
@@ -262,6 +270,16 @@ class _BoardState extends State<Chessboard> {
     final newPieces = readFen(widget.fen);
 
     pieces = newPieces;
+  }
+
+  Square? _getKingSquare() {
+    for (final square in pieces.keys) {
+      if (pieces[square]!.color == widget.game?.checkedKingColor &&
+          pieces[square]!.role == Role.king) {
+        return square;
+      }
+    }
+    return null;
   }
 
   /// Returns the position of the square target during drag as a global offset.

@@ -10,12 +10,18 @@ import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dar
 class GameData {
   /// Creates a new [GameData] with the provided values.
   const GameData({
+    required this.sideToMove,
     required this.validMoves,
     required this.onMove,
     required this.promotionMove,
     required this.promotionColor,
     required this.onPromotionSelection,
+    this.isCheck,
+    this.checkedKingColor,
   });
+
+  /// Side which is to move.
+  final Side sideToMove;
 
   /// Set of moves allowed to be played by current side to move.
   final ValidMoves validMoves;
@@ -39,6 +45,12 @@ class GameData {
   ///
   /// If the argument is `null`, the promotion should be canceled.
   final void Function(Role? role) onPromotionSelection;
+
+  /// Hightlight the king of current side to move
+  final bool? isCheck;
+
+  /// Color of the king in check
+  final PieceColor? checkedKingColor;
 }
 
 /// Describes a set of piece assets.
