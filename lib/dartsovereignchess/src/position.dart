@@ -95,13 +95,19 @@ abstract class Position<T extends Position<T>> {
   IMap<Square, SquareSet> get legalMoves {
     final context = _makeContext();
     return IMap({
-      for (final s in armyManager.allColorsOf(turn).fold<List<Square>>([],
+      for (final s in armyManager.colorsOf(turn).fold<List<Square>>([],
           (previousValue, color) {
         final squares = board.byColor(color).squares;
         return [...previousValue, ...squares];
       }))
         s: _legalMovesOf(s, context: context)
     });
+  }
+
+  /// Attacks that a king on `square` would have to deal with.
+  SquareSet kingAttackers(Square square, Side attacker, {SquareSet? occupied}) {
+    return board.attacksTo(square, armyManager.colorsOf(turn.opposite),
+        occupied: occupied);
   }
 
   /// Plays a move and returns the updated [Position].
@@ -168,7 +174,7 @@ abstract class Position<T extends Position<T>> {
   SquareSet _legalMovesOf(Square square, {_Context? context}) {
     final ctx = context ?? _makeContext();
     final piece = board.pieceAt(square);
-    if (piece == null || !armyManager.allColorsOf(turn).contains(piece.color)) {
+    if (piece == null || !armyManager.colorsOf(turn).contains(piece.color)) {
       return SquareSet.empty;
     }
 
@@ -195,8 +201,19 @@ abstract class Position<T extends Position<T>> {
     // Only one square of each color may be occupied at a time.
     pseudo = pseudo.diff(_occupiedColoredSquares());
 
+    if (ctx.king != null) {
+      if (piece.role == Role.king) {
+        final occ = board.occupied.withoutSquare(square);
+        for (final to in pseudo.squares) {
+          if (kingAttackers(to, turn.opposite, occupied: occ).isNotEmpty) {
+            pseudo = pseudo.withoutSquare(to);
+          }
+        }
+      }
+    }
+
     // Include colors that aren't controlled because we cannot attack those pieces
-    pseudo = pseudo.diff(board.exclude(armyManager.allColorsOf(turn.opposite)));
+    pseudo = pseudo.diff(board.exclude(armyManager.colorsOf(turn.opposite)));
     return pseudo;
   }
 

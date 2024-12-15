@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
+import './attacks.dart';
 import './models.dart';
 import './square_set.dart';
 
@@ -180,6 +181,12 @@ class Board {
     return board;
   }
 
+  /// The square set of all rooks and queens.
+  SquareSet get rooksAndQueens => rooks | queens;
+
+  /// The square set of all bishops and queens.
+  SquareSet get bishopsAndQueens => bishops | queens;
+
   /// Board part of the FEN.
   String get fen {
     final buffer = StringBuffer();
@@ -313,6 +320,18 @@ class Board {
   Square? kingOf(PieceColor color) {
     return byPiece(Piece(color: color, role: Role.king)).lsb();
   }
+
+  /// Finds the squares who are attacking `square` by the `attacker` [PieceColor]s.
+  SquareSet attacksTo(Square square, ISet<PieceColor> attackerColors,
+          {SquareSet? occupied}) =>
+      byColors(attackerColors).intersect(
+          rookAttacks(square, occupied ?? this.occupied)
+              .intersect(rooksAndQueens)
+              .union(bishopAttacks(square, occupied ?? this.occupied)
+                  .intersect(bishopsAndQueens))
+              .union(knightAttacks(square).intersect(knights))
+              .union(kingAttacks(square).intersect(kings))
+              .union(pawnAttacks(square).intersect(pawns)));
 
   /// Puts a [Piece] on a [Square] overriding the existing one, if any.
   Board setPieceAt(Square square, Piece piece) {

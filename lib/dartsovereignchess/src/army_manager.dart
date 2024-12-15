@@ -72,20 +72,17 @@ class ArmyManager {
         Side.player2 => p2Controlled.contains(color),
       };
 
-  ISet<PieceColor> allColorsOf(Side turn) {
-    if (turn == Side.player1) {
-      return [
-        p1Owned,
-        ...p1Controlled,
-      ].toISet();
-    }
-    if (turn == Side.player2) {
-      return [
-        p2Owned,
-        ...p2Controlled,
-      ].toISet();
-    }
-    return ISet.empty();
+  ISet<PieceColor> colorsOf(Side turn) {
+    return switch (turn) {
+      Side.player1 => [
+          p1Owned,
+          ...p1Controlled,
+        ].toISet(),
+      Side.player2 => [
+          p2Owned,
+          ...p2Controlled,
+        ].toISet(),
+    };
   }
 
   PieceColor colorOf(Side turn) {

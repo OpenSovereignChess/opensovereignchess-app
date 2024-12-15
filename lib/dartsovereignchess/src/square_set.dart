@@ -302,6 +302,9 @@ class SquareSet {
   /// Returns the squares in the set as an iterable.
   Iterable<Square> get squares => _iterateSquares();
 
+  /// Returns true if the set is not empty.
+  bool get isNotEmpty => lsb() != null;
+
   /// Returns true if the [SquareSet] contains the given [square].
   bool has(Square square) {
     final (index, offset) = _squareToKey(square);
