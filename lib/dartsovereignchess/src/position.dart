@@ -231,6 +231,9 @@ abstract class Position<T extends Position<T>> {
     // Only one square of each color may be occupied at a time.
     pseudo = pseudo.diff(_occupiedColoredSquares());
 
+    // Include colors that aren't controlled because we cannot attack those pieces
+    pseudo = pseudo.diff(board.exclude(armyManager.colorsOf(turn.opposite)));
+
     if (ctx.king != null) {
       if (piece.role == Role.king) {
         final occ = board.occupied.withoutSquare(square);
@@ -249,10 +252,13 @@ abstract class Position<T extends Position<T>> {
         }
         pseudo = pseudo & between(checker, ctx.king!).withSquare(checker);
       }
-    }
 
-    // Include colors that aren't controlled because we cannot attack those pieces
-    pseudo = pseudo.diff(board.exclude(armyManager.colorsOf(turn.opposite)));
+      // TODO: Blocker should be able to move toward the sniper too,
+      // not just toward the king.
+      if (ctx.blockers.has(square)) {
+        pseudo = pseudo & ray(square, ctx.king!);
+      }
+    }
     return pseudo;
   }
 
@@ -300,8 +306,25 @@ abstract class Position<T extends Position<T>> {
     final king = board.kingOf(armyManager.colorOf(turn));
     return _Context(
       king: king,
+      blockers: _sliderBlockers(king!),
       checkers: checkers,
     );
+  }
+
+  SquareSet _sliderBlockers(Square king) {
+    final snipers = rookAttacks(king, SquareSet.empty)
+        .intersect(board.rooksAndQueens)
+        .union(bishopAttacks(king, SquareSet.empty)
+            .intersect(board.bishopsAndQueens))
+        .intersect(board.byColors(armyManager.colorsOf(turn.opposite)));
+    SquareSet blockers = SquareSet.empty;
+    for (final sniper in snipers.squares) {
+      final b = between(king, sniper) & board.occupied;
+      if (!b.moreThanOne) {
+        blockers = blockers | b;
+      }
+    }
+    return blockers;
   }
 }
 
@@ -352,18 +375,22 @@ class SovereignChess extends Position<SovereignChess> {
 class _Context {
   const _Context({
     required this.king,
+    required this.blockers,
     required this.checkers,
   });
 
   final Square? king;
+  final SquareSet blockers;
   final SquareSet checkers;
 
   _Context copyWith({
     Square? king,
+    SquareSet? blockers,
     SquareSet? checkers,
   }) {
     return _Context(
       king: king,
+      blockers: blockers ?? this.blockers,
       checkers: checkers ?? this.checkers,
     );
   }
