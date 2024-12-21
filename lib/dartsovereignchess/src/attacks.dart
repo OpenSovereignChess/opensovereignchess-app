@@ -50,6 +50,46 @@ SquareSet queenAttacks(Square square, SquareSet occupied) {
   return bishopAttacks(square, occupied) ^ rookAttacks(square, occupied);
 }
 
+/// Gets all squares of the rank, file or diagonal with the two squares
+/// `a` and `b`, or an empty set if they are not aligned.
+///
+/// Only considers rays of length 9, as that is as far as a sliding piece
+/// can move.
+SquareSet ray(Square a, Square b) {
+  final other = SquareSet.fromSquare(b);
+  if (_northRange[a].isIntersected(other)) {
+    return _northRange[a].withSquare(a);
+  }
+  if (_northeastRange[a].isIntersected(other)) {
+    return _northeastRange[a].withSquare(a);
+  }
+  if (_eastRange[a].isIntersected(other)) {
+    return _eastRange[a].withSquare(a);
+  }
+  if (_southeastRange[a].isIntersected(other)) {
+    return _southeastRange[a].withSquare(a);
+  }
+  if (_southRange[a].isIntersected(other)) {
+    return _southRange[a].withSquare(a);
+  }
+  if (_southwestRange[a].isIntersected(other)) {
+    return _southwestRange[a].withSquare(a);
+  }
+  if (_westRange[a].isIntersected(other)) {
+    return _westRange[a].withSquare(a);
+  }
+  if (_northwestRange[a].isIntersected(other)) {
+    return _northwestRange[a].withSquare(a);
+  }
+  return SquareSet.empty;
+}
+
+/// Gets all squares between `a` and `b` (bounds not included), or an empty set
+/// if they are not on the same rank, file or diagonal.
+SquareSet between(Square a, Square b) => ray(a, b)
+    .intersect(SquareSet.full.shl(a).xor(SquareSet.full.shl(b)))
+    .withoutFirst();
+
 SquareSet _computeRange(Square square, List<int> deltas) {
   SquareSet range = SquareSet.empty;
   for (final delta in deltas) {

@@ -11,6 +11,12 @@ dart run build_runner watch # in separate terminal
 flutter run -d chrome
 ```
 
+Before committing:
+
+```bash
+dart format .
+```
+
 ### Adding piece assets
 
 We precompile and optimize the SVGs.  This also allows us to create constant values for the piece images.  To generate the piece SVG vector, run:

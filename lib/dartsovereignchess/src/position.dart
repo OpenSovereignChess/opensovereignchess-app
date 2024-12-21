@@ -71,9 +71,23 @@ abstract class Position<T extends Position<T>> {
     return king != null && checkers.isNotEmpty;
   }
 
+  /// Tests for checkmate.
+  bool get isCheckmate => checkers.isNotEmpty && !hasSomeLegalMoves;
+
   /// [PieceColor] of the king in check, if any.
   PieceColor? get checkedKingColor =>
       isCheck ? armyManager.colorOf(turn) : null;
+
+  /// Tests if the position has at least one legal move.
+  bool get hasSomeLegalMoves {
+    final context = _makeContext();
+    for (final square in board.byColors(armyManager.colorsOf(turn)).squares) {
+      if (_legalMovesOf(square, context: context).isNotEmpty) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /// Tests a move for legality.
   bool isLegal(Move move) {
@@ -225,6 +239,15 @@ abstract class Position<T extends Position<T>> {
             pseudo = pseudo.withoutSquare(to);
           }
         }
+        return pseudo;
+      }
+
+      if (ctx.checkers.isNotEmpty) {
+        final checker = ctx.checkers.singleSquare;
+        if (checker == null) {
+          return SquareSet.empty;
+        }
+        pseudo = pseudo & between(checker, ctx.king!).withSquare(checker);
       }
     }
 
@@ -277,6 +300,7 @@ abstract class Position<T extends Position<T>> {
     final king = board.kingOf(armyManager.colorOf(turn));
     return _Context(
       king: king,
+      checkers: checkers,
     );
   }
 }
@@ -328,15 +352,19 @@ class SovereignChess extends Position<SovereignChess> {
 class _Context {
   const _Context({
     required this.king,
+    required this.checkers,
   });
 
   final Square? king;
+  final SquareSet checkers;
 
   _Context copyWith({
     Square? king,
+    SquareSet? checkers,
   }) {
     return _Context(
       king: king,
+      checkers: checkers ?? this.checkers,
     );
   }
 }

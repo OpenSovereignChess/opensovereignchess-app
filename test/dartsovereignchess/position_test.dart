@@ -57,6 +57,14 @@ void main() {
     expect(pos.legalMoves[Square.i1]!.has(Square.i2), false);
   });
 
+  test('legalMoves, only king can move when in check', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        '8bk7/wq15/16/16/16/16/16/16/16/16/16/16/16/16/16/br7wk7 1 w - b -'));
+    final legalMoves = pos.legalMoves;
+    expect(legalMoves[Square.a15]!.isEmpty, true);
+    expect(legalMoves[Square.i1]!.isNotEmpty, true);
+  });
+
   test('play, move onto colored squares', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '16/16/16/16/3bp12/16/16/16/16/16/16/16/11wp4/16/16/16 1 w - b -'));
@@ -95,10 +103,10 @@ void main() {
     final move =
         NormalMove(from: Square.f7, to: Square.g7, promotion: Role.king);
     expect(pos.board.kings.has(Square.i1), true);
-    expect(pos.armyManager.ownedColor(Side.player1), PieceColor.white);
+    expect(pos.armyManager.colorOf(Side.player1), PieceColor.white);
     final result = pos.play(move);
     expect(result.board.kings.has(Square.g7), true);
     expect(result.board.kings.has(Square.i1), false);
-    expect(result.armyManager.ownedColor(Side.player1), PieceColor.red);
+    expect(result.armyManager.colorOf(Side.player1), PieceColor.red);
   });
 }

@@ -57,12 +57,6 @@ class ArmyManager {
     );
   }
 
-  /// Returns the owned [PieceColor] for the given [Side].
-  PieceColor ownedColor(Side turn) => switch (turn) {
-        Side.player1 => p1Owned,
-        Side.player2 => p2Owned,
-      };
-
   /// Returns true if the given [Side] controls the [PieceColor].
   ///
   /// Returns false in the case where the given [Side] owns instead of controls
@@ -72,6 +66,7 @@ class ArmyManager {
         Side.player2 => p2Controlled.contains(color),
       };
 
+  /// Returns both owned and controlled [PieceColor]s for a given [Side].
   ISet<PieceColor> colorsOf(Side turn) {
     return switch (turn) {
       Side.player1 => [
@@ -85,12 +80,11 @@ class ArmyManager {
     };
   }
 
-  PieceColor colorOf(Side turn) {
-    return switch (turn) {
-      Side.player1 => p1Owned,
-      Side.player2 => p2Owned,
-    };
-  }
+  /// Returns the owned [PieceColor] for the given [Side].
+  PieceColor colorOf(Side turn) => switch (turn) {
+        Side.player1 => p1Owned,
+        Side.player2 => p2Owned,
+      };
 
   ArmyManager removeControlledArmy(Side turn, PieceColor color) {
     switch (turn) {

@@ -67,6 +67,8 @@ class SquareSet {
   }
 
   static const empty = SquareSet(0, 0, 0, 0, 0, 0, 0, 0);
+  static const full = SquareSet(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
+      0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);
 
   // North or east rays start from a1
   // South or west rays start from p16
@@ -302,8 +304,20 @@ class SquareSet {
   /// Returns the squares in the set as an iterable.
   Iterable<Square> get squares => _iterateSquares();
 
+  /// Returns the number of squares in the set.
+  int get size => squares.length;
+
+  /// Returns true if the set is empty.
+  bool get isEmpty => lsb() == null;
+
   /// Returns true if the set is not empty.
   bool get isNotEmpty => lsb() != null;
+
+  /// Returns true if the set contains more than one square.
+  bool get moreThanOne => isNotEmpty && size > 1;
+
+  /// Returns square if it is single, otherwise returns null.
+  Square? get singleSquare => moreThanOne ? null : lsb();
 
   /// Returns true if the [SquareSet] contains the given [square].
   bool has(Square square) {
@@ -311,6 +325,9 @@ class SquareSet {
     final integer = _get(index);
     return integer & (1 << offset) != 0;
   }
+
+  /// Returns true if the square set has any square in the [other] square set.
+  bool isIntersected(SquareSet other) => intersect(other).isNotEmpty;
 
   /// Returns a new [SquareSet] with the given [square] added.
   SquareSet withSquare(Square square) {
@@ -346,6 +363,12 @@ class SquareSet {
   Square? lsb() {
     final it = _iterateSquares();
     return it.isEmpty ? null : it.first;
+  }
+
+  /// Returns a new [SquareSet] with its first [Square] removed.
+  SquareSet withoutFirst() {
+    final f = lsb();
+    return f != null ? withoutSquare(f) : empty;
   }
 
   Iterable<int> _iterateSegments() sync* {
