@@ -65,6 +65,15 @@ void main() {
     expect(pos.legalMoves[Square.i1]!.has(Square.i2), false);
   });
 
+  test(
+      'legalMoves, checked king can move to a square of the same color as the checker',
+      () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        '8bk7/16/16/16/16/16/7bq8/16/16/7wk8/16/16/16/16/16/16 1 w - b -'));
+    //print(humanReadableSquareSet(pos.legalMoves[Square.h7]!));
+    expect(pos.legalMoves[Square.h7]!.has(Square.h8), true);
+  });
+
   test('legalMoves, only king can move when in check', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '8bk7/wq15/16/16/16/16/16/16/16/16/16/16/16/16/16/br7wk7 1 w - b -'));

@@ -136,8 +136,14 @@ abstract class Position<T extends Position<T>> {
 
   /// Attacks that a king on `square` would have to deal with.
   SquareSet kingAttackers(Square square, Side attacker, {SquareSet? occupied}) {
-    return board.attacksTo(square, armyManager.colorsOf(turn.opposite),
-        occupied: occupied);
+    SquareSet attackers = board
+        .attacksTo(square, armyManager.colorsOf(attacker), occupied: occupied);
+    // Attackers cannot jump to a square of their own color
+    attackers = attackers.squares.fold(attackers, (prevVal, sq) {
+      final piece = board.pieceAt(sq);
+      return piece!.color == square.color ? prevVal.withoutSquare(sq) : prevVal;
+    });
+    return attackers;
   }
 
   /// Plays a move and returns the updated [Position].
@@ -250,6 +256,7 @@ abstract class Position<T extends Position<T>> {
         if (checker == null) {
           return SquareSet.empty;
         }
+        // When king is in check, only include moves that could block the check
         pseudo = pseudo & between(checker, ctx.king!).withSquare(checker);
       }
 

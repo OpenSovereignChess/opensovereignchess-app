@@ -100,6 +100,11 @@ class ArmyManager {
   }
 
   ArmyManager addControlledArmy(Side turn, PieceColor color) {
+    // Cannot control an owned army
+    if (colorOf(turn.opposite) == color) {
+      return this;
+    }
+
     switch (turn) {
       case Side.player1:
         return copyWith(

@@ -928,6 +928,9 @@ class Piece {
   final Role role;
   final bool promoted;
 
+  /// The name of the piece.
+  String get name => '${color.name} ${role.name}';
+
   /// Gets the piece kind.
   PieceKind get kind => switch ((color, role)) {
         (PieceColor.white, Role.pawn) => PieceKind.whitePawn,
