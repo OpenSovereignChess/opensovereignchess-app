@@ -1,49 +1,48 @@
-import 'dart:math' as math;
-
-import 'package:fast_immutable_collections/fast_immutable_collections.dart'; // For testing purposes
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:opensovereignchess_app/chessboard/chessboard.dart';
-import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
-
-import 'package:opensovereignchess_app/chessboard/src/board_settings.dart';
-import 'package:opensovereignchess_app/chessboard/src/widgets/piece.dart';
-
-import './model/over_the_board/over_the_board_game_controller.dart';
+import 'package:go_router/go_router.dart';
 
 enum NavTab {
   home,
-  tools,
-  settings;
+  boardEditor;
+  //settings;
 
   String get label {
     return switch (this) {
       NavTab.home => 'Home',
-      NavTab.tools => 'Tools',
-      NavTab.settings => 'Settings',
+      NavTab.boardEditor => 'Board Editor',
+      //NavTab.settings => 'Settings',
     };
   }
 
   IconData get icon {
     return switch (this) {
       NavTab.home => Icons.home_outlined,
-      NavTab.tools => Icons.handyman_outlined,
-      NavTab.settings => Icons.settings_outlined,
+      NavTab.boardEditor => Icons.handyman_outlined,
+      //NavTab.settings => Icons.settings_outlined,
     };
   }
 
   IconData get activeIcon {
     return switch (this) {
       NavTab.home => Icons.home,
-      NavTab.tools => Icons.handyman,
-      NavTab.settings => Icons.settings,
+      NavTab.boardEditor => Icons.handyman,
+      //NavTab.settings => Icons.settings,
+    };
+  }
+
+  String get path {
+    return switch (this) {
+      NavTab.home => '/',
+      NavTab.boardEditor => '/editor',
     };
   }
 }
 
 class AppScaffold extends StatelessWidget {
-  const AppScaffold({super.key});
+  final Widget body;
+
+  const AppScaffold({super.key, required this.body});
 
   @override
   Widget build(BuildContext context) {
@@ -56,49 +55,14 @@ class AppScaffold extends StatelessWidget {
             label: tab.label,
           )
       ],
-      body: (_) => const _TestView(),
+      onSelectedIndexChange: (int index) {
+        for (final tab in NavTab.values) {
+          if (tab.index == index) {
+            context.go(tab.path);
+          }
+        }
+      },
+      body: (_) => body,
     );
-  }
-}
-
-class _TestView extends ConsumerStatefulWidget {
-  const _TestView({super.key});
-
-  @override
-  _TestViewState createState() => _TestViewState();
-}
-
-class _TestViewState extends ConsumerState<_TestView> {
-  @override
-  Widget build(BuildContext context) {
-    final gameState = ref.watch(overTheBoardGameControllerProvider);
-    return Center(
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Chessboard(
-            size: math.min(constraints.maxWidth, constraints.maxHeight),
-            fen: gameState.position.fen,
-            game: GameData(
-              sideToMove: gameState.position.turn,
-              validMoves: gameState.legalMoves,
-              isCheck: gameState.position.isCheck,
-              checkedKingColor: gameState.position.checkedKingColor,
-              onMove: _onMove,
-              promotionMove: gameState.promotionMove,
-              promotionColor: gameState.promotionColor,
-              onPromotionSelection: ref
-                  .read(overTheBoardGameControllerProvider.notifier)
-                  .onPromotionSelection,
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  void _onMove(NormalMove move, {bool? isDrop, PieceColor? color}) {
-    ref
-        .read(overTheBoardGameControllerProvider.notifier)
-        .makeMove(move, color: color);
   }
 }

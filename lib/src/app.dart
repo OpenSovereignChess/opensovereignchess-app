@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:opensovereignchess_app/src/navigation.dart';
 
+import './router.dart';
+
 /// The main application widget.
 ///
 /// This widget is the root of the application and is responsible for setting up
@@ -10,30 +12,9 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Sovereign Chess',
-      home: const _EntryPointWidget(),
+      routerConfig: router,
     );
-  }
-}
-
-/// The entry point widget for the application.
-///
-/// This widget needs to be a descendant of [MaterialApp] to be able to handle
-/// the [Navigator] properly.
-///
-/// This widget is responsible for setting up the adaptive navigation scaffold and
-/// the main navigation routes.
-class _EntryPointWidget extends StatefulWidget {
-  const _EntryPointWidget();
-
-  @override
-  State<_EntryPointWidget> createState() => _EntryPointState();
-}
-
-class _EntryPointState extends State<_EntryPointWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return const AppScaffold();
   }
 }
