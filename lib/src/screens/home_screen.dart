@@ -8,29 +8,41 @@ import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dar
 import '../model/over_the_board/over_the_board_game_controller.dart';
 import '../navigation.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeState createState() => _HomeState();
+  Widget build(BuildContext context) {
+    return AppScaffold(
+      body: _Body(),
+    );
+  }
 }
 
-class _HomeState extends ConsumerState<HomeScreen> {
+class _Body extends ConsumerWidget {
+  const _Body();
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider);
+
     return Center(
       child: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return Chessboard(
             size: math.min(constraints.maxWidth, constraints.maxHeight),
+            orientation: Side.player1,
             fen: gameState.position.fen,
             game: GameData(
               sideToMove: gameState.position.turn,
               validMoves: gameState.legalMoves,
               isCheck: gameState.position.isCheck,
               checkedKingColor: gameState.position.checkedKingColor,
-              onMove: _onMove,
+              onMove: (NormalMove move, {bool? isDrop, PieceColor? color}) {
+                ref
+                    .read(overTheBoardGameControllerProvider.notifier)
+                    .makeMove(move, color: color);
+              },
               promotionMove: gameState.promotionMove,
               promotionColor: gameState.promotionColor,
               onPromotionSelection: ref
@@ -41,11 +53,5 @@ class _HomeState extends ConsumerState<HomeScreen> {
         },
       ),
     );
-  }
-
-  void _onMove(NormalMove move, {bool? isDrop, PieceColor? color}) {
-    ref
-        .read(overTheBoardGameControllerProvider.notifier)
-        .makeMove(move, color: color);
   }
 }

@@ -16,6 +16,7 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
     required this.move,
     required this.color,
     required this.size,
+    required this.orientation,
     required this.onSelect,
     required this.onCancel,
     required this.pieceAssets,
@@ -32,6 +33,9 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
 
   @override
   final double size;
+
+  @override
+  final Side orientation;
 
   /// Callback when a piece is selected.
   final void Function(Role) onSelect;

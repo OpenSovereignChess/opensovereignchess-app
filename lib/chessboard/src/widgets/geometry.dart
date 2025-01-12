@@ -6,6 +6,9 @@ mixin ChessboardGeometry {
   /// Visual size of the board.
   double get size;
 
+  /// Side by which the board is oriented.
+  Side get orientation;
+
   /// Size of a single square on the board.
   double get squareSize => size / 16;
 

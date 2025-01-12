@@ -14,6 +14,7 @@ class PositionedSquare extends StatelessWidget with ChessboardGeometry {
     super.key,
     required this.child,
     required this.size,
+    required this.orientation,
     required this.square,
     this.childSize = 1,
   });
@@ -23,6 +24,9 @@ class PositionedSquare extends StatelessWidget with ChessboardGeometry {
   /// The total size of the board.
   @override
   final double size;
+
+  @override
+  final Side orientation;
 
   final Square square;
 

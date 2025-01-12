@@ -6,3 +6,4 @@
 export 'src/fen.dart';
 export 'src/models.dart';
 export 'src/widgets/board.dart' show Chessboard;
+export 'src/widgets/board_editor.dart';

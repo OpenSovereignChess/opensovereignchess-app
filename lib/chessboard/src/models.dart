@@ -63,3 +63,15 @@ typedef Pieces = Map<Square, Piece>;
 
 /// Sets of each valid destinations for an origin square.
 typedef ValidMoves = IMap<Square, ISet<Square>>;
+
+/// Base class for shapes that can be drawn on the board.
+sealed class Shape {
+  /// Scale factor for the shape. Must be between 0.0 and 1.0.
+  double get scale => 1.0;
+
+  /// Decides what shape to draw based on the current shape and the new destination.
+  Shape newDest(Square newDest);
+
+  /// Returns a new shape with the same properties but a different scale.
+  Shape withScale(double scale);
+}

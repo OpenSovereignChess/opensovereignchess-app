@@ -26,12 +26,17 @@ class Chessboard extends StatefulWidget with ChessboardGeometry {
     super.key,
     required this.size,
     this.settings = const ChessboardSettings(),
+    required this.orientation,
     required this.fen,
     required this.game,
   });
 
   /// Size of the board in logical pixels.
   final double size;
+
+  /// Side by which the board is oriented.
+  @override
+  final Side orientation;
 
   /// Settings that control the theme and behavior of the board.
   final ChessboardSettings settings;
@@ -104,6 +109,7 @@ class _BoardState extends State<Chessboard> {
         PositionedSquare(
           key: ValueKey('${sq}-${color}'),
           size: widget.size,
+          orientation: widget.orientation,
           square: sq,
           child: SquareHighlight(
             color: color,
@@ -113,6 +119,7 @@ class _BoardState extends State<Chessboard> {
       PositionedSquare(
         key: ValueKey('promotion-box'),
         size: widget.size,
+        orientation: widget.orientation,
         square: Square.g10,
         childSize: 4,
         child: Container(
@@ -128,6 +135,7 @@ class _BoardState extends State<Chessboard> {
       PositionedSquare(
         key: ValueKey('pawn-directional-lines-top'),
         size: widget.size,
+        orientation: widget.orientation,
         square: Square.i16,
         childSize: 6,
         child: Container(
@@ -141,6 +149,7 @@ class _BoardState extends State<Chessboard> {
       PositionedSquare(
         key: ValueKey('pawn-directional-lines-bottom'),
         size: widget.size,
+        orientation: widget.orientation,
         square: Square.i6,
         childSize: 6,
         child: Container(
@@ -154,6 +163,7 @@ class _BoardState extends State<Chessboard> {
       PositionedSquare(
         key: ValueKey('pawn-directional-lines-left'),
         size: widget.size,
+        orientation: widget.orientation,
         square: Square.a8,
         childSize: 6,
         child: Container(
@@ -167,6 +177,7 @@ class _BoardState extends State<Chessboard> {
       PositionedSquare(
         key: ValueKey('pawn-directional-lines-right'),
         size: widget.size,
+        orientation: widget.orientation,
         square: Square.k8,
         childSize: 6,
         child: Container(
@@ -181,6 +192,7 @@ class _BoardState extends State<Chessboard> {
         PositionedSquare(
           key: ValueKey('${selected!.name}-selected'),
           size: widget.size,
+          orientation: widget.orientation,
           square: selected!,
           child: SquareHighlight(color: colorScheme.selected),
         ),
@@ -188,6 +200,7 @@ class _BoardState extends State<Chessboard> {
         PositionedSquare(
           key: ValueKey('${dest.name}-dest'),
           size: widget.size,
+          orientation: widget.orientation,
           square: dest,
           child: ValidMoveHighlight(
             size: widget.squareSize,
@@ -199,6 +212,7 @@ class _BoardState extends State<Chessboard> {
         PositionedSquare(
           key: ValueKey('${checkSquare.name}-check'),
           size: widget.size,
+          orientation: widget.orientation,
           square: checkSquare,
           child: CheckHighlight(size: widget.squareSize),
         ),
@@ -209,6 +223,7 @@ class _BoardState extends State<Chessboard> {
         PositionedSquare(
           key: ValueKey('${entry.key.name}-${entry.value}'),
           size: widget.size,
+          orientation: widget.orientation,
           square: entry.key,
           child: PieceWidget(
             piece: entry.value,
@@ -235,6 +250,7 @@ class _BoardState extends State<Chessboard> {
                 pieceAssets: widget.settings.pieceAssets,
                 move: widget.game!.promotionMove!,
                 size: widget.size,
+                orientation: widget.orientation,
                 color: widget.game!.promotionColor!,
                 onSelect: widget.game!.onPromotionSelection,
                 onCancel: () {

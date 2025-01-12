@@ -32,7 +32,7 @@ class Setup {
   /// Parses a Sovereign Chess FEN string and returns a [Setup].
   ///
   /// - Accepts missing FEN fields (except the board) and fills them with
-  ///   default values of `16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/16 1 w b - - 0`
+  ///   default values of `16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/16 1 w - b - 0`
   /// - Accepts multiple spaces as separators between FEN fields.
   ///
   /// Throws a [FenException] if the provided FEN is not valid.
