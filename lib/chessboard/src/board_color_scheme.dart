@@ -30,6 +30,6 @@ class ChessboardColorScheme {
       darkSquare: Color(0xFFFFECB3), // amber 100
     ),
     selected: Color(0x6014551e),
-    validMoves: Color(0x4014551e),
+    validMoves: Color.fromRGBO(152, 251, 152, 0.6),
   );
 }
