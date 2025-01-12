@@ -235,7 +235,10 @@ abstract class Position<T extends Position<T>> {
     pseudo = pseudo.diff(ownColorSquares);
 
     // Only one square of each color may be occupied at a time.
-    pseudo = pseudo.diff(_occupiedColoredSquares());
+    // But we allow a piece that is currently on a colored square to move
+    // to the other square of the same color.
+    pseudo = pseudo
+        .diff(_occupiedColoredSquares(board.occupied.withoutSquare(square)));
 
     // Include colors that aren't controlled because we cannot attack those pieces
     pseudo = pseudo.diff(board.exclude(armyManager.colorsOf(turn.opposite)));
@@ -270,7 +273,7 @@ abstract class Position<T extends Position<T>> {
   }
 
   // Create a mask of colored squares we cannot move onto.
-  SquareSet _occupiedColoredSquares() {
+  SquareSet _occupiedColoredSquares(SquareSet occupied) {
     final coloredSquares = [
       SquareSet.whiteSquares,
       SquareSet.blackSquares,
@@ -287,8 +290,8 @@ abstract class Position<T extends Position<T>> {
     ];
     return coloredSquares.fold(
         SquareSet.empty,
-        (prev, mask) => (mask & board.occupied).lsb() != null
-            ? (prev | (mask.diff(board.occupied)))
+        (prev, mask) => (mask & occupied).lsb() != null
+            ? (prev | (mask.diff(occupied)))
             : prev);
   }
 

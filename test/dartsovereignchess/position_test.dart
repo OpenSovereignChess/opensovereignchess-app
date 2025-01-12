@@ -59,6 +59,14 @@ void main() {
     expect(pos.legalMoves[Square.i16]!.has(Square.i9), false);
   });
 
+  test(
+      'legalMoves, piece on colored square can move to other square of same color',
+      () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        '8bk7/16/16/16/16/16/16/16/7wk8/16/16/16/16/16/16/16 1 w - b -'));
+    expect(pos.legalMoves[Square.h8]!.has(Square.i9), true);
+  });
+
   test('legalMoves, king cannot move into check', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '16/16/16/16/16/16/16/16/16/16/16/16/16/16/br15/8wk7 1 w - b -'));
@@ -70,7 +78,6 @@ void main() {
       () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '8bk7/16/16/16/16/16/7bq8/16/16/7wk8/16/16/16/16/16/16 1 w - b -'));
-    //print(humanReadableSquareSet(pos.legalMoves[Square.h7]!));
     expect(pos.legalMoves[Square.h7]!.has(Square.h8), true);
   });
 
