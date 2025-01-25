@@ -8,8 +8,11 @@ final router = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      builder: (BuildContext context, GoRouterState state) =>
-          const HomeScreen(),
+      builder: (BuildContext context, GoRouterState state) {
+        String? fen = state.uri.queryParameters['fen'];
+        fen = fen?.replaceAll('_', ' ');
+        return HomeScreen(initialFen: fen);
+      },
     ),
     GoRoute(
       path: '/editor',

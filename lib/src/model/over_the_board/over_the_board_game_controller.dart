@@ -5,14 +5,12 @@ import 'package:opensovereignchess_app/src/model/common/sovereignchess.dart';
 
 part 'over_the_board_game_controller.g.dart';
 
-final initialFen =
-    'aqabvrvnbrbnbbbqbkbbbnbrynyrsbsq/aranvpvpbpbpbpbpbpbpbpbpypypsnsr/nbnp12opob/nqnp12opoq/crcp12rprr/cncp12rprn/gbgp12pppb/gqgp12pppq/yqyp12vpvq/ybyp12vpvb/onop12npnn/orop12npnr/rqrp12cpcq/rbrp12cpcb/srsnppppwpwpwpwpwpwpwpwpgpgpanar/sqsbprpnwrwnwbwqwkwbwnwrgngrabaq';
-
 @riverpod
 class OverTheBoardGameController extends _$OverTheBoardGameController {
   @override
-  OverTheBoardGameState build() => OverTheBoardGameState(
-        position: SovereignChess.fromSetup(Setup.parseFen(initialFen)),
+  OverTheBoardGameState build(String? initialFen) => OverTheBoardGameState(
+        position:
+            SovereignChess.fromSetup(Setup.parseFen(initialFen ?? kInitialFEN)),
       );
 
   void makeMove(NormalMove move, {PieceColor? color}) {

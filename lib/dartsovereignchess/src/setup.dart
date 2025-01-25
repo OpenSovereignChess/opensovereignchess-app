@@ -152,18 +152,10 @@ class Setup {
   }
 
   /// FEN representation of the setup.
-  // TODO: Sort controlled armies letters
   String get fen => [
         board.fen,
         turn.name[turn.name.length - 1],
-        armyManager.p1Owned.letter,
-        armyManager.p1Controlled.isNotEmpty
-            ? armyManager.p1Controlled.fold('', (prev, i) => prev + i.letter)
-            : '-',
-        armyManager.p2Owned.letter,
-        armyManager.p2Controlled.isNotEmpty
-            ? armyManager.p2Controlled.fold('', (prev, i) => prev + i.letter)
-            : '-',
+        armyManager.fenStr,
         ply,
       ].join(' ');
 }

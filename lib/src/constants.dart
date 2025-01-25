@@ -7,7 +7,7 @@ final List<BoxShadow> boardShadows = defaultTargetPlatform == TargetPlatform.iOS
     : kElevationToShadow[1]!;
 
 const kTabletBoardTableSidePadding = 16.0;
-const kBottomBarHeight = 0;
+const kBottomBarHeight = 56.0;
 
 /// The threshold to detect screens with a small remaining height left board.
 const kSmallRemainingHeightLeftBoardThreshold = 160;

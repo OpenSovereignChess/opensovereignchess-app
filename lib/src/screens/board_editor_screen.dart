@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 import 'package:opensovereignchess_app/src/constants.dart';
@@ -68,7 +69,9 @@ class _Body extends ConsumerWidget {
                       // unlockView is safe because chessground will never modify the pieces
                       pieces: boardEditorState.pieces.unlockView,
                     ),
-                    _PieceMenu(),
+                    _Menu(
+                      initialFen: initialFen,
+                    ),
                   ],
                 );
               },
@@ -119,6 +122,40 @@ class _BoardEditor extends ConsumerWidget {
       onEditedSquare: (Square square) => ref
           .read(boardEditorControllerProvider(initialFen).notifier)
           .editSquare(square),
+    );
+  }
+}
+
+const Widget verticalSpacer = SizedBox(height: 16);
+
+class _Menu extends ConsumerWidget {
+  const _Menu({
+    required this.initialFen,
+  });
+
+  final String? initialFen;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final editorState = ref.watch(boardEditorControllerProvider(initialFen));
+
+    return Expanded(
+      child: ListView(
+        padding: const EdgeInsets.all(16),
+        children: <Widget>[
+          verticalSpacer,
+          _PieceMenu(),
+          verticalSpacer,
+          TextButton(
+            onPressed: () {
+              final fen =
+                  Uri.encodeComponent(editorState.fen.replaceAll(' ', '_'));
+              context.go('/?fen=$fen');
+            },
+            child: const Text('Analysis Board'),
+          ),
+        ],
+      ),
     );
   }
 }

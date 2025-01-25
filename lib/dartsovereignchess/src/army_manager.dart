@@ -129,4 +129,21 @@ class ArmyManager {
         ),
     };
   }
+
+  String get fenStr => [
+        p1Owned.letter,
+        p1Controlled.isNotEmpty
+            ? _sort(p1Controlled.fold('', (prev, i) => prev + i.letter))
+            : '-',
+        p2Owned.letter,
+        p2Controlled.isNotEmpty
+            ? _sort(p2Controlled.fold('', (prev, i) => prev + i.letter))
+            : '-',
+      ].join(' ');
+}
+
+String _sort(String s) {
+  final chars = s.split('');
+  chars.sort();
+  return chars.join('');
 }

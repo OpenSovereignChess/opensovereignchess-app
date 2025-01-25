@@ -9,22 +9,26 @@ import '../model/over_the_board/over_the_board_game_controller.dart';
 import '../navigation.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.initialFen});
+
+  final String? initialFen;
 
   @override
   Widget build(BuildContext context) {
     return AppScaffold(
-      body: _Body(),
+      body: _Body(initialFen),
     );
   }
 }
 
 class _Body extends ConsumerWidget {
-  const _Body();
+  const _Body(this.initialFen);
+
+  final String? initialFen;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameState = ref.watch(overTheBoardGameControllerProvider);
+    final gameState = ref.watch(overTheBoardGameControllerProvider(initialFen));
 
     return Center(
       child: LayoutBuilder(
@@ -40,13 +44,14 @@ class _Body extends ConsumerWidget {
               checkedKingColor: gameState.position.checkedKingColor,
               onMove: (NormalMove move, {bool? isDrop, PieceColor? color}) {
                 ref
-                    .read(overTheBoardGameControllerProvider.notifier)
+                    .read(
+                        overTheBoardGameControllerProvider(initialFen).notifier)
                     .makeMove(move, color: color);
               },
               promotionMove: gameState.promotionMove,
               promotionColor: gameState.promotionColor,
               onPromotionSelection: ref
-                  .read(overTheBoardGameControllerProvider.notifier)
+                  .read(overTheBoardGameControllerProvider(initialFen).notifier)
                   .onPromotionSelection,
             ),
           );

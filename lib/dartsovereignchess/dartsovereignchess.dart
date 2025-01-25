@@ -3,6 +3,7 @@
 /// All classes are immutable.
 library dartsovereignchess;
 
+export 'src/army_manager.dart';
 export 'src/constants.dart';
 export 'src/models.dart';
 export 'src/position.dart';

@@ -16,6 +16,7 @@ class BoardEditorController extends _$BoardEditorController {
       orientation: Side.player1,
       sideToPlay: Side.player1,
       pieces: readFen(initialFen ?? kInitialFEN).lock,
+      armyManager: setup.armyManager,
       //castlingRights: IMap(const {
       //  CastlingRight.whiteKing: true,
       //  CastlingRight.whiteQueen: true,
@@ -111,6 +112,7 @@ class BoardEditorState with _$BoardEditorState {
     required Side orientation,
     required Side sideToPlay,
     required IMap<Square, Piece> pieces,
+    required ArmyManager armyManager,
     //required IMap<CastlingRight, bool> castlingRights,
     required EditorPointerMode editorPointerMode,
     required int ply,
@@ -186,6 +188,6 @@ class BoardEditorState with _$BoardEditorState {
 
   String get fen {
     final boardFen = writeFen(pieces.unlock);
-    return '$boardFen ${sideToPlay == Side.player1 ? '1' : '2'} $ply';
+    return '$boardFen ${sideToPlay == Side.player1 ? '1' : '2'} ${armyManager.fenStr} $ply';
   }
 }
