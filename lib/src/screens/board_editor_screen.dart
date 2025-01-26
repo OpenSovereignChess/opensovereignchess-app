@@ -162,6 +162,22 @@ class _Menu extends ConsumerWidget {
           verticalSpacer,
           TextButton(
             onPressed: () {
+              ref
+                  .read(boardEditorControllerProvider(initialFen).notifier)
+                  .loadFen(kInitialFEN);
+            },
+            child: const Text('Starting Position'),
+          ),
+          TextButton(
+            onPressed: () {
+              ref
+                  .read(boardEditorControllerProvider(initialFen).notifier)
+                  .loadFen(kEmptyFEN);
+            },
+            child: const Text('Clear Board'),
+          ),
+          TextButton(
+            onPressed: () {
               final fen =
                   Uri.encodeComponent(editorState.fen.replaceAll(' ', '_'));
               context.go('/?fen=$fen');
