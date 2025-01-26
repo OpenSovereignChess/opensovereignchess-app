@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -70,7 +71,9 @@ class _Body extends ConsumerWidget {
                       pieces: boardEditorState.pieces.unlockView,
                     ),
                     _Menu(
+                      boardSize,
                       initialFen: initialFen,
+                      isTablet: isTablet,
                     ),
                   ],
                 );
@@ -129,11 +132,17 @@ class _BoardEditor extends ConsumerWidget {
 const Widget verticalSpacer = SizedBox(height: 16);
 
 class _Menu extends ConsumerWidget {
-  const _Menu({
+  const _Menu(
+    this.boardSize, {
     required this.initialFen,
+    required this.isTablet,
   });
 
   final String? initialFen;
+
+  final double boardSize;
+
+  final bool isTablet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -144,7 +153,12 @@ class _Menu extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         children: <Widget>[
           verticalSpacer,
-          _PieceMenu(),
+          ...PieceColor.values.map((color) => _PieceMenu(
+                boardSize,
+                initialFen: initialFen,
+                color: color,
+                isTablet: isTablet,
+              )),
           verticalSpacer,
           TextButton(
             onPressed: () {
@@ -160,11 +174,135 @@ class _Menu extends ConsumerWidget {
   }
 }
 
-class _PieceMenu extends ConsumerWidget {
-  const _PieceMenu();
+class _PieceMenu extends ConsumerStatefulWidget {
+  const _PieceMenu(
+    this.boardSize, {
+    required this.initialFen,
+    required this.color,
+    required this.isTablet,
+  });
+
+  final String? initialFen;
+
+  final double boardSize;
+
+  final PieceColor color;
+
+  final bool isTablet;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Text('Piece Menu');
+  ConsumerState<_PieceMenu> createState() => _PieceMenuState();
+}
+
+final _assets = const ChessboardSettings().pieceAssets;
+final _enabledColor = Colors.green[400]!;
+
+class _PieceMenuState extends ConsumerState<_PieceMenu> {
+  @override
+  Widget build(BuildContext context) {
+    //final boardPrefs = ref.watch(boardPreferencesProvider);
+    final editorController = boardEditorControllerProvider(widget.initialFen);
+    final editorState = ref.watch(editorController);
+
+    final squareSize = widget.boardSize / 16;
+
+    return Container(
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        borderRadius: widget.isTablet
+            ? const BorderRadius.all(Radius.circular(4.0))
+            : BorderRadius.zero,
+        boxShadow: widget.isTablet ? boardShadows : const <BoxShadow>[],
+      ),
+      child: ColoredBox(
+        color: Theme.of(context).disabledColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: SizedBox(
+                width: squareSize,
+                height: squareSize,
+                child: ColoredBox(
+                  key: Key('drag-button-${widget.color.name}'),
+                  color: editorState.editorPointerMode == EditorPointerMode.drag
+                      ? _enabledColor
+                      : Colors.transparent,
+                  child: GestureDetector(
+                    onTap: () => ref
+                        .read(editorController.notifier)
+                        .updateMode(EditorPointerMode.drag),
+                    child:
+                        Icon(CupertinoIcons.hand_draw, size: 0.9 * squareSize),
+                  ),
+                ),
+              ),
+            ),
+            ...Role.values.map((role) {
+              final piece = Piece(role: role, color: widget.color);
+              final pieceWidget = PieceWidget(
+                piece: piece,
+                size: squareSize,
+                //pieceAssets: boardPrefs.pieceSet.assets,
+                pieceAssets: _assets,
+              );
+
+              return Expanded(
+                child: ColoredBox(
+                  key: Key(
+                      'piece-button-${piece.color.name}-${piece.role.name}'),
+                  color: ref
+                              .read(boardEditorControllerProvider(
+                                  widget.initialFen))
+                              .activePieceOnEdit ==
+                          piece
+                      ? _enabledColor
+                      : Colors.transparent,
+                  child: GestureDetector(
+                    child: Draggable(
+                      data: Piece(role: role, color: widget.color),
+                      feedback: PieceDragFeedback(
+                        piece: piece,
+                        squareSize: squareSize,
+                        //pieceAssets: boardPrefs.pieceSet.assets,
+                        pieceAssets: _assets,
+                      ),
+                      child: pieceWidget,
+                      onDragEnd: (_) => ref
+                          .read(editorController.notifier)
+                          .updateMode(EditorPointerMode.drag),
+                    ),
+                    onTap: () => ref
+                        .read(editorController.notifier)
+                        .updateMode(EditorPointerMode.edit, piece),
+                  ),
+                ),
+              );
+            }),
+            Expanded(
+              child: SizedBox(
+                key: Key('delete-button-${widget.color.name}'),
+                width: squareSize,
+                height: squareSize,
+                child: ColoredBox(
+                  color: editorState.deletePiecesActive
+                      ? _enabledColor
+                      : Colors.transparent,
+                  child: GestureDetector(
+                    onTap: () => {
+                      ref
+                          .read(editorController.notifier)
+                          .updateMode(EditorPointerMode.edit, null),
+                    },
+                    child: Icon(CupertinoIcons.delete, size: 0.8 * squareSize),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
