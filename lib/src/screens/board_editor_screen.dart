@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
@@ -183,6 +184,17 @@ class _Menu extends ConsumerWidget {
               context.go('/?fen=$fen');
             },
             child: const Text('Analysis Board'),
+          ),
+          TextButton(
+            onPressed: () async {
+              final fen =
+                  Uri.encodeComponent(editorState.fen.replaceAll(' ', '_'));
+              final url = '/editor?fen=$fen';
+              await Clipboard.setData(
+                  ClipboardData(text: 'https://sovchess.web.app$url'));
+              context.go(url);
+            },
+            child: const Text('Copy URL'),
           ),
         ],
       ),

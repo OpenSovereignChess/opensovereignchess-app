@@ -9,4 +9,4 @@ const kInitialFEN = '$kInitialBoardFEN 1 w - b - 0';
 const kEmptyBoardFEN = '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/16';
 
 /// Empty board in the FEN format.
-const kEmptyFEN = '$kEmptyBoardFEN 1 w - b - 0';
+const kEmptyFEN = '$kEmptyBoardFEN 1 - - - - 0';

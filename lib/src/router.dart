@@ -16,8 +16,11 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/editor',
-      builder: (BuildContext context, GoRouterState state) =>
-          const BoardEditorScreen(),
+      builder: (BuildContext context, GoRouterState state) {
+        String? fen = state.uri.queryParameters['fen'];
+        fen = fen?.replaceAll('_', ' ');
+        return BoardEditorScreen(initialFen: fen);
+      },
     ),
   ],
 );
