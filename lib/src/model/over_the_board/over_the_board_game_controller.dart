@@ -77,4 +77,6 @@ class OverTheBoardGameState {
   }
 
   IMap<Square, ISet<Square>> get legalMoves => makeLegalMoves(position);
+
+  String get fen => position.fen;
 }
