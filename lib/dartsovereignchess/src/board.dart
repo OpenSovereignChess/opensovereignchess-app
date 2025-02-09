@@ -241,13 +241,10 @@ class Board {
         PieceColor.violet: violet,
       }));
 
-  /// Gets all occupied squares excluding pieces of [PieceColor]s.
-  SquareSet exclude(ISet<PieceColor> colors) {
-    return _colorMap()
-        .entries
-        .where((entry) => !colors.contains(entry.key))
-        .fold<SquareSet>(SquareSet.empty, (prev, entry) => prev | entry.value);
-  }
+  /// Gets all squares occupied by [Side].
+  ///
+  /// This includes all owned and controlled pieces of [Side].
+  SquareSet bySide(Side side) => byColors(armyManager.colorsOf(side));
 
   /// Gets all squares occupied by pieces of [PieceColor].
   SquareSet byColor(PieceColor color) {
@@ -323,21 +320,20 @@ class Board {
   }
 
   /// Finds the unique king [Square] of the given [Side], if any.
-  Square? kingOf(PieceColor color) {
+  Square? kingOf(Side side) {
+    final color = armyManager.colorOf(side);
     return byPiece(Piece(color: color, role: Role.king)).lsb();
   }
 
-  /// Finds the squares who are attacking `square` by the `attacker` [PieceColor]s.
-  SquareSet attacksTo(Square square, ISet<PieceColor> attackerColors,
-          {SquareSet? occupied}) =>
-      byColors(attackerColors).intersect(
-          rookAttacks(square, occupied ?? this.occupied)
-              .intersect(rooksAndQueens)
-              .union(bishopAttacks(square, occupied ?? this.occupied)
-                  .intersect(bishopsAndQueens))
-              .union(knightAttacks(square).intersect(knights))
-              .union(kingAttacks(square).intersect(kings))
-              .union(pawnAttacks(square).intersect(pawns)));
+  /// Finds the squares who are attacking `square` by the `attacker` [Side].
+  SquareSet attacksTo(Square square, Side attacker, {SquareSet? occupied}) =>
+      bySide(attacker).intersect(rookAttacks(square, occupied ?? this.occupied)
+          .intersect(rooksAndQueens)
+          .union(bishopAttacks(square, occupied ?? this.occupied)
+              .intersect(bishopsAndQueens))
+          .union(knightAttacks(square).intersect(knights))
+          .union(kingAttacks(square).intersect(kings))
+          .union(pawnAttacks(square).intersect(pawns)));
 
   /// Puts a [Piece] on a [Square] overriding the existing one, if any.
   Board setPieceAt(Square square, Piece piece) {
@@ -449,6 +445,30 @@ class Board {
         .map((square) => pieceAt(square))
         .firstWhere((piece) => piece != null, orElse: () => null);
   }
+
+  PieceColor ownedColorOf(Side side) => armyManager.colorOf(side);
+
+  /// Returns true if the [PieceColor] belongs to the [Side].
+  bool colorBelongsTo(Side side, PieceColor color) =>
+      armyManager.colorsOf(side).contains(color);
+
+  bool colorControlledBy(Side side, PieceColor color) =>
+      armyManager.colorsOf(side).contains(color);
+
+  Board setOwnedColor(Side side, PieceColor color) {
+    return ownedColorOf(side) == color
+        ? this
+        : copyWith(armyManager: armyManager.setOwnedColor(side, color));
+  }
+
+  Board addControlledColor(Side side, PieceColor color) {
+    return armyManager.controlledColorsOf(side).contains(color)
+        ? this
+        : copyWith(armyManager: armyManager.addControlledArmy(side, color));
+  }
+
+  Board removeControlledColor(Side side, PieceColor color) =>
+      copyWith(armyManager: armyManager.removeControlledArmy(side, color));
 
   /// Returns a copy of this board with some fields updated.
   Board copyWith({

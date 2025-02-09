@@ -68,7 +68,7 @@ abstract class Position<T extends Position<T>> {
 
   /// Tests if the king is in check.
   bool get isCheck {
-    final king = board.kingOf(board.armyManager.colorOf(turn));
+    final king = board.kingOf(turn);
     return king != null && checkers.isNotEmpty;
   }
 
@@ -76,13 +76,12 @@ abstract class Position<T extends Position<T>> {
   bool get isCheckmate => checkers.isNotEmpty && !hasSomeLegalMoves;
 
   /// [PieceColor] of the king in check, if any.
-  PieceColor? get checkedKingColor =>
-      isCheck ? board.armyManager.colorOf(turn) : null;
+  PieceColor? get checkedKingColor => isCheck ? board.ownedColorOf(turn) : null;
 
   /// Tests if the position has at least one legal move.
   bool get hasSomeLegalMoves {
     final context = _makeContext();
-    for (final square in board.byColors(board.armyManager.colorsOf(turn)).squares) {
+    for (final square in board.bySide(turn).squares) {
       if (_legalMovesOf(square, context: context).isNotEmpty) {
         return true;
       }
@@ -120,25 +119,20 @@ abstract class Position<T extends Position<T>> {
   IMap<Square, SquareSet> get legalMoves {
     final context = _makeContext();
     return IMap({
-      for (final s in board.armyManager.colorsOf(turn).fold<List<Square>>([],
-          (previousValue, color) {
-        final squares = board.byColor(color).squares;
-        return [...previousValue, ...squares];
-      }))
+      for (final s in board.bySide(turn).squares)
         s: _legalMovesOf(s, context: context)
     });
   }
 
   /// Square set of pieces giving check.
   SquareSet get checkers {
-    final king = board.kingOf(board.armyManager.colorOf(turn));
+    final king = board.kingOf(turn);
     return king != null ? kingAttackers(king, turn.opposite) : SquareSet.empty;
   }
 
   /// Attacks that a king on `square` would have to deal with.
   SquareSet kingAttackers(Square square, Side attacker, {SquareSet? occupied}) {
-    SquareSet attackers = board
-        .attacksTo(square, board.armyManager.colorsOf(attacker), occupied: occupied);
+    SquareSet attackers = board.attacksTo(square, attacker, occupied: occupied);
     // Attackers cannot jump to a square of their own color
     attackers = attackers.squares.fold(attackers, (prevVal, sq) {
       final piece = board.pieceAt(sq);
@@ -173,13 +167,12 @@ abstract class Position<T extends Position<T>> {
         }
 
         Board newBoard = board.removePieceAt(from);
-        ArmyManager newArmyManager = board.armyManager;
 
         // Remove existing king if we're promoting to a king
         if (promotion == Role.king) {
-          final kingSquare = newBoard.kingOf(newBoard.armyManager.colorOf(turn));
+          final kingSquare = newBoard.kingOf(turn);
           newBoard = newBoard.removePieceAt(kingSquare!);
-          newArmyManager = newArmyManager.setOwnedColor(turn, piece.color);
+          newBoard = newBoard.setOwnedColor(turn, piece.color);
         }
 
         final newPiece =
@@ -188,16 +181,15 @@ abstract class Position<T extends Position<T>> {
 
         // Update armies if we're moving on or off of colored squares
         if (from.color != null) {
-          newArmyManager =
-              newArmyManager.removeControlledArmy(turn, from.color!);
+          newBoard = newBoard.removeControlledColor(turn, from.color!);
         }
         if (to.color != null) {
-          newArmyManager = newArmyManager.addControlledArmy(turn, to.color!);
+          newBoard = newBoard.addControlledColor(turn, to.color!);
         }
 
         return copyWith(
           ply: ply + 1,
-          board: newBoard.copyWith(armyManager: newArmyManager),
+          board: newBoard,
           turn: turn.opposite,
           castles: castles, // TODO: update castles
         );
@@ -211,7 +203,7 @@ abstract class Position<T extends Position<T>> {
   SquareSet _legalMovesOf(Square square, {_Context? context}) {
     final ctx = context ?? _makeContext();
     final piece = board.pieceAt(square);
-    if (piece == null || !board.armyManager.colorsOf(turn).contains(piece.color)) {
+    if (piece == null || !board.colorBelongsTo(turn, piece.color)) {
       return SquareSet.empty;
     }
 
@@ -242,7 +234,7 @@ abstract class Position<T extends Position<T>> {
         .diff(_occupiedColoredSquares(board.occupied.withoutSquare(square)));
 
     // Include colors that aren't controlled because we cannot attack those pieces
-    pseudo = pseudo.diff(board.exclude(board.armyManager.colorsOf(turn.opposite)));
+    pseudo = pseudo.diff(board.bySide(turn));
 
     if (ctx.king != null) {
       if (piece.role == Role.king) {
@@ -297,7 +289,7 @@ abstract class Position<T extends Position<T>> {
   }
 
   _Context _makeContext() {
-    final king = board.kingOf(board.armyManager.colorOf(turn));
+    final king = board.kingOf(turn);
     return _Context(
       king: king,
       blockers: _sliderBlockers(king!),
@@ -310,7 +302,7 @@ abstract class Position<T extends Position<T>> {
         .intersect(board.rooksAndQueens)
         .union(bishopAttacks(king, SquareSet.empty)
             .intersect(board.bishopsAndQueens))
-        .intersect(board.byColors(board.armyManager.colorsOf(turn.opposite)));
+        .intersect(board.bySide(turn.opposite));
     SquareSet blockers = SquareSet.empty;
     for (final sniper in snipers.squares) {
       final b = between(king, sniper) & board.occupied;

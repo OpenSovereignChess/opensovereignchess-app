@@ -115,7 +115,8 @@ void main() {
     final move = NormalMove(from: Square.l5, to: Square.l6);
     final pos1 = pos.play(move);
     expect(pos1.board.white.has(Square.l6), true);
-    expect(pos1.board.armyManager.controls(Side.player1, PieceColor.red), false);
+    expect(
+        pos1.board.armyManager.controls(Side.player1, PieceColor.red), false);
   });
 
   test('play, promoting to king', () {

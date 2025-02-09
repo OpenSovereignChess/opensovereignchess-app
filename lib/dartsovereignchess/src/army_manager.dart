@@ -93,6 +93,12 @@ class ArmyManager {
         Side.player2 => p2Owned,
       };
 
+  /// Returns the controlled [PieceColor]s for the given [Side].
+  ISet<PieceColor> controlledColorsOf(Side turn) => switch (turn) {
+        Side.player1 => p1Controlled,
+        Side.player2 => p2Controlled,
+      };
+
   ArmyManager removeControlledArmy(Side turn, PieceColor color) {
     switch (turn) {
       case Side.player1:
