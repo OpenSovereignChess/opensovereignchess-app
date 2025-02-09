@@ -12,7 +12,6 @@ class Setup {
   const Setup({
     required this.board,
     required this.turn,
-    required this.armyManager,
     required this.castlingRights,
     required this.ply,
   });
@@ -22,9 +21,6 @@ class Setup {
 
   /// Side to move.
   final Side turn;
-
-  /// Manager for each player's owned and controlled armies.
-  final ArmyManager armyManager;
 
   /// Unmoved rooks positions used to determine castling rights.
   final SquareSet castlingRights;
@@ -111,9 +107,8 @@ class Setup {
     }
 
     return Setup(
-      board: board,
+      board: board.copyWith(armyManager: armyManager),
       turn: turn,
-      armyManager: armyManager,
       castlingRights: castlingRights,
       ply: ply,
     );
@@ -123,8 +118,8 @@ class Setup {
   String get fen => [
         board.fen,
         turn.name[turn.name.length - 1],
-        armyManager.p1Owned.letter,
-        armyManager.p2Owned.letter,
+        board.armyManager.p1Owned.letter,
+        board.armyManager.p2Owned.letter,
         '-',
         ply,
       ].join(' ');

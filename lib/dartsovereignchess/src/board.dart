@@ -1,6 +1,7 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
+import './army_manager.dart';
 import './attacks.dart';
 import './models.dart';
 import './square_set.dart';
@@ -28,6 +29,7 @@ class Board {
     required this.rooks,
     required this.queens,
     required this.kings,
+    required this.armyManager,
   });
 
   /// All occupied squares.
@@ -87,6 +89,9 @@ class Board {
   /// All squares occupied by kings.
   final SquareSet kings;
 
+  /// Manager for each player's owned and controlled armies.
+  final ArmyManager armyManager;
+
   /// Standard chess starting position.
   //static const standard = Board(
   //  occupied: SquareSet(),
@@ -113,6 +118,7 @@ class Board {
     rooks: SquareSet.empty,
     queens: SquareSet.empty,
     kings: SquareSet.empty,
+    armyManager: ArmyManager.empty,
   );
 
   /// Parse the board part of a FEN string and returns a Board.
@@ -465,6 +471,7 @@ class Board {
     SquareSet? rooks,
     SquareSet? queens,
     SquareSet? kings,
+    ArmyManager? armyManager,
   }) {
     return Board(
       occupied: occupied ?? this.occupied,
@@ -486,6 +493,7 @@ class Board {
       rooks: rooks ?? this.rooks,
       queens: queens ?? this.queens,
       kings: kings ?? this.kings,
+      armyManager: armyManager ?? this.armyManager,
     );
   }
 }

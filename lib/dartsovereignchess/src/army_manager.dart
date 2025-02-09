@@ -24,6 +24,13 @@ class ArmyManager {
   /// The color armies that player 2 controls.
   final ISet<PieceColor> p2Controlled;
 
+  static const empty = ArmyManager(
+    p1Owned: PieceColor.white,
+    p2Owned: PieceColor.black,
+    p1Controlled: ISet.empty(),
+    p2Controlled: ISet.empty(),
+  );
+
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||

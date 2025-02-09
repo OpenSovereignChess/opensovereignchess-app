@@ -101,21 +101,21 @@ void main() {
   test('play, move onto colored squares', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '16/16/16/16/3bp12/16/16/16/16/16/16/16/11wp4/16/16/8wk7 1 w b -'));
-    expect(pos.armyManager.controls(Side.player1, PieceColor.red), false);
+    expect(pos.board.armyManager.controls(Side.player1, PieceColor.red), false);
     final move = NormalMove(from: Square.l4, to: Square.l5);
     final pos1 = pos.play(move);
     expect(pos1.board.white.has(Square.l5), true);
-    expect(pos1.armyManager.controls(Side.player1, PieceColor.red), true);
+    expect(pos1.board.armyManager.controls(Side.player1, PieceColor.red), true);
   });
 
   test('play, move off of colored squares', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '16/16/16/16/3bp12/16/16/16/16/16/16/11wp4/16/16/16/8wk7 1 w b -'));
-    expect(pos.armyManager.controls(Side.player1, PieceColor.red), true);
+    expect(pos.board.armyManager.controls(Side.player1, PieceColor.red), true);
     final move = NormalMove(from: Square.l5, to: Square.l6);
     final pos1 = pos.play(move);
     expect(pos1.board.white.has(Square.l6), true);
-    expect(pos1.armyManager.controls(Side.player1, PieceColor.red), false);
+    expect(pos1.board.armyManager.controls(Side.player1, PieceColor.red), false);
   });
 
   test('play, promoting to king', () {
@@ -136,10 +136,10 @@ void main() {
     final move =
         NormalMove(from: Square.f7, to: Square.g7, promotion: Role.king);
     expect(pos.board.kings.has(Square.i1), true);
-    expect(pos.armyManager.colorOf(Side.player1), PieceColor.white);
+    expect(pos.board.armyManager.colorOf(Side.player1), PieceColor.white);
     final result = pos.play(move);
     expect(result.board.kings.has(Square.g7), true);
     expect(result.board.kings.has(Square.i1), false);
-    expect(result.armyManager.colorOf(Side.player1), PieceColor.red);
+    expect(result.board.armyManager.colorOf(Side.player1), PieceColor.red);
   });
 }
