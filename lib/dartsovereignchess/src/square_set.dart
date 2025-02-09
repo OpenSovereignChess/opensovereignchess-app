@@ -66,6 +66,13 @@ class SquareSet {
         .fold(SquareSet.empty, (left, right) => left | right);
   }
 
+  /// Create a [SquareSet] containing all squares of the given backrank [Side].
+  factory SquareSet.backrankOf(Side side) {
+    return side == Side.player1
+        ? const SquareSet(0, 0, 0, 0, 0, 0, 0, 0xFFFF)
+        : const SquareSet(0xFFFF0000, 0, 0, 0, 0, 0, 0, 0);
+  }
+
   static const empty = SquareSet(0, 0, 0, 0, 0, 0, 0, 0);
   static const full = SquareSet(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
       0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF);

@@ -418,6 +418,32 @@ class Board {
         : this;
   }
 
+  /// Gets the [SquareSet] of all squares of color [PieceColor].
+  SquareSet coloredSquaresOf(PieceColor color) {
+    return switch (color) {
+      PieceColor.white => SquareSet.whiteSquares,
+      PieceColor.black => SquareSet.blackSquares,
+      PieceColor.ash => SquareSet.ashSquares,
+      PieceColor.slate => SquareSet.slateSquares,
+      PieceColor.cyan => SquareSet.cyanSquares,
+      PieceColor.green => SquareSet.greenSquares,
+      PieceColor.navy => SquareSet.navySquares,
+      PieceColor.orange => SquareSet.orangeSquares,
+      PieceColor.pink => SquareSet.pinkSquares,
+      PieceColor.red => SquareSet.redSquares,
+      PieceColor.violet => SquareSet.violetSquares,
+      PieceColor.yellow => SquareSet.yellowSquares,
+    };
+  }
+
+  /// Gets the [Piece] at any [Square] of [PieceColor], if any.
+  Piece? pieceOnSquareOf(PieceColor color) {
+    return coloredSquaresOf(color)
+        .squares
+        .map((square) => pieceAt(square))
+        .firstWhere((piece) => piece != null, orElse: () => null);
+  }
+
   /// Returns a copy of this board with some fields updated.
   Board copyWith({
     SquareSet? occupied,

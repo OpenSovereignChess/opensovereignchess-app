@@ -1168,14 +1168,11 @@ enum IllegalFenCause {
   /// The p1 owned part of the FEN string is invalid.
   p1Owned,
 
-  /// The p1 controlled part of the FEN string is invalid.
-  p1Controlled,
-
   /// The p2 owned part of the FEN string is invalid.
   p2Owned,
 
-  /// The p2 controlled part of the FEN string is invalid.
-  p2Controlled,
+  /// The castling part of the FEN string is invalid.
+  castling,
 }
 
 /// An exception thrown when trying to parse an invalid FEN string.

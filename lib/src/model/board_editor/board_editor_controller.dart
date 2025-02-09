@@ -188,6 +188,6 @@ class BoardEditorState with _$BoardEditorState {
 
   String get fen {
     final boardFen = writeFen(pieces.unlock);
-    return '$boardFen ${sideToPlay == Side.player1 ? '1' : '2'} ${armyManager.fenStr} $ply';
+    return '$boardFen ${sideToPlay == Side.player1 ? '1' : '2'} ${armyManager.p1Owned.letter} ${armyManager.p2Owned.letter} - $ply';
   }
 }

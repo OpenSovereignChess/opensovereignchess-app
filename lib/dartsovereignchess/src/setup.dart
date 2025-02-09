@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import './army_manager.dart';
 import './board.dart';
 import './models.dart';
+import './square_set.dart';
 
 /// A not necessarily legal position.
 @immutable
@@ -12,6 +13,9 @@ class Setup {
     required this.board,
     required this.turn,
     required this.armyManager,
+    //required this.p1OwnedColor,
+    //required this.p2OwnedColor,
+    required this.castlingRights,
     required this.ply,
   });
 
@@ -24,6 +28,15 @@ class Setup {
   /// Manager for each player's owned and controlled armies.
   final ArmyManager armyManager;
 
+  ///// Owned color for Side.player1
+  //final PieceColor p1OwnedColor;
+
+  ///// Owned color for Side.player2
+  //final PieceColor p2OwnedColor;
+
+  /// Unmoved rooks positions used to determine castling rights.
+  final SquareSet castlingRights;
+
   /// Current half-move number.
   ///
   /// Gets incremented after any player makes a turn.
@@ -32,7 +45,7 @@ class Setup {
   /// Parses a Sovereign Chess FEN string and returns a [Setup].
   ///
   /// - Accepts missing FEN fields (except the board) and fills them with
-  ///   default values of `16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/16 1 w - b - 0`
+  ///   default values of `16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/16 1 w b CELNceln 0`
   /// - Accepts multiple spaces as separators between FEN fields.
   ///
   /// Throws a [FenException] if the provided FEN is not valid.
@@ -73,27 +86,6 @@ class Setup {
       }
     }
 
-    // p1 controlled armies
-    ISet<PieceColor> p1Controlled;
-    if (parts.isEmpty) {
-      p1Controlled = ISet.empty();
-    } else {
-      final p1ControlledPart = parts.removeAt(0);
-      if (p1ControlledPart[0] == '-') {
-        p1Controlled = ISet.empty();
-      } else {
-        final colors = p1ControlledPart.characters.map((c) {
-          final color = PieceColor.fromChar(c);
-          if (color == null) {
-            throw const FenException(IllegalFenCause.p1Controlled);
-          } else {
-            return color;
-          }
-        });
-        p1Controlled = colors.toISet();
-      }
-    }
-
     // p2 owned army
     PieceColor p2Owned;
     if (parts.isEmpty) {
@@ -108,33 +100,16 @@ class Setup {
       }
     }
 
-    // p2 controlled armies
-    ISet<PieceColor> p2Controlled;
-    if (parts.isEmpty) {
-      p2Controlled = ISet.empty();
-    } else {
-      final p2ControlledPart = parts.removeAt(0);
-      if (p2ControlledPart[0] == '-') {
-        p2Controlled = ISet.empty();
-      } else {
-        final colors = p2ControlledPart.characters.map((c) {
-          final color = PieceColor.fromChar(c);
-          if (color == null) {
-            throw const FenException(IllegalFenCause.p2Controlled);
-          } else {
-            return color;
-          }
-        });
-        p2Controlled = colors.toISet();
-      }
-    }
+    final armyManager = _parseControlledArmies(board, p1Owned, p2Owned);
 
-    final armyManager = ArmyManager(
-      p1Owned: p1Owned,
-      p2Owned: p2Owned,
-      p1Controlled: p1Controlled,
-      p2Controlled: p2Controlled,
-    );
+    // Castling
+    SquareSet castlingRights;
+    if (parts.isEmpty) {
+      castlingRights = SquareSet.empty;
+    } else {
+      final castlingPart = parts.removeAt(0);
+      castlingRights = _parseCastlingFen(board, castlingPart);
+    }
 
     int ply;
     if (parts.isEmpty) {
@@ -147,7 +122,10 @@ class Setup {
       board: board,
       turn: turn,
       armyManager: armyManager,
+      castlingRights: SquareSet.empty,
       ply: ply,
+      //p1OwnedColor: PieceColor.white,
+      //p2OwnedColor: PieceColor.black,
     );
   }
 
@@ -155,7 +133,78 @@ class Setup {
   String get fen => [
         board.fen,
         turn.name[turn.name.length - 1],
-        armyManager.fenStr,
+        armyManager.p1Owned.letter,
+        armyManager.p2Owned.letter,
+        '-',
         ply,
       ].join(' ');
+}
+
+SquareSet _parseCastlingFen(Board board, String castlingPart) {
+  SquareSet castlingRights = SquareSet.empty;
+  if (castlingPart == '-') {
+    return castlingRights;
+  }
+  for (final rune in castlingPart.runes) {
+    final c = String.fromCharCode(rune);
+    final lower = c.toLowerCase();
+    final lowerCode = lower.codeUnitAt(0);
+    final side = c == lower ? Side.player2 : Side.player1;
+    final rank = side == Side.player1 ? Rank.first : Rank.sixteenth;
+    if ('a'.codeUnitAt(0) <= lowerCode && lowerCode <= 'p'.codeUnitAt(0)) {
+      castlingRights = castlingRights.withSquare(
+          Square.fromCoords(File(lowerCode - 'a'.codeUnitAt(0)), rank));
+    } else {
+      throw const FenException(IllegalFenCause.castling);
+    }
+  }
+  if (Side.values.any((color) =>
+      SquareSet.backrankOf(color).intersect(castlingRights).size > 2)) {
+    throw const FenException(IllegalFenCause.castling);
+  }
+  return castlingRights;
+}
+
+// Follow the chain of which colors control which colors until the end.
+// If the end is p1Owned or p2Owned, then add the controlled color to the controlled set.
+// Cannot control an owned army.
+ArmyManager _parseControlledArmies(
+    Board board, PieceColor p1Owned, PieceColor p2Owned) {
+  final owned = {p1Owned, p2Owned};
+  final controlledBy = Map<PieceColor, PieceColor>();
+  for (final color in PieceColor.values) {
+    if (owned.contains(color)) {
+      continue;
+    }
+    final piece = board.pieceOnSquareOf(color);
+    if (piece != null) {
+      controlledBy[color] = piece.color;
+    }
+  }
+
+  PieceColor _findFinalOwner(PieceColor color) {
+    color = controlledBy[color]!;
+    while (controlledBy[color] != null) {
+      color = controlledBy[color]!;
+    }
+    return color;
+  }
+
+  final p1Controlled = <PieceColor>{};
+  final p2Controlled = <PieceColor>{};
+
+  for (final key in controlledBy.keys) {
+    if (_findFinalOwner(key) == p1Owned) {
+      p1Controlled.add(key);
+    } else if (_findFinalOwner(key) == p2Owned) {
+      p2Controlled.add(key);
+    }
+  }
+
+  return ArmyManager(
+    p1Owned: p1Owned,
+    p2Owned: p2Owned,
+    p1Controlled: p1Controlled.toISet(),
+    p2Controlled: p2Controlled.toISet(),
+  );
 }
