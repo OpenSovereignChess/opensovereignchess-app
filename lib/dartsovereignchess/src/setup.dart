@@ -13,8 +13,6 @@ class Setup {
     required this.board,
     required this.turn,
     required this.armyManager,
-    //required this.p1OwnedColor,
-    //required this.p2OwnedColor,
     required this.castlingRights,
     required this.ply,
   });
@@ -27,12 +25,6 @@ class Setup {
 
   /// Manager for each player's owned and controlled armies.
   final ArmyManager armyManager;
-
-  ///// Owned color for Side.player1
-  //final PieceColor p1OwnedColor;
-
-  ///// Owned color for Side.player2
-  //final PieceColor p2OwnedColor;
 
   /// Unmoved rooks positions used to determine castling rights.
   final SquareSet castlingRights;
@@ -122,10 +114,8 @@ class Setup {
       board: board,
       turn: turn,
       armyManager: armyManager,
-      castlingRights: SquareSet.empty,
+      castlingRights: castlingRights,
       ply: ply,
-      //p1OwnedColor: PieceColor.white,
-      //p2OwnedColor: PieceColor.black,
     );
   }
 
@@ -158,8 +148,8 @@ SquareSet _parseCastlingFen(Board board, String castlingPart) {
       throw const FenException(IllegalFenCause.castling);
     }
   }
-  if (Side.values.any((color) =>
-      SquareSet.backrankOf(color).intersect(castlingRights).size > 2)) {
+  if (Side.values.any((side) =>
+      SquareSet.backrankOf(side).intersect(castlingRights).size > 4)) {
     throw const FenException(IllegalFenCause.castling);
   }
   return castlingRights;

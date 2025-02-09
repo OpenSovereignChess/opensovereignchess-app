@@ -67,6 +67,15 @@ enum PieceColor {
       };
 }
 
+/// The chessboard castling side.
+enum CastlingSide {
+  /// The queen side castling.
+  queen,
+
+  /// The king side castling.
+  king,
+}
+
 /// Piece role, such as pawn, knight, etc.
 enum Role {
   bishop,
@@ -833,6 +842,9 @@ const IMap<Square, PieceColor> coloredSquares = IMapConst({
   Square.e12: PieceColor.red,
   Square.l12: PieceColor.navy,
 });
+
+typedef BySide<T> = IMap<Side, T>;
+typedef ByCastlingSide<T> = IMap<CastlingSide, T>;
 
 /// Describes a chess piece kind by its color and role.
 enum PieceKind {

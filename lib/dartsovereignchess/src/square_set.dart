@@ -320,6 +320,12 @@ class SquareSet {
   /// Returns true if the set is not empty.
   bool get isNotEmpty => lsb() != null;
 
+  /// Returns the first square in the set, or null if the set is empty.
+  Square? get first => squares.isEmpty ? null : squares.first;
+
+  /// Returns the last square in the set, or null if the set is empty.
+  Square? get last => squares.isEmpty ? null : squares.last;
+
   /// Returns true if the set contains more than one square.
   bool get moreThanOne => isNotEmpty && size > 1;
 

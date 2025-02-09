@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import './army_manager.dart';
 import './attacks.dart';
 import './board.dart';
+import './castles.dart';
 import './models.dart';
 import './pawn_moves.dart';
 import './setup.dart';
@@ -18,6 +19,7 @@ abstract class Position<T extends Position<T>> {
     required this.board,
     required this.turn,
     required this.armyManager,
+    required this.castles,
     required this.ply,
   });
 
@@ -30,6 +32,9 @@ abstract class Position<T extends Position<T>> {
   /// Manager for each player's owned and controlled armies.
   final ArmyManager armyManager;
 
+  /// Castling paths and unmoved rooks.
+  final Castles castles;
+
   // Current half-move number.
   final int ply;
 
@@ -41,6 +46,7 @@ abstract class Position<T extends Position<T>> {
     Board? board,
     Side? turn,
     ArmyManager? armyManager,
+    Castles? castles,
     int? ply,
   });
 
@@ -61,7 +67,7 @@ abstract class Position<T extends Position<T>> {
       board: board,
       turn: turn,
       armyManager: armyManager,
-      castlingRights: SquareSet.empty,
+      castlingRights: castles.castlingRights,
       ply: ply,
     ).fen;
   }
@@ -200,6 +206,7 @@ abstract class Position<T extends Position<T>> {
           board: newBoard,
           turn: turn.opposite,
           armyManager: newArmyManager,
+          castles: castles, // TODO: update castles
         );
     }
   }
@@ -329,6 +336,7 @@ class SovereignChess extends Position<SovereignChess> {
     required super.board,
     required super.turn,
     required super.armyManager,
+    required super.castles,
     required super.ply,
   });
 
@@ -344,6 +352,7 @@ class SovereignChess extends Position<SovereignChess> {
       board: setup.board,
       turn: setup.turn,
       armyManager: setup.armyManager,
+      castles: Castles.fromSetup(setup),
       ply: setup.ply,
     );
     return pos;
@@ -354,12 +363,14 @@ class SovereignChess extends Position<SovereignChess> {
     Board? board,
     Side? turn,
     ArmyManager? armyManager,
+    Castles? castles,
     int? ply,
   }) {
     return SovereignChess(
       board: board ?? this.board,
       turn: turn ?? this.turn,
       armyManager: armyManager ?? this.armyManager,
+      castles: castles ?? this.castles,
       ply: ply ?? this.ply,
     );
   }
