@@ -66,8 +66,7 @@ class SquareSet {
         .fold(SquareSet.empty, (left, right) => left | right);
   }
 
-  /// Create a [SquareSet] containing all squares of the given backrank [Side].
-  // Update to take PieceColor instead of Side, update all references AI!
+  /// Create a [SquareSet] containing all squares of the given backrank [PieceColor].
   factory SquareSet.backrankOf(Side side) {
     return side == Side.player1
         ? const SquareSet(0, 0, 0, 0, 0, 0, 0, 0xFFFF)
