@@ -120,7 +120,7 @@ class Setup {
         turn.name[turn.name.length - 1],
         board.armyManager.p1Owned.letter,
         board.armyManager.p2Owned.letter,
-        '-', // TODO: Add castling FEN
+        _makeCastlingFen(board, castlingRights),
         ply,
       ].join(' ');
 }
@@ -204,8 +204,20 @@ String _makeCastlingFen(Board board, SquareSet castlingRights) {
   for (final side in Side.values) {
     final backrank = SquareSet.backrankOf(side);
     final king = board.kingOf(side);
+    
+    // Skip if no king or no castling rights on this side
+    if (king == null || castlingRights.intersect(backrank).isEmpty) {
+      continue;
+    }
 
-    // Implement ai!
+    // Get all rook squares that have castling rights
+    final rookSquares = castlingRights.intersect(backrank);
+    
+    // Add each rook's file letter to the FEN
+    for (final square in rookSquares.squares) {
+      final letter = square.file.name.toUpperCase();
+      buffer.write(side == Side.player1 ? letter : letter.toLowerCase());
+    }
   }
   final fen = buffer.toString();
   return fen != '' ? fen : '-';
