@@ -81,25 +81,16 @@ abstract class Castles {
   /// relinquish their castling rights.
   factory Castles.fromSetup(Setup setup) {
     Castles castles = Castles.empty;
-    castles = castles.copyWith(castlingRights: setup.castlingRights);
     final rooks = setup.castlingRights & setup.board.rooks;
+    castles = castles.copyWith(castlingRights: rooks);
     for (final side in Side.values) {
       final backrank = SquareSet.backrankOf(side);
+      // Store the king square for each side in Castles.  Add new properties for this ai!
       final king = setup.board.kingOf(side);
       if (king == null || !backrank.has(king)) continue;
       final backrankRooks = rooks & setup.board.bySide(side) & backrank;
-
-      // If we detect more than one rook on each side of the king, use the
-      // closest rook to the king.
-      Square? queenSideRook; // Queenside rook
-      Square? kingSideRook; // Kingside rook
-      for (final rook in backrankRooks.squares) {
-        if (rook < king) {
-          queenSideRook = rook;
-        } else if (kingSideRook == null) {
-          kingSideRook = rook;
-        }
-      }
+      final queenSideRook = _getClosestRook(CastlingSide.queen, king, backrankRooks);
+      final kingSideRook = _getClosestRook(CastlingSide.king, king, backrankRooks);
 
       if (queenSideRook != null) {
         castles = castles._add(side, CastlingSide.queen, king, queenSideRook);
@@ -168,7 +159,7 @@ abstract class Castles {
 
   /// Returns a new [Castles] instance with the given rook discarded.
   Castles discardRookAt(Square square) {
-    // When we discard a rook, we should fall back to the remaining rook in castlingRights ai!
+    // When we discard a rook, we should fall back to any remaining rooks
     return copyWith(
       castlingRights: castlingRights.withoutSquare(square),
       whiteRookQueenSide:
@@ -358,3 +349,22 @@ class _Castles extends Castles {
 
 /// Unique object to use as a sentinel value in copyWith methods.
 const _uniqueObjectInstance = Object();
+
+/// Return the closest rook to the king on the given [CastlingSide].
+Square? _getClosestRook(CastlingSide cs, Square king, SquareSet rooks) {
+  Square? maxRook;
+  for (final _rook in rooks.squares) {
+    if (cs == CastlingSide.queen) {
+      if (_rook < king) {
+        maxRook = _rook;
+      } else {
+        return maxRook;
+      }
+    } else {
+      if (_rook > king) {
+        return _rook;
+      }
+    }
+  }
+  return null;
+}
