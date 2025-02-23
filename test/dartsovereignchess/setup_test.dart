@@ -39,4 +39,6 @@ void main() {
     final setup = Setup.parseFen(fen);
     expect(setup.fen, fen);
   });
+
+  // Test the castling rights part of the FEN AI!
 }
