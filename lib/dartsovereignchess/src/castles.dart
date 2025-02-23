@@ -4,6 +4,7 @@ import 'attacks.dart';
 import 'models.dart';
 import 'setup.dart';
 import 'square_set.dart';
+import 'debug.dart';
 
 /// Represents the castling rights of a game.
 @immutable
@@ -53,7 +54,7 @@ abstract class Castles {
   final SquareSet _blackPathKingSide;
 
   static const standard = Castles(
-    castlingRights: SquareSet(0x28140000, 0, 0, 0, 0, 0, 0, 0x2814),
+    castlingRights: SquareSet.castlingRooks,
     whiteRookQueenSide: Square.e1,
     whiteRookKingSide: Square.l1,
     blackRookQueenSide: Square.e16,
@@ -80,6 +81,7 @@ abstract class Castles {
   /// relinquish their castling rights.
   factory Castles.fromSetup(Setup setup) {
     Castles castles = Castles.empty;
+    castles = castles.copyWith(castlingRights: setup.castlingRights);
     final rooks = setup.castlingRights & setup.board.rooks;
     for (final side in Side.values) {
       final backrank = SquareSet.backrankOf(side);
@@ -87,14 +89,23 @@ abstract class Castles {
       if (king == null || !backrank.has(king)) continue;
       final backrankRooks = rooks & setup.board.bySide(side) & backrank;
 
-      // If we detect more than one rook on each side of the king, only use the closest rook to the king. ai!
-      if (backrankRooks.first != null && backrankRooks.first! < king) {
-        castles =
-            castles._add(side, CastlingSide.queen, king, backrankRooks.first!);
+      // If we detect more than one rook on each side of the king, use the
+      // closest rook to the king.
+      Square? queenSideRook; // Queenside rook
+      Square? kingSideRook; // Kingside rook
+      for (final rook in backrankRooks.squares) {
+        if (rook < king) {
+          queenSideRook = rook;
+        } else if (kingSideRook == null) {
+          kingSideRook = rook;
+        }
       }
-      if (backrankRooks.last != null && king < backrankRooks.last!) {
-        castles =
-            castles._add(side, CastlingSide.king, king, backrankRooks.last!);
+
+      if (queenSideRook != null) {
+        castles = castles._add(side, CastlingSide.queen, king, queenSideRook);
+      }
+      if (kingSideRook != null) {
+        castles = castles._add(side, CastlingSide.king, king, kingSideRook);
       }
     }
     return castles;
@@ -114,7 +125,7 @@ abstract class Castles {
     });
   }
 
-  /// Gets rooks paths by side and castling side.
+  /// Gets ByCastlingSiderooks paths by side and castling side.
   BySide<ByCastlingSide<SquareSet>> get paths {
     return BySide({
       Side.player1: ByCastlingSide({
@@ -157,6 +168,7 @@ abstract class Castles {
 
   /// Returns a new [Castles] instance with the given rook discarded.
   Castles discardRookAt(Square square) {
+    // When we discard a rook, we should fall back to the remaining rook in castlingRights ai!
     return copyWith(
       castlingRights: castlingRights.withoutSquare(square),
       whiteRookQueenSide:
@@ -182,13 +194,13 @@ abstract class Castles {
   }
 
   Castles _add(Side side, CastlingSide cs, Square king, Square rook) {
-    final kingTo = kingCastlesTo(side, cs);
-    final rookTo = rookCastlesTo(side, cs);
-    final path = between(rook, rookTo)
-        .withSquare(rookTo)
-        .union(between(king, kingTo).withSquare(kingTo))
-        .withoutSquare(king)
-        .withoutSquare(rook);
+    //final kingTo = kingCastlesTo(side, cs);
+    //final rookTo = rookCastlesTo(side, cs);
+    final path = between(rook, king);
+        //.withSquare(rookTo)
+        //.union(between(king, kingTo).withSquare(kingTo))
+        //.withoutSquare(king)
+        //.withoutSquare(rook);
     return copyWith(
       castlingRights: castlingRights.withSquare(rook),
       whiteRookQueenSide: side == Side.player1 && cs == CastlingSide.queen
@@ -214,10 +226,25 @@ abstract class Castles {
     );
   }
 
-  //@override
-  //String toString() {
-  //  return 'Castles(castlingRights: ${castlingRights.toHexString()})';
-  //}
+  @override
+  String toString() {
+    return '''Castles(
+castlingRights:
+${humanReadableSquareSet(castlingRights)})
+_whiteRookQueenSide: ${_whiteRookQueenSide?.name ?? 'null'}
+_whiteRookKingSide: ${_whiteRookKingSide?.name ?? 'null'}
+_blackRookQueenSide: ${_blackRookQueenSide?.name ?? 'null'}
+_blackRookKingSide: ${_blackRookKingSide?.name ?? 'null'}
+_whitePathQueenSide:
+${humanReadableSquareSet(_whitePathQueenSide)})
+_whitePathKingSide:
+${humanReadableSquareSet(_whitePathKingSide)})
+_blackPathQueenSide:
+${humanReadableSquareSet(_blackPathQueenSide)})
+_blackPathKingSide:
+${humanReadableSquareSet(_blackPathKingSide)})
+''';
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -258,29 +285,29 @@ abstract class Castles {
   });
 }
 
-/// Returns the square the rook moves to when castling.
-Square rookCastlesTo(Side side, CastlingSide cs) => switch (side) {
-      Side.player1 => switch (cs) {
-          CastlingSide.queen => Square.d1,
-          CastlingSide.king => Square.f1,
-        },
-      Side.player2 => switch (cs) {
-          CastlingSide.queen => Square.d8,
-          CastlingSide.king => Square.f8,
-        },
-    };
-
-/// Returns the square the king moves to when castling.
-Square kingCastlesTo(Side side, CastlingSide cs) => switch (side) {
-      Side.player1 => switch (cs) {
-          CastlingSide.queen => Square.c1,
-          CastlingSide.king => Square.g1,
-        },
-      Side.player2 => switch (cs) {
-          CastlingSide.queen => Square.c8,
-          CastlingSide.king => Square.g8,
-        },
-    };
+///// Returns the square the rook moves to when castling.
+//Square rookCastlesTo(Side side, CastlingSide cs) => switch (side) {
+//      Side.player1 => switch (cs) {
+//          CastlingSide.queen => Square.d1,
+//          CastlingSide.king => Square.f1,
+//        },
+//      Side.player2 => switch (cs) {
+//          CastlingSide.queen => Square.d8,
+//          CastlingSide.king => Square.f8,
+//        },
+//    };
+//
+///// Returns the square the king moves to when castling.
+//Square kingCastlesTo(Side side, CastlingSide cs) => switch (side) {
+//      Side.player1 => switch (cs) {
+//          CastlingSide.queen => Square.c1,
+//          CastlingSide.king => Square.g1,
+//        },
+//      Side.player2 => switch (cs) {
+//          CastlingSide.queen => Square.c8,
+//          CastlingSide.king => Square.g8,
+//        },
+//    };
 
 class _Castles extends Castles {
   const _Castles({
