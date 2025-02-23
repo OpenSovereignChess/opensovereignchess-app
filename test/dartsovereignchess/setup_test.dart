@@ -40,5 +40,55 @@ void main() {
     expect(setup.fen, fen);
   });
 
-  // Test the castling rights part of the FEN AI!
+  test('castling rights in FEN', () {
+    // Test empty castling rights
+    var setup = Setup.parseFen('16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b - 0');
+    expect(setup.castlingRights, SquareSet.empty);
+
+    // Test all castling rights
+    setup = Setup.parseFen('16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CELNceln 0');
+    expect(setup.castlingRights, makeSquareSet('''
+. . 1 . 1 . . . . . . 1 . 1 . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . 1 . 1 . . . . . . 1 . 1 . .
+'''));
+
+    // Test partial castling rights
+    setup = Setup.parseFen('16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CLen 0');
+    expect(setup.castlingRights, makeSquareSet('''
+. . 1 . . . . . . . . . . 1 . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . .
+. . 1 . . . . . . . . . . 1 . .
+'''));
+
+    // Test invalid castling rights throws FenException
+    expect(() => Setup.parseFen('16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b XYZ 0'),
+        throwsA(isA<FenException>().having((e) => e.cause, 'cause', IllegalFenCause.castling)));
+  });
 }
