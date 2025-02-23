@@ -24,7 +24,16 @@ class ArmyManager {
   /// The color armies that player 2 controls.
   final ISet<PieceColor> p2Controlled;
 
+  /// Army Manager for an empty board.
   static const empty = ArmyManager(
+    p1Owned: PieceColor.white,
+    p2Owned: PieceColor.black,
+    p1Controlled: ISet.empty(),
+    p2Controlled: ISet.empty(),
+  );
+
+  /// Army Manager for a standard board.
+  static const standard = ArmyManager(
     p1Owned: PieceColor.white,
     p2Owned: PieceColor.black,
     p1Controlled: ISet.empty(),

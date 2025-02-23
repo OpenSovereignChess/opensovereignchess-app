@@ -50,3 +50,4 @@ app.*.map.json
 # Code generation output
 *.freezed.dart
 *.g.dart
+.aider*

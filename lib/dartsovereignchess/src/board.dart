@@ -93,9 +93,32 @@ class Board {
   final ArmyManager armyManager;
 
   /// Standard chess starting position.
-  //static const standard = Board(
-  //  occupied: SquareSet(),
-  //);
+  static const standard = Board(
+    occupied: SquareSet(0xFFFFFFFF, 0xC003C003, 0xC003C003, 0xC003C003,
+        0xC003C003, 0xC003C003, 0xC003C003, 0xFFFFFFFF),
+    white: SquareSet(0, 0, 0, 0, 0, 0, 0, 0xFF00FF0),
+    ash: SquareSet(0x30003, 0, 0, 0, 0, 0, 0, 0xC000C000),
+    slate: SquareSet(0xC000C000, 0, 0, 0, 0, 0, 0, 0x30003),
+    black: SquareSet(0xFF00FF0, 0, 0, 0, 0, 0, 0, 0),
+    pink: SquareSet(0, 0, 0, 0xC000C000, 0, 0, 0, 0xC000C),
+    red: SquareSet(0, 0, 0xC000C000, 0, 0, 0, 0x30003, 0),
+    orange: SquareSet(0, 0xC000C000, 0, 0, 0, 0x30003, 0, 0),
+    yellow: SquareSet(0x30003000, 0, 0, 0, 0x30003, 0, 0, 0),
+    green: SquareSet(0, 0, 0, 0x30003, 0, 0, 0, 0x30003000),
+    cyan: SquareSet(0, 0, 0x3003, 0, 0, 0, 0xC000C000, 0),
+    navy: SquareSet(0, 0xC000C000, 0, 0, 0, 0x3003, 0, 0),
+    violet: SquareSet(0xC000C, 0, 0, 0, 0xC000C000, 0, 0, 0),
+    pawns: SquareSet(0x3FFC, 0x40024002, 0x40024002, 0x40024002, 0x40024002,
+        0x40024002, 0x40024002, 0x3FFC0000),
+    knights: SquareSet(0x14284002, 0, 0x8001, 0, 0, 0x80010000, 0, 0x40021428),
+    bishops: SquareSet(
+        0x42420000, 0x80010000, 0, 0x80010000, 0x8001, 0, 0x8001, 0x4242),
+    rooks: SquareSet(0x28148001, 0, 0x80010000, 0, 0, 0x8001, 0, 0x80012814),
+    queens: SquareSet(
+        0x80810000, 0x8001, 0, 0x8001, 0x80010000, 0, 0x80010000, 0x8081),
+    kings: SquareSet(0x1000000, 0, 0, 0, 0, 0, 0, 0x100),
+    armyManager: ArmyManager.standard,
+  );
 
   /// Empty board.
   static const empty = Board(

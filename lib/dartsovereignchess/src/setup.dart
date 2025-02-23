@@ -30,6 +30,14 @@ class Setup {
   /// Gets incremented after any player makes a turn.
   final int ply;
 
+  /// Initial position setup.
+  static const standard = Setup(
+    board: Board.standard,
+    turn: Side.player1,
+    castlingRights: SquareSet.castlingRooks,
+    ply: 0,
+  );
+
   /// Parses a Sovereign Chess FEN string and returns a [Setup].
   ///
   /// - Accepts missing FEN fields (except the board) and fills them with
@@ -204,7 +212,7 @@ String _makeCastlingFen(Board board, SquareSet castlingRights) {
   for (final side in Side.values) {
     final backrank = SquareSet.backrankOf(side);
     final king = board.kingOf(side);
-    
+
     // Skip if no king or no castling rights on this side
     if (king == null || castlingRights.intersect(backrank).isEmpty) {
       continue;
@@ -212,7 +220,7 @@ String _makeCastlingFen(Board board, SquareSet castlingRights) {
 
     // Get all rook squares that have castling rights
     final rookSquares = castlingRights.intersect(backrank);
-    
+
     // Add each rook's file letter to the FEN
     for (final square in rookSquares.squares) {
       final letter = square.file.name.toUpperCase();

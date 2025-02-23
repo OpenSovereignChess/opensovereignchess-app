@@ -107,14 +107,14 @@ void main() {
 
     // Test all castling rights
     setup = Setup.parseFen(
-        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CELNceln 0');
+        'bk15/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CELNceln 0');
     expect(setup.fen,
-        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CELNceln 0');
+        'bk15/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CELNceln 0');
 
     // Test partial castling rights
     setup = Setup.parseFen(
-        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CLen 0');
+        'bk15/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CLen 0');
     expect(setup.fen,
-        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CLen 0');
+        'bk15/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CLen 0');
   });
 }

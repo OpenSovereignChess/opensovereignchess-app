@@ -66,12 +66,15 @@ class SquareSet {
         .fold(SquareSet.empty, (left, right) => left | right);
   }
 
-  /// Create a [SquareSet] containing all squares of the given backrank [PieceColor].
-  factory SquareSet.backrankOf(Side side) {
-    return side == Side.player1
-        ? const SquareSet(0, 0, 0, 0, 0, 0, 0, 0xFFFF)
-        : const SquareSet(0xFFFF0000, 0, 0, 0, 0, 0, 0, 0);
-  }
+  /// Create a [SquareSet] containing all squares of the given backrank of [Side].
+  ///
+  /// If player2 chooses to play as white on the first turn, then player2 will
+  /// become player1. This way we know that player 1's backrank is always the
+  /// first rank.
+  factory SquareSet.backrankOf(Side side) => switch (side) {
+        Side.player1 => SquareSet.firstRankMask,
+        Side.player2 => SquareSet.sixteenthRankMask,
+      };
 
   static const empty = SquareSet(0, 0, 0, 0, 0, 0, 0, 0);
   static const full = SquareSet(0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF,
@@ -161,6 +164,9 @@ class SquareSet {
   static const redSquares = SquareSet(0, 0, 0x100000, 0, 0, 0x800, 0, 0);
   static const violetSquares = SquareSet(0, 0, 0x100, 0, 0, 0x800000, 0, 0);
   static const yellowSquares = SquareSet(0, 0, 0x20, 0, 0, 0x4000000, 0, 0);
+
+  // Starting rook positions for castling
+  static const castlingRooks = SquareSet(0x28140000, 0, 0, 0, 0, 0, 0, 0x2814);
 
   /// Bitwise right shift
   SquareSet shr(int shift) {
