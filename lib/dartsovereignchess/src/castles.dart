@@ -73,23 +73,30 @@ abstract class Castles {
   );
 
   /// Creates a [Castles] instance from a [Setup].
+  ///
+  /// In a standard game setup, there are initially four rooks with castling
+  /// rights, but there is only one rook on each side that you can castle with
+  /// at any given time. So disregard the outer rooks until the inner rooks
+  /// relinquish their castling rights.
   factory Castles.fromSetup(Setup setup) {
     Castles castles = Castles.empty;
-    //final rooks = setup.castlingRights & setup.board.rooks;
-    //for (final side in Side.values) {
-    //  final backrank = SquareSet.backrankOf(side);
-    //  final king = setup.board.kingOf(side);
-    //  if (king == null || !backrank.has(king)) continue;
-    //  final backrankRooks = rooks & setup.board.bySide(side) & backrank;
-    //  if (backrankRooks.first != null && backrankRooks.first! < king) {
-    //    castles =
-    //        castles._add(side, CastlingSide.queen, king, backrankRooks.first!);
-    //  }
-    //  if (backrankRooks.last != null && king < backrankRooks.last!) {
-    //    castles =
-    //        castles._add(side, CastlingSide.king, king, backrankRooks.last!);
-    //  }
-    //}
+    final rooks = setup.castlingRights & setup.board.rooks;
+    for (final side in Side.values) {
+      final backrank = SquareSet.backrankOf(side);
+      final king = setup.board.kingOf(side);
+      if (king == null || !backrank.has(king)) continue;
+      final backrankRooks = rooks & setup.board.bySide(side) & backrank;
+
+      // If we detect more than one rook on each side of the king, only use the closest rook to the king. ai!
+      if (backrankRooks.first != null && backrankRooks.first! < king) {
+        castles =
+            castles._add(side, CastlingSide.queen, king, backrankRooks.first!);
+      }
+      if (backrankRooks.last != null && king < backrankRooks.last!) {
+        castles =
+            castles._add(side, CastlingSide.king, king, backrankRooks.last!);
+      }
+    }
     return castles;
   }
 
