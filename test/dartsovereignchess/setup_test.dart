@@ -98,5 +98,23 @@ void main() {
             .having((e) => e.cause, 'cause', IllegalFenCause.castling)));
   });
 
-  // Test writing castling rights to FEN ai!
+  test('writing castling rights to FEN', () {
+    // Test empty castling rights
+    var setup = Setup.parseFen(
+        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b - 0');
+    expect(setup.fen,
+        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b - 0');
+
+    // Test all castling rights
+    setup = Setup.parseFen(
+        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CELNceln 0');
+    expect(setup.fen,
+        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CELNceln 0');
+
+    // Test partial castling rights
+    setup = Setup.parseFen(
+        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CLen 0');
+    expect(setup.fen,
+        '16/16/16/16/16/16/16/16/16/16/16/16/16/16/16/wk15 1 w b CLen 0');
+  });
 }
