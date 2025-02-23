@@ -120,7 +120,7 @@ class Setup {
         turn.name[turn.name.length - 1],
         board.armyManager.p1Owned.letter,
         board.armyManager.p2Owned.letter,
-        '-',
+        '-', // TODO: Add castling FEN
         ply,
       ].join(' ');
 }
@@ -192,4 +192,21 @@ ArmyManager _parseControlledArmies(
     p1Controlled: p1Controlled.toISet(),
     p2Controlled: p2Controlled.toISet(),
   );
+}
+
+/// Return the castling FEN string.
+///
+/// Return the Files of all rooks that are still able to castle.
+/// Player 1's files will be uppercase, and player 2's files will be lowercase.
+/// e.g. CELNceln
+String _makeCastlingFen(Board board, SquareSet castlingRights) {
+  final buffer = StringBuffer();
+  for (final side in Side.values) {
+    final backrank = SquareSet.backrankOf(side);
+    final king = board.kingOf(side);
+
+    // Implement ai!
+  }
+  final fen = buffer.toString();
+  return fen != '' ? fen : '-';
 }
