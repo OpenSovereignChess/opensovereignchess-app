@@ -28,6 +28,8 @@ abstract class Castles {
     Square? whiteRookKingSide,
     Square? blackRookQueenSide,
     Square? blackRookKingSide,
+    Square? whiteKing,
+    Square? blackKing,
     required SquareSet whitePathQueenSide,
     required SquareSet whitePathKingSide,
     required SquareSet blackPathQueenSide,
@@ -36,6 +38,8 @@ abstract class Castles {
         _whiteRookKingSide = whiteRookKingSide,
         _blackRookQueenSide = blackRookQueenSide,
         _blackRookKingSide = blackRookKingSide,
+        _whiteKing = whiteKing,
+        _blackKing = blackKing,
         _whitePathQueenSide = whitePathQueenSide,
         _whitePathKingSide = whitePathKingSide,
         _blackPathQueenSide = blackPathQueenSide,
@@ -48,6 +52,8 @@ abstract class Castles {
   final Square? _whiteRookKingSide;
   final Square? _blackRookQueenSide;
   final Square? _blackRookKingSide;
+  final Square? _whiteKing;
+  final Square? _blackKing;
   final SquareSet _whitePathQueenSide;
   final SquareSet _whitePathKingSide;
   final SquareSet _blackPathQueenSide;
@@ -59,6 +65,8 @@ abstract class Castles {
     whiteRookKingSide: Square.l1,
     blackRookQueenSide: Square.e16,
     blackRookKingSide: Square.l16,
+    whiteKing: Square.h1,
+    blackKing: Square.h16,
     whitePathQueenSide: SquareSet(0, 0, 0, 0, 0, 0, 0, 0xE0),
     whitePathKingSide: SquareSet(0, 0, 0, 0, 0, 0, 0, 0x600),
     blackPathQueenSide: SquareSet(0xE00000, 0, 0, 0, 0, 0, 0, 0),
@@ -71,6 +79,8 @@ abstract class Castles {
     whitePathKingSide: SquareSet.empty,
     blackPathQueenSide: SquareSet.empty,
     blackPathKingSide: SquareSet.empty,
+    whiteKing: null,
+    blackKing: null,
   );
 
   /// Creates a [Castles] instance from a [Setup].
@@ -85,9 +95,13 @@ abstract class Castles {
     castles = castles.copyWith(castlingRights: rooks);
     for (final side in Side.values) {
       final backrank = SquareSet.backrankOf(side);
-      // Store the king square for each side in Castles.  Add new properties for this ai!
       final king = setup.board.kingOf(side);
       if (king == null || !backrank.has(king)) continue;
+      
+      castles = castles.copyWith(
+        whiteKing: side == Side.player1 ? king : null,
+        blackKing: side == Side.player2 ? king : null,
+      );
       final backrankRooks = rooks & setup.board.bySide(side) & backrank;
       final queenSideRook = _getClosestRook(CastlingSide.queen, king, backrankRooks);
       final kingSideRook = _getClosestRook(CastlingSide.king, king, backrankRooks);
@@ -246,6 +260,8 @@ ${humanReadableSquareSet(_blackPathKingSide)})
           other._whiteRookKingSide == _whiteRookKingSide &&
           other._blackRookQueenSide == _blackRookQueenSide &&
           other._blackRookKingSide == _blackRookKingSide &&
+          other._whiteKing == _whiteKing &&
+          other._blackKing == _blackKing &&
           other._whitePathQueenSide == _whitePathQueenSide &&
           other._whitePathKingSide == _whitePathKingSide &&
           other._blackPathQueenSide == _blackPathQueenSide &&
@@ -258,6 +274,8 @@ ${humanReadableSquareSet(_blackPathKingSide)})
       _whiteRookKingSide,
       _blackRookQueenSide,
       _blackRookKingSide,
+      _whiteKing,
+      _blackKing,
       _whitePathQueenSide,
       _whitePathKingSide,
       _blackPathQueenSide,
@@ -269,6 +287,8 @@ ${humanReadableSquareSet(_blackPathKingSide)})
     Square? whiteRookKingSide,
     Square? blackRookQueenSide,
     Square? blackRookKingSide,
+    Square? whiteKing,
+    Square? blackKing,
     SquareSet? whitePathQueenSide,
     SquareSet? whitePathKingSide,
     SquareSet? blackPathQueenSide,
@@ -320,6 +340,8 @@ class _Castles extends Castles {
     Object? whiteRookKingSide = _uniqueObjectInstance,
     Object? blackRookQueenSide = _uniqueObjectInstance,
     Object? blackRookKingSide = _uniqueObjectInstance,
+    Object? whiteKing = _uniqueObjectInstance,
+    Object? blackKing = _uniqueObjectInstance,
     SquareSet? whitePathQueenSide,
     SquareSet? whitePathKingSide,
     SquareSet? blackPathQueenSide,
@@ -339,6 +361,12 @@ class _Castles extends Castles {
       blackRookKingSide: blackRookKingSide == _uniqueObjectInstance
           ? _blackRookKingSide
           : blackRookKingSide as Square?,
+      whiteKing: whiteKing == _uniqueObjectInstance
+          ? _whiteKing
+          : whiteKing as Square?,
+      blackKing: blackKing == _uniqueObjectInstance
+          ? _blackKing
+          : blackKing as Square?,
       whitePathQueenSide: whitePathQueenSide ?? _whitePathQueenSide,
       whitePathKingSide: whitePathKingSide ?? _whitePathKingSide,
       blackPathQueenSide: blackPathQueenSide ?? _blackPathQueenSide,
