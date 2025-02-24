@@ -480,9 +480,12 @@ class Board {
 
   Board setOwnedColor(Side side, PieceColor color) {
     return ownedColorOf(side) == color
-        ? this
+        ? copyWith()
         : copyWith(armyManager: armyManager.setOwnedColor(side, color));
   }
+
+  ISet<PieceColor> controlledColorsOf(Side side) =>
+      armyManager.controlledColorsOf(side);
 
   Board addControlledColor(Side side, PieceColor color) {
     return armyManager.controlledColorsOf(side).contains(color)

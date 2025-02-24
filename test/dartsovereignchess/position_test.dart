@@ -143,4 +143,19 @@ void main() {
     expect(result.board.kings.has(Square.i1), false);
     expect(result.board.armyManager.colorOf(Side.player1), PieceColor.red);
   });
+
+  test('defect', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        'bk15/16/16/16/16/16/16/16/16/16/16/4wp11/16/16/16/8wk7 1 w b -'));
+    expect(pos.board.kingOf(Side.player1), Square.i1);
+    expect(pos.board.ownedColorOf(Side.player1), PieceColor.white);
+
+    final newPos = pos.defect(PieceColor.navy);
+
+    expect(pos.board.armyManager, isNot(newPos.board.armyManager));
+    expect(newPos.board.ownedColorOf(Side.player1), PieceColor.navy);
+    expect(newPos.board.kingOf(Side.player1), Square.i1);
+    expect(newPos.board.pieceAt(Square.i1), Piece.navyKing);
+    expect(newPos.board.armyManager.p1Controlled, isEmpty);
+  });
 }

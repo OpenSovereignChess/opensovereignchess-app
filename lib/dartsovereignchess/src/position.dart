@@ -78,6 +78,11 @@ abstract class Position<T extends Position<T>> {
   /// [PieceColor] of the king in check, if any.
   PieceColor? get checkedKingColor => isCheck ? board.ownedColorOf(turn) : null;
 
+  /// Returns whether the given [Side] can defect.
+  bool canDefect(Side side) => board.controlledColorsOf(side).length > 0;
+
+  ISet<PieceColor> get controlledColors => board.controlledColorsOf(turn);
+
   /// Tests if the position has at least one legal move.
   bool get hasSomeLegalMoves {
     final context = _makeContext();
@@ -194,6 +199,29 @@ abstract class Position<T extends Position<T>> {
           castles: castles, // TODO: update castles
         );
     }
+  }
+
+  /// Defect to [PieceColor].
+  Position<T> defect(PieceColor color) {
+    // PieceColor must be controlled by the player
+    if (!board.colorControlledBy(turn, color)) {
+      return copyWith();
+    }
+    final king = board.kingOf(turn);
+    if (king == null) {
+      return copyWith();
+    }
+    final newKing = Piece(
+      role: Role.king,
+      color: color,
+    );
+    Board newBoard = board.setPieceAt(king, newKing);
+    newBoard = newBoard.setOwnedColor(turn, color);
+    return copyWith(
+      board: newBoard,
+      turn: turn.opposite,
+      ply: ply + 1,
+    );
   }
 
   /// Gets the legal moves for that [Square].

@@ -36,6 +36,13 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
       state = state.copyWith(promotionMove: null);
     }
   }
+
+  void defect(PieceColor color) {
+    final newPos = state.position.defect(color);
+    state = state.copyWith(
+      position: newPos,
+    );
+  }
 }
 
 class OverTheBoardGameState {
@@ -79,4 +86,6 @@ class OverTheBoardGameState {
   IMap<Square, ISet<Square>> get legalMoves => makeLegalMoves(position);
 
   String get fen => position.fen;
+
+  bool canDefect(Side side) => position.canDefect(side);
 }

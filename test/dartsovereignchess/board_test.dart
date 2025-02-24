@@ -6,8 +6,11 @@ import 'package:opensovereignchess_app/dartsovereignchess/src/constants.dart';
 void main() {
   test('setPieceAt', () {
     const piece = Piece.whiteKing;
-    final board = Board.empty.setPieceAt(Square.a1, piece);
+    Board board = Board.empty.setPieceAt(Square.a1, piece);
     expect(board.pieceAt(Square.a1), piece);
+
+    board = board.setPieceAt(Square.a1, Piece.whiteQueen);
+    expect(board.pieceAt(Square.a1), Piece.whiteQueen);
   });
 
   test('parseFen', () {

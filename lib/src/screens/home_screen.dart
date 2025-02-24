@@ -10,6 +10,7 @@ import 'package:opensovereignchess_app/src/constants.dart';
 import 'package:opensovereignchess_app/src/utils/screen.dart';
 
 import '../model/over_the_board/over_the_board_game_controller.dart';
+import '../widgets/defection_dialog.dart';
 import '../navigation.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -127,6 +128,23 @@ class _Menu extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
+          verticalSpacer,
+          TextButton(
+            onPressed: gameState.canDefect(gameState.position.turn)
+                ? () async {
+                    final PieceColor? defectColor = await showDefectionDialog(
+                        context, gameState.position.controlledColors);
+                    if (defectColor != null) {
+                      print('Defect to ${defectColor.name}');
+                      ref
+                          .read(overTheBoardGameControllerProvider(initialFen)
+                              .notifier)
+                          .defect(defectColor);
+                    }
+                  }
+                : null,
+            child: const Text('Defect'),
+          ),
           verticalSpacer,
           TextButton(
             onPressed: () {

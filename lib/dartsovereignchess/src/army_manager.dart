@@ -41,6 +41,11 @@ class ArmyManager {
   );
 
   @override
+  String toString() {
+    return 'ArmyManager{p1Owned: $p1Owned, p2Owned: $p2Owned, p1Controlled: $p1Controlled, p2Controlled: $p2Controlled}';
+  }
+
+  @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         other is ArmyManager &&
@@ -123,8 +128,8 @@ class ArmyManager {
 
   ArmyManager addControlledArmy(Side turn, PieceColor color) {
     // Cannot control an owned army
-    if (colorOf(turn.opposite) == color) {
-      return this;
+    if (colorOf(turn) == color || colorOf(turn.opposite) == color) {
+      return copyWith();
     }
 
     switch (turn) {
@@ -141,14 +146,20 @@ class ArmyManager {
 
   ArmyManager setOwnedColor(Side turn, PieceColor color) {
     return switch (turn) {
-      Side.player1 => copyWith(
-          p1Owned: color,
-          p1Controlled: removeControlledArmy(Side.player1, color).p1Controlled,
-        ),
-      Side.player2 => copyWith(
-          p2Owned: color,
-          p2Controlled: removeControlledArmy(Side.player2, color).p2Controlled,
-        ),
+      Side.player1 => p1Controlled.contains(color)
+          ? copyWith(
+              p1Owned: color,
+              p1Controlled:
+                  removeControlledArmy(Side.player1, color).p1Controlled,
+            )
+          : copyWith(),
+      Side.player2 => p2Controlled.contains(color)
+          ? copyWith(
+              p2Owned: color,
+              p2Controlled:
+                  removeControlledArmy(Side.player2, color).p2Controlled,
+            )
+          : copyWith(),
     };
   }
 
