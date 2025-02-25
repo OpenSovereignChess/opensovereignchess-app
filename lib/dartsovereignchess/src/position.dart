@@ -261,8 +261,9 @@ abstract class Position<T extends Position<T>> {
     pseudo = pseudo
         .diff(_occupiedColoredSquares(board.occupied.withoutSquare(square)));
 
-    // Include colors that aren't controlled because we cannot attack those pieces
-    pseudo = pseudo.diff(board.bySide(turn));
+    // Cannot attack our own pieces as well as neutral pieces (pieces not
+    // controlled by either player).
+    pseudo = pseudo.diff(board.occupied.diff(board.bySide(turn.opposite)));
 
     if (ctx.king != null) {
       if (piece.role == Role.king) {

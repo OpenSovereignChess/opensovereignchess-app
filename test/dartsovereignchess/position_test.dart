@@ -39,6 +39,15 @@ void main() {
     expect(kingLegalMoves!.has(Square.j2), false);
   });
 
+  test('legalMoves, cannot capture a neutral piece', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        'bk15/16/16/16/16/16/16/16/16/16/16/16/16/16/8pp7/8wk7 1 w b -'));
+    final kingLegalMoves = pos.legalMoves[Square.i1];
+    expect(pos.board.colorBelongsTo(Side.player1, PieceColor.pink), false);
+    expect(pos.board.colorBelongsTo(Side.player2, PieceColor.pink), false);
+    expect(kingLegalMoves!.has(Square.i2), false);
+  });
+
   test('legalMoves, occupied color square', () {
     // We have a black pawn on a red square, so the white pawn on l4
     // cannot move to l5, the other red square.
