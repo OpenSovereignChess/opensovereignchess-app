@@ -15,6 +15,7 @@ Before committing:
 
 ```bash
 dart format .
+dart analyze
 ```
 
 ### Adding piece assets
