@@ -1,7 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
-import 'package:opensovereignchess_app/dartsovereignchess/src/setup.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/src/debug.dart';
 
 void main() {

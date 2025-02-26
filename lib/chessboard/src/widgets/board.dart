@@ -4,10 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 
-import '../board_settings.dart';
 import './geometry.dart';
 import './highlight.dart';
-import './piece.dart';
 import './positioned_square.dart';
 import './promotion.dart';
 
@@ -32,6 +30,7 @@ class Chessboard extends StatefulWidget with ChessboardGeometry {
   });
 
   /// Size of the board in logical pixels.
+  @override
   final double size;
 
   /// Side by which the board is oriented.

@@ -31,7 +31,7 @@ Pieces readFen(String fen) {
           pieceToken += c;
 
           // Process skipped spaces if any
-          if (skippedToken.length > 0) {
+          if (skippedToken.isNotEmpty) {
             final skippedSpaces = int.parse(skippedToken);
             file += skippedSpaces;
             skippedToken = '';

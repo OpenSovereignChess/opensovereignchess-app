@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:opensovereignchess_app/src/navigation.dart';
 
 import './router.dart';
 

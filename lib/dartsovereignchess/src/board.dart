@@ -172,7 +172,7 @@ class Board {
             pieceToken += c;
 
             // Process skipped spaces if any
-            if (skippedToken.length > 0) {
+            if (skippedToken.isNotEmpty) {
               final skippedSpaces = int.parse(skippedToken);
               file += skippedSpaces;
               skippedToken = '';
@@ -199,7 +199,7 @@ class Board {
       }
       //print('rank=$rank file=$file');
     }
-    if (skippedToken.length > 0) {
+    if (skippedToken.isNotEmpty) {
       file += int.parse(skippedToken);
       //print('finally rank=$rank file=$file');
     }

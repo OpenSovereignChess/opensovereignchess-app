@@ -1,7 +1,7 @@
 /// Dart library for Sovereign Chess
 ///
 /// All classes are immutable.
-library dartsovereignchess;
+library;
 
 export 'src/army_manager.dart';
 export 'src/constants.dart';

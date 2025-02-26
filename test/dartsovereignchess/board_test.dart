@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/src/board.dart';
-import 'package:opensovereignchess_app/dartsovereignchess/src/constants.dart';
 
 void main() {
   test('setPieceAt', () {

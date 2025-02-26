@@ -36,7 +36,7 @@ void main() {
         '16/16/16/16/16/16/16/16/16/16/16/16/16/16/8bpwp6/8wk7 1 w b -'));
     final kingLegalMoves = pos.legalMoves[Square.i1];
     expect(kingLegalMoves!.has(Square.i2), true);
-    expect(kingLegalMoves!.has(Square.j2), false);
+    expect(kingLegalMoves.has(Square.j2), false);
   });
 
   test('legalMoves, cannot capture a neutral piece', () {

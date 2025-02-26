@@ -394,16 +394,16 @@ Square? _getClosestRook(CastlingSide cs, Square? king, SquareSet rooks) {
   if (king == null) return null;
 
   Square? maxRook;
-  for (final _rook in rooks.squares) {
+  for (final rook in rooks.squares) {
     if (cs == CastlingSide.queen) {
-      if (_rook < king) {
-        maxRook = _rook;
+      if (rook < king) {
+        maxRook = rook;
       } else {
         return maxRook;
       }
     } else {
-      if (_rook > king) {
-        return _rook;
+      if (rook > king) {
+        return rook;
       }
     }
   }

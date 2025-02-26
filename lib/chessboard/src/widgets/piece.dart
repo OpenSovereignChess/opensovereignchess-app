@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/widgets.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 

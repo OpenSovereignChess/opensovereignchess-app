@@ -1,6 +1,5 @@
 import './models.dart';
 import './square_set.dart';
-import './debug.dart';
 
 /// Gets squares attacked or defended by a king on [Square].
 SquareSet kingAttacks(Square square) {
@@ -197,22 +196,22 @@ final _southwestRange = _tabulate((sq) {
 SquareSet _computeRayAttack(
     SquareSet ray, SquareSet occupied, List<SquareSet> ranges,
     [bool reverse = false]) {
-  final _ray = reverse ? ray.flipVertical() : ray;
-  final _occupied = reverse ? occupied.flipVertical() : occupied;
-  final intersection = _occupied & _ray;
+  final ray_ = reverse ? ray.flipVertical() : ray;
+  final occupied_ = reverse ? occupied.flipVertical() : occupied;
+  final intersection = occupied_ & ray_;
   final lsb = intersection.lsb();
-  final blocked = (lsb != null ? ranges[lsb] : SquareSet.empty) & _ray;
-  final result = _ray ^ blocked;
+  final blocked = (lsb != null ? ranges[lsb] : SquareSet.empty) & ray_;
+  final result = ray_ ^ blocked;
   return reverse ? result.flipVertical() : result;
 }
 
 SquareSet _computeWestRayAttack(SquareSet ray, SquareSet occupied) {
-  final _ray = ray.mirrorHorizontal();
-  final _occupied = occupied.mirrorHorizontal();
-  final intersection = _occupied & _ray;
+  final ray_ = ray.mirrorHorizontal();
+  final occupied_ = occupied.mirrorHorizontal();
+  final intersection = occupied_ & ray_;
   final lsb = intersection.lsb();
-  final blocked = (lsb != null ? _eastRange[lsb] : SquareSet.empty) & _ray;
-  final result = _ray ^ blocked;
+  final blocked = (lsb != null ? _eastRange[lsb] : SquareSet.empty) & ray_;
+  final result = ray_ ^ blocked;
   return result.mirrorHorizontal();
 }
 

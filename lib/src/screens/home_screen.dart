@@ -135,7 +135,6 @@ class _Menu extends ConsumerWidget {
                     final PieceColor? defectColor = await showDefectionDialog(
                         context, gameState.position.controlledColors);
                     if (defectColor != null) {
-                      print('Defect to ${defectColor.name}');
                       ref
                           .read(overTheBoardGameControllerProvider(initialFen)
                               .notifier)

@@ -164,7 +164,7 @@ SquareSet _parseCastlingFen(Board board, String castlingPart) {
 ArmyManager _parseControlledArmies(
     Board board, PieceColor p1Owned, PieceColor p2Owned) {
   final owned = {p1Owned, p2Owned};
-  final controlledBy = Map<PieceColor, PieceColor>();
+  final controlledBy = <PieceColor, PieceColor>{};
   for (final color in PieceColor.values) {
     if (owned.contains(color)) {
       continue;
@@ -175,7 +175,7 @@ ArmyManager _parseControlledArmies(
     }
   }
 
-  PieceColor _findFinalOwner(PieceColor color) {
+  PieceColor findFinalOwner(PieceColor color) {
     color = controlledBy[color]!;
     while (controlledBy[color] != null) {
       color = controlledBy[color]!;
@@ -187,9 +187,9 @@ ArmyManager _parseControlledArmies(
   final p2Controlled = <PieceColor>{};
 
   for (final key in controlledBy.keys) {
-    if (_findFinalOwner(key) == p1Owned) {
+    if (findFinalOwner(key) == p1Owned) {
       p1Controlled.add(key);
-    } else if (_findFinalOwner(key) == p2Owned) {
+    } else if (findFinalOwner(key) == p2Owned) {
       p2Controlled.add(key);
     }
   }

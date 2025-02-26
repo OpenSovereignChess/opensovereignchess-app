@@ -1,7 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 
-import './army_manager.dart';
 import './attacks.dart';
 import './board.dart';
 import './castles.dart';
@@ -79,7 +78,7 @@ abstract class Position<T extends Position<T>> {
   PieceColor? get checkedKingColor => isCheck ? board.ownedColorOf(turn) : null;
 
   /// Returns whether the given [Side] can defect.
-  bool canDefect(Side side) => board.controlledColorsOf(side).length > 0;
+  bool canDefect(Side side) => board.controlledColorsOf(side).isNotEmpty;
 
   ISet<PieceColor> get controlledColors => board.controlledColorsOf(turn);
 
