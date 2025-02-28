@@ -62,6 +62,7 @@ class AppScaffold extends StatelessWidget {
           }
         }
       },
+      drawerBreakpoint: const Breakpoint(beginWidth: 0, endWidth: 600),
       body: (_) => body,
     );
   }

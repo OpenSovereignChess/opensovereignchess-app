@@ -90,9 +90,7 @@ class _Body extends ConsumerWidget {
                       ),
                     ),
                     _Menu(
-                      boardSize,
                       initialFen: initialFen,
-                      isTablet: isTablet,
                     ),
                   ],
                 );
@@ -108,17 +106,11 @@ class _Body extends ConsumerWidget {
 const Widget verticalSpacer = SizedBox(height: 16);
 
 class _Menu extends ConsumerWidget {
-  const _Menu(
-    this.boardSize, {
+  const _Menu({
     required this.initialFen,
-    required this.isTablet,
   });
 
   final String? initialFen;
-
-  final double boardSize;
-
-  final bool isTablet;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
