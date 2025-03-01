@@ -69,7 +69,7 @@ class _BoardState extends State<Chessboard> {
   _DragAvatar? _dragAvatar;
 
   /// Once a piece is dragged, holds the square id of the piece.
-  Square? _draggedPieceSquare;
+  //Square? _draggedPieceSquare;
 
   /// Current pointer down event.
   ///
@@ -323,7 +323,8 @@ class _BoardState extends State<Chessboard> {
 
       if (square != null) {
         if (square != selected) {
-          final couldMove = _tryMove(square, drop: true);
+          //final couldMove = _tryMove(square, drop: true);
+          _tryMove(square, drop: true);
         } else {
           shouldDeselect = false;
         }
@@ -333,7 +334,7 @@ class _BoardState extends State<Chessboard> {
         if (shouldDeselect) {
           selected = null;
         }
-        _draggedPieceSquare = null;
+        //_draggedPieceSquare = null;
       });
     }
     // Handle pointer up while not dragging a piece
@@ -369,7 +370,7 @@ class _BoardState extends State<Chessboard> {
     final feedbackSize = widget.squareSize * widget.settings.dragFeedbackScale;
     if (square != null && piece != null) {
       setState(() {
-        _draggedPieceSquare = square;
+        //_draggedPieceSquare = square;
       });
       _renderBox ??= context.findRenderObject()! as RenderBox;
 

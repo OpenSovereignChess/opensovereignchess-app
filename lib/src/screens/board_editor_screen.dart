@@ -190,7 +190,6 @@ class _Menu extends ConsumerWidget {
               final url = '/editor?fen=$fen';
               await Clipboard.setData(
                   ClipboardData(text: 'https://sovchess.web.app$url'));
-              context.go(url);
             },
             child: const Text('Copy URL'),
           ),

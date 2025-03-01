@@ -6,8 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:opensovereignchess_app/chessboard/chessboard.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
-import 'package:opensovereignchess_app/src/constants.dart';
-import 'package:opensovereignchess_app/src/utils/screen.dart';
+//import 'package:opensovereignchess_app/src/constants.dart';
+//import 'package:opensovereignchess_app/src/utils/screen.dart';
 
 import '../model/over_the_board/over_the_board_game_controller.dart';
 import '../widgets/defection_dialog.dart';
@@ -44,15 +44,15 @@ class _Body extends ConsumerWidget {
               builder: (BuildContext context, BoxConstraints constraints) {
                 final aspectRatio = constraints.biggest.aspectRatio;
 
-                final defaultBoardSize = constraints.biggest.shortestSide;
-                final isTablet = isTabletOrLarger(context);
-                final remainingHeight =
-                    constraints.maxHeight - defaultBoardSize;
-                final isSmallScreen =
-                    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
-                final boardSize = isTablet || isSmallScreen
-                    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
-                    : defaultBoardSize;
+                //final defaultBoardSize = constraints.biggest.shortestSide;
+                //final isTablet = isTabletOrLarger(context);
+                //final remainingHeight =
+                //    constraints.maxHeight - defaultBoardSize;
+                //final isSmallScreen =
+                //    remainingHeight < kSmallRemainingHeightLeftBoardThreshold;
+                //final boardSize = isTablet || isSmallScreen
+                //    ? defaultBoardSize - kTabletBoardTableSidePadding * 2
+                //    : defaultBoardSize;
 
                 final direction =
                     aspectRatio > 1 ? Axis.horizontal : Axis.vertical;
@@ -152,7 +152,6 @@ class _Menu extends ConsumerWidget {
               final url = '/?fen=$fen';
               await Clipboard.setData(
                   ClipboardData(text: 'https://sovchess.web.app$url'));
-              context.go(url);
             },
             child: const Text('Copy URL'),
           ),
