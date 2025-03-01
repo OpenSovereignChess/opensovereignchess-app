@@ -176,7 +176,7 @@ class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
   Widget build(BuildContext context) {
     final gameState =
         ref.watch(overTheBoardGameControllerProvider(widget.initialFen));
-    final canCastle = gameState.position.canCastle();
+    final canCastle = gameState.position.canCastle;
 
     return Card(
       child: Padding(

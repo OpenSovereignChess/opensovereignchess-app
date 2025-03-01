@@ -293,8 +293,24 @@ abstract class Position<T extends Position<T>> {
     return pseudo;
   }
 
-  /// Returns whether we can castle.
-  bool canCastle() => false;
+  /// Returns whether we can castle in this position.
+  bool get canCastle => legalCastlingMoves.isNotEmpty;
+
+  /// Gets all the legal castling moves of this position.
+  ///
+  /// Returns a [SquareSet] of all the legal castling moves for each [Square].
+  IMap<Square, SquareSet> get legalCastlingMoves {
+    //print('castles: $castles');
+    return IMap({
+      for (final s in castles.castlingRights.squares)
+        s: SquareSet.empty // TODO: implement castling
+    });
+    //final context = _makeContext();
+    //return IMap({
+    //  for (final s in board.kingsAndRooksOf(turn).squares)
+    //    s: _legalMovesOf(s, context: context)
+    //});
+  }
 
   // Create a mask of colored squares we cannot move onto.
   SquareSet _occupiedColoredSquares(SquareSet occupied) {

@@ -28,6 +28,12 @@ void main() {
           equals([Square.j16, Square.k16]));
     });
 
+    test('fromSetup with kInitialFEN', () {
+      final castles = Castles.fromSetup(Setup.parseFen(kInitialFEN));
+      expect(castles.castlingRights, SquareSet.castlingRooks);
+      expect(castles, Castles.standard);
+    });
+
     test('discard rook', () {
       expect(Castles.standard.discardRookAt(Square.a4), Castles.standard);
       expect(
