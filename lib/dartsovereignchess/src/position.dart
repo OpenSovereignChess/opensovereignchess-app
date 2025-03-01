@@ -293,6 +293,9 @@ abstract class Position<T extends Position<T>> {
     return pseudo;
   }
 
+  /// Returns whether we can castle.
+  bool canCastle() => false;
+
   // Create a mask of colored squares we cannot move onto.
   SquareSet _occupiedColoredSquares(SquareSet occupied) {
     final coloredSquares = [

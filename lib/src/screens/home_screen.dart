@@ -103,8 +103,6 @@ class _Body extends ConsumerWidget {
   }
 }
 
-const Widget verticalSpacer = SizedBox(height: 16);
-
 class _Menu extends ConsumerWidget {
   const _Menu({
     required this.initialFen,
@@ -120,7 +118,8 @@ class _Menu extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
-          verticalSpacer,
+          const Spacer(flex: 1),
+          _CastleSwitch(initialFen: initialFen),
           TextButton(
             onPressed: gameState.canDefect(gameState.position.turn)
                 ? () async {
@@ -136,7 +135,7 @@ class _Menu extends ConsumerWidget {
                 : null,
             child: const Text('Defect'),
           ),
-          verticalSpacer,
+          const Spacer(flex: 1),
           TextButton(
             onPressed: () {
               final fen =
@@ -156,6 +155,78 @@ class _Menu extends ConsumerWidget {
             child: const Text('Copy URL'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _CastleSwitch extends ConsumerStatefulWidget {
+  const _CastleSwitch({this.initialFen});
+
+  final String? initialFen;
+
+  @override
+  ConsumerState<_CastleSwitch> createState() => _CastleSwitchState();
+}
+
+class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
+  bool _isCastling = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final gameState =
+        ref.watch(overTheBoardGameControllerProvider(widget.initialFen));
+    final canCastle = gameState.position.canCastle();
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.castle,
+                        color: _isCastling
+                            ? Theme.of(context).colorScheme.primary
+                            : canCastle
+                                ? Colors.grey
+                                : Colors.grey.withValues(alpha: 0.5)),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Castle',
+                      style: TextStyle(
+                        color:
+                            canCastle ? null : Theme.of(context).disabledColor,
+                      ),
+                    ),
+                  ],
+                ),
+                if (!canCastle)
+                  Text(
+                    'Not available in current position',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).disabledColor,
+                        ),
+                  ),
+              ],
+            ),
+            const Spacer(),
+            Switch(
+              value: _isCastling,
+              activeColor: Theme.of(context).colorScheme.primary,
+              onChanged: canCastle
+                  ? (bool value) {
+                      setState(() {
+                        _isCastling = value;
+                      });
+                    }
+                  : null,
+            ),
+          ],
+        ),
       ),
     );
   }
