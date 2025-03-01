@@ -29,9 +29,9 @@ class ChessboardColorScheme {
       promotionBox: Color(0xFF000000),
       pawnGuideline: Color(0xFF42150A),
       // Flutter Material Colors
-      lightSquare: Color(0xFFFFF8E1), // amber 50
-      darkSquare: Color(0xFFFFECB3), // amber 100
-      ashSquare: Color(0xCCDDDDDD),
+      lightSquare: Color(0xBBFFF8E1), // amber 50
+      darkSquare: Color(0xBBFFECB3), // amber 100
+      ashSquare: Color(0x6693A1A1),
       blackSquare: Color(0xCC000000),
       cyanSquare: Color(0xCC7BAFDE),
       greenSquare: Color(0xCC4EB265),
@@ -39,7 +39,7 @@ class ChessboardColorScheme {
       orangeSquare: Color(0xCCF4A736),
       pinkSquare: Color(0xCCFFAFD2),
       redSquare: Color(0xCCDC050C),
-      slateSquare: Color(0xCC777777),
+      slateSquare: Color(0xCC586E75),
       violetSquare: Color(0xCC882E72),
       whiteSquare: Color(0xCCFFFFFF),
       yellowSquare: Color(0xCCF7F056),

@@ -13,7 +13,7 @@ declare -A colors
 # Reference:
 # - https://personal.sron.nl/~pault/data/colourschemes.pdf
 # - https://www.ibm.com/design/language/color/
-colors["ash"]="0xFFDDDDDD"
+colors["ash"]="0xFFCCCCCC"
 colors["cyan"]="0xFF7BAFDE"
 colors["green"]="0xFF4EB265"
 colors["navy"]="0xFF1965B0"
@@ -21,7 +21,7 @@ colors["orange"]="0xFFF4A736"
 # NOTE: Used pink from IBM color palette as there was no pink in Tol's.
 colors["pink"]="0xFFFFAFD2"
 colors["red"]="0xFFDC050C"
-colors["slate"]="0xFF777777"
+colors["slate"]="0xEE586e75"
 colors["violet"]="0xFF882E72"
 colors["white"]="0xFFFFFFFF"
 colors["yellow"]="0xFFF7F056"
