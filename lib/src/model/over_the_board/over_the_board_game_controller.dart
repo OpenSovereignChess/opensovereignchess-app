@@ -14,6 +14,14 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
       );
 
   void makeMove(NormalMove move, {PieceColor? color}) {
+    if (state.inCastlingMode) {
+      final newPos = state.position.playCastle(move);
+      state = state.copyWith(
+        position: newPos,
+        inCastlingMode: false,
+      );
+      return;
+    }
     if (isPromotionPawnMove(state.position, move)) {
       state = state.copyWith(promotionMove: move, promotionColor: color);
       return;

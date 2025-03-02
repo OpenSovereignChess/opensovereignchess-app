@@ -317,6 +317,77 @@ abstract class Position<T extends Position<T>> {
     return castlingMoves.lock;
   }
 
+  /// Plays a castle and returns the updated [Position].
+  ///
+  /// Throws a [PlayException] if the move is not legal.
+  Position<T> playCastle(Move move) {
+    if (isLegalCastle(move)) {
+      return playCastleUnchecked(move);
+    } else {
+      throw PlayException('Invalid move $move');
+    }
+  }
+
+  /// Tests a castle move for legality.
+  bool isLegalCastle(Move move) {
+    switch (move) {
+      case NormalMove(from: final f, to: final t, promotion: final p):
+        final piece = board.pieceAt(f);
+        if (piece == null || piece.role != Role.king) {
+          return false;
+        }
+        if (p != null) {
+          return false;
+        }
+        final legalMoves = legalCastlingMoves[board.kingOf(turn)!];
+        return legalMoves!.has(t);
+    }
+  }
+
+  /// Plays a castle move without checking if the move is legal and returns the
+  /// updated [Position].
+  Position<T> playCastleUnchecked(Move move) {
+    switch (move) {
+      case NormalMove(
+          from: final from,
+          to: final to,
+        ):
+        final piece = board.pieceAt(from);
+        if (piece == null) {
+          return copyWith();
+        }
+
+        // Move king
+        Board newBoard = board.removePieceAt(from);
+        newBoard = newBoard.setPieceAt(to, piece);
+
+        // Move rook
+        final cs = _castlingSideOf(move);
+        final rookSquare = castles.rookOf(turn, cs)!;
+        final rook = newBoard.pieceAt(rookSquare);
+        final newRook = to + (cs == CastlingSide.king ? -1 : 1);
+        newBoard = newBoard.removePieceAt(rookSquare);
+        newBoard = newBoard.setPieceAt(newRook as Square, rook!);
+
+        return copyWith(
+          ply: ply + 1,
+          board: newBoard,
+          turn: turn.opposite,
+          castles: castles, // TODO: update castles
+        );
+    }
+  }
+
+  /// Returns the [CastlingSide] of a castle move.
+  ///
+  /// Assumes the move is a castle move.
+  CastlingSide _castlingSideOf(Move move) {
+    switch (move) {
+      case NormalMove(from: final f, to: final t):
+        return t - f > 0 ? CastlingSide.king : CastlingSide.queen;
+    }
+  }
+
   // Create a mask of colored squares we cannot move onto.
   SquareSet _occupiedColoredSquares(SquareSet occupied) {
     final coloredSquares = [
