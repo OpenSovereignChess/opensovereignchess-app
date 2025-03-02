@@ -305,15 +305,13 @@ abstract class Position<T extends Position<T>> {
     }
     Map<Square, SquareSet> castlingMoves = {};
     // If there are any pieces in the castling path, we cannot castle.
-    for (final side in Side.values) {
-      SquareSet moves = SquareSet.empty;
-      for (final path in castles.paths[side]!.values) {
-        if (path.intersect(board.occupied).isEmpty) {
-          moves = moves | path;
-        }
+    SquareSet moves = SquareSet.empty;
+    for (final path in castles.paths[turn]!.values) {
+      if (path.intersect(board.occupied).isEmpty) {
+        moves = moves | path;
       }
-      castlingMoves[board.kingOf(side)!] = moves;
     }
+    castlingMoves[board.kingOf(turn)!] = moves;
     return castlingMoves.lock;
   }
 

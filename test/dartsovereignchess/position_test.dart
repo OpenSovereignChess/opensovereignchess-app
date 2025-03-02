@@ -171,31 +171,46 @@ void main() {
   test('legalCastlingMoves from initial position', () {
     final pos = SovereignChess.fromSetup(Setup.standard);
     expect(pos.legalCastlingMoves[Square.i1]!, SquareSet.empty);
-    expect(pos.legalCastlingMoves[Square.i16]!, SquareSet.empty);
+    expect(pos.legalCastlingMoves[Square.i16], null);
   });
 
   test('legalCastlingMoves', () {
+    // Player 1 can castle with the two inner (white) rooks
     Position pos = SovereignChess.fromSetup(Setup.parseFen(
         '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/16/16/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
     expect(
         pos.legalCastlingMoves[Square.i1]!,
         SquareSet.fromSquares(
             [Square.f1, Square.g1, Square.h1, Square.j1, Square.k1]));
+    expect(pos.legalCastlingMoves[Square.i16], null);
+
+    // Player 2 can castle with the two inner (black) rooks
+    pos = SovereignChess.fromSetup(Setup.parseFen(
+        '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/16/16/16/16/16/16/2pr1wr3wk2wr1gr2 2 w b CELNceln'));
+    expect(pos.legalCastlingMoves[Square.i1], null);
     expect(
         pos.legalCastlingMoves[Square.i16]!,
         SquareSet.fromSquares(
             [Square.f16, Square.g16, Square.h16, Square.j16, Square.k16]));
 
+    // Player 1 can only castle queenside because there is a blocking piece on the kingside
     pos = SovereignChess.fromSetup(Setup.parseFen(
         '2vr1brbn2bk2br1yr2/16/16/16/16/16/16/16/16/16/16/16/16/16/16/2pr1wr3wkwb1wr1gr2 1 w b CELNceln'));
     expect(pos.legalCastlingMoves[Square.i1]!,
         SquareSet.fromSquares([Square.f1, Square.g1, Square.h1]));
+    expect(pos.legalCastlingMoves[Square.i16], null);
+
+    // Player 2 can only castle kingside because there is a blocking piece on the queenside
+    pos = SovereignChess.fromSetup(Setup.parseFen(
+        '2vr1brbn2bk2br1yr2/16/16/16/16/16/16/16/16/16/16/16/16/16/16/2pr1wr3wkwb1wr1gr2 2 w b CELNceln'));
+    expect(pos.legalCastlingMoves[Square.i1], null);
     expect(pos.legalCastlingMoves[Square.i16]!,
         SquareSet.fromSquares([Square.j16, Square.k16]));
 
+    // Player 2 can castle with queenside outer (violet) rook
     pos = SovereignChess.fromSetup(Setup.parseFen(
-        '2vr5bk7/16/16/16/16/8bp7/16/16/16/16/16/16/16/16/16/2pr1wr3wkwb1wr1gr2 1 w b celn'));
-    expect(pos.legalCastlingMoves[Square.i1], SquareSet.empty);
+        '2vr5bk7/16/16/16/16/8bp7/16/16/16/16/16/16/16/16/16/2pr1wr3wkwb1wr1gr2 2 w b celn'));
+    expect(pos.legalCastlingMoves[Square.i1], null);
     expect(
         pos.legalCastlingMoves[Square.i16]!,
         SquareSet.fromSquares(
