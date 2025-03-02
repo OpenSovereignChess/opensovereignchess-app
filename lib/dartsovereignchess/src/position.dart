@@ -294,7 +294,9 @@ abstract class Position<T extends Position<T>> {
   }
 
   /// Returns whether we can castle in this position.
-  bool get canCastle => legalCastlingMoves.isNotEmpty;
+  bool get canCastle => legalCastlingMoves.entries
+      .map((entry) => entry.value.isNotEmpty)
+      .any((value) => value);
 
   /// Gets all the legal castling moves of this position.
   ///

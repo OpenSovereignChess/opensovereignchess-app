@@ -219,6 +219,11 @@ class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
               activeColor: Theme.of(context).colorScheme.primary,
               onChanged: canCastle
                   ? (bool value) {
+                      ref
+                          .read(overTheBoardGameControllerProvider(
+                                  widget.initialFen)
+                              .notifier)
+                          .setCastlingMode(value);
                       setState(() {
                         _isCastling = value;
                       });

@@ -172,6 +172,7 @@ void main() {
     final pos = SovereignChess.fromSetup(Setup.standard);
     expect(pos.legalCastlingMoves[Square.i1]!, SquareSet.empty);
     expect(pos.legalCastlingMoves[Square.i16], null);
+    expect(pos.canCastle, false);
   });
 
   test('legalCastlingMoves', () {
@@ -183,6 +184,7 @@ void main() {
         SquareSet.fromSquares(
             [Square.f1, Square.g1, Square.h1, Square.j1, Square.k1]));
     expect(pos.legalCastlingMoves[Square.i16], null);
+    expect(pos.canCastle, true);
 
     // Player 2 can castle with the two inner (black) rooks
     pos = SovereignChess.fromSetup(Setup.parseFen(

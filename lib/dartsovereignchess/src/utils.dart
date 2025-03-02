@@ -16,3 +16,17 @@ IMap<Square, ISet<Square>> makeLegalMoves(Position pos) {
   }
   return IMap(result);
 }
+
+/// Returns all the legal castling moves of the [Position] in a convenient format.
+IMap<Square, ISet<Square>> makeLegalCastlingMoves(Position pos) {
+  final Map<Square, ISet<Square>> result = {};
+  for (final entry in pos.legalCastlingMoves.entries) {
+    final dests = entry.value.squares;
+    if (dests.isNotEmpty) {
+      final from = entry.key;
+      final destSet = dests.toSet();
+      result[from] = ISet(destSet);
+    }
+  }
+  return IMap(result);
+}

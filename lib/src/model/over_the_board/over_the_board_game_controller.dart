@@ -43,6 +43,10 @@ class OverTheBoardGameController extends _$OverTheBoardGameController {
       position: newPos,
     );
   }
+
+  void setCastlingMode(bool value) {
+    state = state.copyWith(inCastlingMode: value);
+  }
 }
 
 class OverTheBoardGameState {
@@ -50,6 +54,7 @@ class OverTheBoardGameState {
     required this.position,
     this.promotionMove,
     this.promotionColor,
+    this.inCastlingMode = false,
   });
 
   final Position position;
@@ -58,15 +63,19 @@ class OverTheBoardGameState {
 
   final PieceColor? promotionColor;
 
+  final bool inCastlingMode;
+
   OverTheBoardGameState copyWith({
     Position? position,
     NormalMove? promotionMove,
     PieceColor? promotionColor,
+    bool? inCastlingMode,
   }) {
     return OverTheBoardGameState(
       position: position ?? this.position,
       promotionMove: promotionMove,
       promotionColor: promotionColor,
+      inCastlingMode: inCastlingMode ?? this.inCastlingMode,
     );
   }
 
@@ -83,7 +92,9 @@ class OverTheBoardGameState {
     return Object.hash(position, promotionMove, promotionColor);
   }
 
-  IMap<Square, ISet<Square>> get legalMoves => makeLegalMoves(position);
+  IMap<Square, ISet<Square>> get legalMoves => inCastlingMode
+      ? makeLegalCastlingMoves(position)
+      : makeLegalMoves(position);
 
   String get fen => position.fen;
 
