@@ -34,6 +34,13 @@ void main() {
       expect(castles, Castles.standard);
     });
 
+    test('fromSetup with outer rooks', () {
+      final castles = Castles.fromSetup(Setup.parseFen(
+          '2vr5bk2br1yr2/16/16/16/16/8bp7/16/16/16/16/16/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
+      expect(castles.pathOf(Side.player2, CastlingSide.queen).squares,
+          equals([Square.d16, Square.e16, Square.f16, Square.g16, Square.h16]));
+    });
+
     test('discard rook', () {
       expect(Castles.standard.discardRookAt(Square.a4), Castles.standard);
       expect(

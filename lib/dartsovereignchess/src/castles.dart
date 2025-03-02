@@ -399,7 +399,7 @@ Square? _getClosestRook(CastlingSide cs, Square? king, SquareSet rooks) {
       if (rook < king) {
         maxRook = rook;
       } else {
-        return maxRook;
+        break;
       }
     } else {
       if (rook > king) {
@@ -407,5 +407,5 @@ Square? _getClosestRook(CastlingSide cs, Square? king, SquareSet rooks) {
       }
     }
   }
-  return null;
+  return maxRook;
 }

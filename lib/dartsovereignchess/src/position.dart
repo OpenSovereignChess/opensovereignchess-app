@@ -300,16 +300,21 @@ abstract class Position<T extends Position<T>> {
   ///
   /// Returns a [SquareSet] of all the legal castling moves for each [Square].
   IMap<Square, SquareSet> get legalCastlingMoves {
-    //print('castles: $castles');
-    return IMap({
-      for (final s in castles.castlingRights.squares)
-        s: SquareSet.empty // TODO: implement castling
-    });
-    //final context = _makeContext();
-    //return IMap({
-    //  for (final s in board.kingsAndRooksOf(turn).squares)
-    //    s: _legalMovesOf(s, context: context)
-    //});
+    if (board.kingOf(turn) == null || castles.castlingRights.isEmpty) {
+      return IMap({});
+    }
+    Map<Square, SquareSet> castlingMoves = {};
+    // If there are any pieces in the castling path, we cannot castle.
+    for (final side in Side.values) {
+      SquareSet moves = SquareSet.empty;
+      for (final path in castles.paths[side]!.values) {
+        if (path.intersect(board.occupied).isEmpty) {
+          moves = moves | path;
+        }
+      }
+      castlingMoves[board.kingOf(side)!] = moves;
+    }
+    return castlingMoves.lock;
   }
 
   // Create a mask of colored squares we cannot move onto.
