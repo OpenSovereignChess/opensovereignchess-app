@@ -191,11 +191,22 @@ abstract class Position<T extends Position<T>> {
           newBoard = newBoard.addControlledColor(turn, to.color!);
         }
 
+        // Update castling rights when:
+        // - the king moves
+        // - a rook moves
+        // - when we promote to a king
+        Castles newCastles = castles;
+        if (newPiece.role == Role.king) {
+          newCastles = newCastles.discardSide(turn);
+        } else if (newPiece.role == Role.rook) {
+          newCastles = newCastles.discardRookAt(from);
+        }
+
         return copyWith(
           ply: ply + 1,
           board: newBoard,
           turn: turn.opposite,
-          castles: castles, // TODO: update castles
+          castles: newCastles,
         );
     }
   }
@@ -373,7 +384,7 @@ abstract class Position<T extends Position<T>> {
           ply: ply + 1,
           board: newBoard,
           turn: turn.opposite,
-          castles: castles, // TODO: update castles
+          castles: castles.discardSide(turn),
         );
     }
   }

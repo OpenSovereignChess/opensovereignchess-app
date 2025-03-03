@@ -225,5 +225,33 @@ void main() {
     pos = pos.playCastle(NormalMove(from: Square.i1, to: Square.j1));
     expect(pos.board.pieceAt(Square.j1), Piece.whiteKing);
     expect(pos.board.pieceAt(Square.i1), Piece.whiteRook);
+    expect(pos.castles.rookOf(Side.player1, CastlingSide.king), null);
+    expect(pos.castles.rookOf(Side.player1, CastlingSide.queen), null);
+  });
+
+  test('moving a king or rook updates castle', () {
+    // Move king
+    Position pos = SovereignChess.fromSetup(Setup.parseFen(
+        '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/16/16/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
+    Move move = NormalMove(from: Square.i1, to: Square.i2);
+    pos = pos.play(move);
+    expect(pos.castles.rookOf(Side.player1, CastlingSide.king), null);
+    expect(pos.castles.rookOf(Side.player1, CastlingSide.queen), null);
+
+    // Move rook
+    pos = SovereignChess.fromSetup(Setup.parseFen(
+        '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/16/16/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
+    move = NormalMove(from: Square.e1, to: Square.e2);
+    pos = pos.play(move);
+    expect(pos.castles.rookOf(Side.player1, CastlingSide.king), Square.l1);
+    expect(pos.castles.rookOf(Side.player1, CastlingSide.queen), Square.c1);
+
+    // Promote to king, thereby moving the king
+    pos = SovereignChess.fromSetup(Setup.parseFen(
+        '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/16/7wp8/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
+    move = NormalMove(from: Square.h6, to: Square.h7, promotion: Role.king);
+    pos = pos.play(move);
+    expect(pos.castles.rookOf(Side.player1, CastlingSide.king), null);
+    expect(pos.castles.rookOf(Side.player1, CastlingSide.queen), null);
   });
 }
