@@ -170,13 +170,12 @@ class _CastleSwitch extends ConsumerStatefulWidget {
 }
 
 class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
-  bool _isCastling = false;
-
   @override
   Widget build(BuildContext context) {
     final gameState =
         ref.watch(overTheBoardGameControllerProvider(widget.initialFen));
     final canCastle = gameState.position.canCastle;
+    final isCastling = gameState.inCastlingMode;
 
     return Card(
       child: Padding(
@@ -189,7 +188,7 @@ class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
                 Row(
                   children: [
                     Icon(Icons.castle,
-                        color: _isCastling
+                        color: isCastling
                             ? Theme.of(context).colorScheme.primary
                             : canCastle
                                 ? Colors.grey
@@ -215,7 +214,7 @@ class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
             ),
             const Spacer(),
             Switch(
-              value: _isCastling,
+              value: isCastling,
               activeColor: Theme.of(context).colorScheme.primary,
               onChanged: canCastle
                   ? (bool value) {
@@ -224,9 +223,6 @@ class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
                                   widget.initialFen)
                               .notifier)
                           .setCastlingMode(value);
-                      setState(() {
-                        _isCastling = value;
-                      });
                     }
                   : null,
             ),
