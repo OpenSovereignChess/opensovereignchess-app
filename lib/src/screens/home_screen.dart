@@ -118,8 +118,8 @@ class _Menu extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
-          const Spacer(flex: 1),
-          _CastleSwitch(initialFen: initialFen),
+          //const Spacer(flex: 1),
+          //_CastleSwitch(initialFen: initialFen),
           TextButton(
             onPressed: gameState.canDefect(gameState.position.turn)
                 ? () async {
@@ -135,7 +135,7 @@ class _Menu extends ConsumerWidget {
                 : null,
             child: const Text('Defect'),
           ),
-          const Spacer(flex: 1),
+          //const Spacer(flex: 1),
           TextButton(
             onPressed: () {
               final fen =
@@ -212,7 +212,7 @@ class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
                   ),
               ],
             ),
-            const Spacer(),
+            //const Spacer(flex: 1),
             Switch(
               value: isCastling,
               activeColor: Theme.of(context).colorScheme.primary,
