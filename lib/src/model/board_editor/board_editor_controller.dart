@@ -186,6 +186,6 @@ class BoardEditorState with _$BoardEditorState {
 
   String get fen {
     final boardFen = writeFen(pieces.unlock);
-    return '$boardFen ${sideToPlay == Side.player1 ? '1' : '2'} w b - $ply';
+    return '$boardFen ${sideToPlay == Side.player1 ? '1' : '2'} w b CELNceln $ply';
   }
 }
