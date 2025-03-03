@@ -118,8 +118,7 @@ class _Menu extends ConsumerWidget {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
-          //const Spacer(flex: 1),
-          //_CastleSwitch(initialFen: initialFen),
+          _CastleSwitch(initialFen: initialFen),
           TextButton(
             onPressed: gameState.canDefect(gameState.position.turn)
                 ? () async {
@@ -135,7 +134,7 @@ class _Menu extends ConsumerWidget {
                 : null,
             child: const Text('Defect'),
           ),
-          //const Spacer(flex: 1),
+          const SizedBox(height: 16),
           TextButton(
             onPressed: () {
               final fen =
@@ -177,58 +176,86 @@ class _CastleSwitchState extends ConsumerState<_CastleSwitch> {
     final canCastle = gameState.position.canCastle;
     final isCastling = gameState.inCastlingMode;
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.castle,
-                        color: isCastling
-                            ? Theme.of(context).colorScheme.primary
-                            : canCastle
-                                ? Colors.grey
-                                : Colors.grey.withValues(alpha: 0.5)),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Castle',
-                      style: TextStyle(
-                        color:
-                            canCastle ? null : Theme.of(context).disabledColor,
-                      ),
-                    ),
-                  ],
-                ),
-                if (!canCastle)
-                  Text(
-                    'Not available in current position',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context).disabledColor,
-                        ),
-                  ),
-              ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            'Castle',
+            style: TextStyle(
+              color: canCastle ? null : Theme.of(context).disabledColor,
             ),
-            //const Spacer(flex: 1),
-            Switch(
-              value: isCastling,
-              activeColor: Theme.of(context).colorScheme.primary,
-              onChanged: canCastle
-                  ? (bool value) {
-                      ref
-                          .read(overTheBoardGameControllerProvider(
-                                  widget.initialFen)
-                              .notifier)
-                          .setCastlingMode(value);
-                    }
-                  : null,
-            ),
-          ],
+          ),
         ),
-      ),
+        Flexible(
+          child: Switch(
+            value: isCastling,
+            activeColor: Theme.of(context).colorScheme.primary,
+            onChanged: canCastle
+                ? (bool value) {
+                    ref
+                        .read(overTheBoardGameControllerProvider(
+                                widget.initialFen)
+                            .notifier)
+                        .setCastlingMode(value);
+                  }
+                : null,
+          ),
+        ),
+      ],
     );
+    //return Card(
+    //  child: Padding(
+    //    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+    //    child: Row(
+    //      children: [
+    //        Column(
+    //          crossAxisAlignment: CrossAxisAlignment.start,
+    //          children: [
+    //            Row(
+    //              children: [
+    //                Icon(Icons.castle,
+    //                    color: isCastling
+    //                        ? Theme.of(context).colorScheme.primary
+    //                        : canCastle
+    //                            ? Colors.grey
+    //                            : Colors.grey.withValues(alpha: 0.5)),
+    //                const SizedBox(width: 8),
+    //                Text(
+    //                  'Castle',
+    //                  style: TextStyle(
+    //                    color:
+    //                        canCastle ? null : Theme.of(context).disabledColor,
+    //                  ),
+    //                ),
+    //              ],
+    //            ),
+    //            if (!canCastle)
+    //              Text(
+    //                'Not available in current position',
+    //                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+    //                      color: Theme.of(context).disabledColor,
+    //                    ),
+    //              ),
+    //          ],
+    //        ),
+    //        //const Spacer(flex: 1),
+    //        Switch(
+    //          value: isCastling,
+    //          activeColor: Theme.of(context).colorScheme.primary,
+    //          onChanged: canCastle
+    //              ? (bool value) {
+    //                  ref
+    //                      .read(overTheBoardGameControllerProvider(
+    //                              widget.initialFen)
+    //                          .notifier)
+    //                      .setCastlingMode(value);
+    //                }
+    //              : null,
+    //        ),
+    //      ],
+    //    ),
+    //  ),
+    //);
   }
 }
