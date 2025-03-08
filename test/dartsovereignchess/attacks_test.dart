@@ -170,4 +170,67 @@ void main() {
 '''),
     );
   });
+
+  test('Pawn attacks', () {
+    expect(
+      pawnAttacks(Square.d4),
+      SquareSet.fromSquares([Square.c5, Square.e5, Square.e3]),
+    );
+    expect(
+      pawnAttacks(Square.l4),
+      SquareSet.fromSquares([Square.k5, Square.m5, Square.k3]),
+    );
+    expect(
+      pawnAttacks(Square.d13),
+      SquareSet.fromSquares([Square.c12, Square.e12, Square.e14]),
+    );
+    expect(
+      pawnAttacks(Square.l13),
+      SquareSet.fromSquares([Square.k12, Square.m12, Square.k14]),
+    );
+
+    // On first ring
+    expect(
+      pawnAttacks(Square.d1),
+      SquareSet.fromSquares([Square.c2, Square.e2]),
+    );
+    expect(
+      pawnAttacks(Square.d16),
+      SquareSet.fromSquares([Square.c15, Square.e15]),
+    );
+    expect(
+      pawnAttacks(Square.a4),
+      SquareSet.fromSquares([Square.b5, Square.b3]),
+    );
+    expect(
+      pawnAttacks(Square.p13),
+      SquareSet.fromSquares([Square.o12, Square.o14]),
+    );
+
+    // On edge of quadrant
+    expect(
+      pawnAttacks(Square.h2),
+      SquareSet.fromSquares([Square.g3, Square.i3]),
+    );
+    expect(
+      pawnAttacks(Square.i4),
+      SquareSet.fromSquares([Square.h5, Square.j5]),
+    );
+    expect(
+      pawnAttacks(Square.d9),
+      SquareSet.fromSquares([Square.e10, Square.e8]),
+    );
+    expect(
+      pawnAttacks(Square.i15),
+      SquareSet.fromSquares([Square.h14, Square.j14]),
+    );
+    expect(
+      pawnAttacks(Square.l9),
+      SquareSet.fromSquares([Square.k8, Square.k10]),
+    );
+    expect(
+      pawnAttacks(Square.l8),
+      SquareSet.fromSquares([Square.k7, Square.k9]),
+    );
+  });
 }

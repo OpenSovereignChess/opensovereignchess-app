@@ -116,13 +116,35 @@ final _kingAttacks =
 final _knightAttacks =
     _tabulate((sq) => _computeRange(sq, [-33, -31, -18, -14, 14, 18, 31, 33]));
 
-final _pawnAttacks = _tabulate((sq) {
-  switch (sq.rank) {
-    case < Rank.ninth:
-      return _computeRange(sq, [15, 17]);
-    default:
-      return _computeRange(sq, [-17, -15]);
+// Clamp value to the range of File or Rank values.
+int _clamp(int i) {
+  if (i < 0) {
+    return 0;
   }
+  if (i >= File.values.length) {
+    return File.values.last as int;
+  }
+  return i;
+}
+
+final _pawnAttacks = _tabulate((sq) {
+  SquareSet attacks = switch (sq.quadrant) {
+    Quadrant.q1 => _computeRange(sq, [15, 17, -15]),
+    Quadrant.q2 => _computeRange(sq, [15, 17, -17]),
+    Quadrant.q3 => _computeRange(sq, [17, -15, -17]),
+    Quadrant.q4 => _computeRange(sq, [15, -15, -17]),
+  };
+  // If a pawn is on the edge a quadrant, it can't attack backwards.
+  if (sq.file == File.h || sq.file == File.i) {
+    final mod = sq.rank > Rank.eighth ? 1 : -1;
+    attacks = attacks.diff(SquareSet.fromRank(_clamp(sq.rank + mod) as Rank));
+  }
+  if (sq.rank == Rank.eighth || sq.rank == Rank.ninth) {
+    final mod = sq.file > File.h ? 1 : -1;
+    attacks = attacks.diff(SquareSet.fromFile(_clamp(sq.file + mod) as File));
+  }
+
+  return attacks;
 });
 
 final _northRange = _tabulate((sq) {
@@ -227,7 +249,7 @@ final _rankMask = <SquareSet>[
   SquareSet.ninthRankMask,
   SquareSet.tenthRankMask,
   SquareSet.eleventhRankMask,
-  SquareSet.twelvthRankMask,
+  SquareSet.twelfthRankMask,
   SquareSet.thirteenthRankMask,
   SquareSet.fourteenthRankMask,
   SquareSet.fifteenthRankMask,

@@ -244,6 +244,14 @@ extension type const Rank._(int value) implements int {
   String get name => _names[value];
 }
 
+/// A quadrant of the chessboard.
+enum Quadrant {
+  q1,
+  q2,
+  q3,
+  q4;
+}
+
 /// A square of the chessboard.
 ///
 /// The square is represented with an integer ranging from 0 to 255, using a
@@ -792,6 +800,15 @@ extension type const Square._(int value) implements int {
 
   /// The rank of the square on the board.
   Rank get rank => Rank(value >> 4);
+
+  /// The quadrant of the square on the board.
+  Quadrant get quadrant {
+    final file = this.file;
+    final rank = this.rank;
+    return file < File.i
+        ? (rank < Rank.ninth ? Quadrant.q1 : Quadrant.q3)
+        : (rank < Rank.ninth ? Quadrant.q2 : Quadrant.q4);
+  }
 
   /// Unique identifier of the square, using pure algebraic notation.
   String get name => file.name + rank.name;

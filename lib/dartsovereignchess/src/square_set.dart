@@ -65,6 +65,48 @@ class SquareSet {
         .fold(SquareSet.empty, (left, right) => left | right);
   }
 
+  /// Creates a [SquareSet] containing all squares of the given [Rank].
+  factory SquareSet.fromRank(Rank rank) => switch (rank) {
+        Rank.first => firstRankMask,
+        Rank.second => secondRankMask,
+        Rank.third => thirdRankMask,
+        Rank.fourth => fourthRankMask,
+        Rank.fifth => fifthRankMask,
+        Rank.sixth => sixthRankMask,
+        Rank.seventh => seventhRankMask,
+        Rank.eighth => eigthRankMask,
+        Rank.ninth => ninthRankMask,
+        Rank.tenth => tenthRankMask,
+        Rank.eleventh => eleventhRankMask,
+        Rank.twelfth => twelfthRankMask,
+        Rank.thirteenth => thirteenthRankMask,
+        Rank.fourteenth => fourteenthRankMask,
+        Rank.fifteenth => fifteenthRankMask,
+        Rank.sixteenth => sixteenthRankMask,
+        _ => throw Exception('invalid rank'),
+      };
+
+  /// Creates a [SquareSet] containing all squares of the given [File].
+  factory SquareSet.fromFile(File file) => switch (file) {
+        File.a => aFileMask,
+        File.b => bFileMask,
+        File.c => cFileMask,
+        File.d => dFileMask,
+        File.e => eFileMask,
+        File.f => fFileMask,
+        File.g => gFileMask,
+        File.h => hFileMask,
+        File.i => iFileMask,
+        File.j => jFileMask,
+        File.k => kFileMask,
+        File.l => lFileMask,
+        File.m => mFileMask,
+        File.n => nFileMask,
+        File.o => oFileMask,
+        File.p => pFileMask,
+        _ => throw Exception('invalid file'),
+      };
+
   /// Create a [SquareSet] containing all squares of the given backrank of [Side].
   ///
   /// If player2 chooses to play as white on the first turn, then player2 will
@@ -110,7 +152,7 @@ class SquareSet {
   static const ninthRankMask = SquareSet(0, 0, 0, 0xFFFF, 0, 0, 0, 0);
   static const tenthRankMask = SquareSet(0, 0, 0, 0xFFFF0000, 0, 0, 0, 0);
   static const eleventhRankMask = SquareSet(0, 0, 0xFFFF, 0, 0, 0, 0, 0);
-  static const twelvthRankMask = SquareSet(0, 0, 0xFFFF0000, 0, 0, 0, 0, 0);
+  static const twelfthRankMask = SquareSet(0, 0, 0xFFFF0000, 0, 0, 0, 0, 0);
   static const thirteenthRankMask = SquareSet(0, 0xFFFF, 0, 0, 0, 0, 0, 0);
   static const fourteenthRankMask = SquareSet(0, 0xFFFF0000, 0, 0, 0, 0, 0, 0);
   static const fifteenthRankMask = SquareSet(0xFFFF, 0, 0, 0, 0, 0, 0, 0);
