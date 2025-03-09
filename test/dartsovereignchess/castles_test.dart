@@ -79,5 +79,34 @@ void main() {
                 const {CastlingSide.queen: null, CastlingSide.king: null})
           })));
     });
+
+    test('discardRookAt', () {
+      expect(
+        Castles.standard
+            .discardRookAt(Square.e1)
+            .pathOf(Side.player1, CastlingSide.queen),
+        SquareSet.fromSquares(
+            [Square.d1, Square.e1, Square.f1, Square.g1, Square.h1]),
+      );
+      expect(
+        Castles.standard
+            .discardRookAt(Square.l1)
+            .pathOf(Side.player1, CastlingSide.king),
+        SquareSet.fromSquares([Square.j1, Square.k1, Square.l1, Square.m1]),
+      );
+      expect(
+        Castles.standard
+            .discardRookAt(Square.e16)
+            .pathOf(Side.player2, CastlingSide.queen),
+        SquareSet.fromSquares(
+            [Square.d16, Square.e16, Square.f16, Square.g16, Square.h16]),
+      );
+      expect(
+        Castles.standard
+            .discardRookAt(Square.l16)
+            .pathOf(Side.player2, CastlingSide.king),
+        SquareSet.fromSquares([Square.j16, Square.k16, Square.l16, Square.m16]),
+      );
+    });
   });
 }

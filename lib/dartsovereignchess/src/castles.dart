@@ -174,23 +174,53 @@ abstract class Castles {
       };
 
   /// Returns a new [Castles] instance with the given rook discarded.
+  ///
+  /// When we discard a rook, we should fall back to any remaining rooks.
   Castles discardRookAt(Square square) {
-    // When we discard a rook, we should fall back to any remaining rooks
     final newCastlingRights = castlingRights.withoutSquare(square);
+
+    if (_whiteRookQueenSide == square) {
+      final newRook =
+          _getClosestRook(CastlingSide.queen, _whiteKing, newCastlingRights);
+      return copyWith(
+        castlingRights: newCastlingRights,
+        whiteRookQueenSide: newRook,
+        whitePathQueenSide:
+            newRook != null ? between(newRook, _whiteKing!) : SquareSet.empty,
+      );
+    }
+    if (_whiteRookKingSide == square) {
+      final newRook =
+          _getClosestRook(CastlingSide.king, _whiteKing, newCastlingRights);
+      return copyWith(
+        castlingRights: newCastlingRights,
+        whiteRookKingSide: newRook,
+        whitePathKingSide:
+            newRook != null ? between(newRook, _whiteKing!) : SquareSet.empty,
+      );
+    }
+    if (_blackRookQueenSide == square) {
+      final newRook =
+          _getClosestRook(CastlingSide.queen, _blackKing, newCastlingRights);
+      return copyWith(
+        castlingRights: newCastlingRights,
+        blackRookQueenSide: newRook,
+        blackPathQueenSide:
+            newRook != null ? between(newRook, _blackKing!) : SquareSet.empty,
+      );
+    }
+    if (_blackRookKingSide == square) {
+      final newRook =
+          _getClosestRook(CastlingSide.king, _blackKing, newCastlingRights);
+      return copyWith(
+        castlingRights: newCastlingRights,
+        blackRookKingSide: newRook,
+        blackPathKingSide:
+            newRook != null ? between(newRook, _blackKing!) : SquareSet.empty,
+      );
+    }
     return copyWith(
       castlingRights: newCastlingRights,
-      whiteRookQueenSide: _whiteRookQueenSide == square
-          ? _getClosestRook(CastlingSide.queen, _whiteKing, newCastlingRights)
-          : _whiteRookQueenSide,
-      whiteRookKingSide: _whiteRookKingSide == square
-          ? _getClosestRook(CastlingSide.king, _whiteKing, newCastlingRights)
-          : _whiteRookKingSide,
-      blackRookQueenSide: _blackRookQueenSide == square
-          ? _getClosestRook(CastlingSide.queen, _blackKing, newCastlingRights)
-          : _blackRookQueenSide,
-      blackRookKingSide: _blackRookKingSide == square
-          ? _getClosestRook(CastlingSide.king, _blackKing, newCastlingRights)
-          : _blackRookKingSide,
     );
   }
 
@@ -202,17 +232,19 @@ abstract class Castles {
       whiteRookKingSide: side == Side.player1 ? null : _whiteRookKingSide,
       blackRookQueenSide: side == Side.player2 ? null : _blackRookQueenSide,
       blackRookKingSide: side == Side.player2 ? null : _blackRookKingSide,
+      whitePathQueenSide:
+          side == Side.player1 ? SquareSet.empty : _whitePathQueenSide,
+      whitePathKingSide:
+          side == Side.player1 ? SquareSet.empty : _whitePathKingSide,
+      blackPathQueenSide:
+          side == Side.player2 ? SquareSet.empty : _blackPathQueenSide,
+      blackPathKingSide:
+          side == Side.player2 ? SquareSet.empty : _blackPathKingSide,
     );
   }
 
   Castles _add(Side side, CastlingSide cs, Square king, Square rook) {
-    //final kingTo = kingCastlesTo(side, cs);
-    //final rookTo = rookCastlesTo(side, cs);
     final path = between(rook, king);
-    //.withSquare(rookTo)
-    //.union(between(king, kingTo).withSquare(kingTo))
-    //.withoutSquare(king)
-    //.withoutSquare(rook);
     return copyWith(
       castlingRights: castlingRights.withSquare(rook),
       whiteRookQueenSide: side == Side.player1 && cs == CastlingSide.queen
