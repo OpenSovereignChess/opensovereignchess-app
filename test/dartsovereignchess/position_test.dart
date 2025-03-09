@@ -219,6 +219,20 @@ void main() {
             [Square.d16, Square.e16, Square.f16, Square.g16, Square.h16]));
   });
 
+  test('legalCastlingMoves detects check', () {
+    // King cannot castle while in check
+    Position pos = SovereignChess.fromSetup(Setup.parseFen(
+        '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/8bq7/16/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
+    expect(pos.isCheck, true);
+    expect(pos.legalCastlingMoves[Square.i1], null);
+
+    // King cannot castle through check
+    pos = SovereignChess.fromSetup(Setup.parseFen(
+        '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/6bq9/16/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
+    expect(pos.legalCastlingMoves[Square.i1]!,
+        SquareSet.fromSquares([Square.j1, Square.k1]));
+  });
+
   test('playCastle', () {
     Position pos = SovereignChess.fromSetup(Setup.parseFen(
         '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/16/16/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
