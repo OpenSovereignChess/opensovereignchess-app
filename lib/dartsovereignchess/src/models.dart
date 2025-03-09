@@ -11,6 +11,8 @@ enum Side {
 
   /// Gets the opposite side.
   Side get opposite => this == Side.player1 ? Side.player2 : Side.player1;
+
+  String get name => this == Side.player1 ? 'Player 1' : 'Player 2';
 }
 
 /// Piece color, such as white, black, etc.

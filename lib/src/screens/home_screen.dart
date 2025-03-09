@@ -114,10 +114,23 @@ class _Menu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(overTheBoardGameControllerProvider(initialFen));
 
+    final turnMessage = gameState.position.isCheckmate
+        ? '${gameState.position.turn.opposite.name} wins!'
+        : '${gameState.position.turn.name} to move';
+
     return Expanded(
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
+          Center(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              child: Text(
+                turnMessage,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+            ),
+          ),
           _CastleSwitch(initialFen: initialFen),
           TextButton(
             onPressed: gameState.canDefect(gameState.position.turn)
