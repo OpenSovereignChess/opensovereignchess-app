@@ -1,16 +1,1 @@
-{
-  "hosting": {
-    "public": "build/web",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ]
-  }
-}
+{"hosting":{"public":"build/web","ignore":["firebase.json","**/.*","**/node_modules/**"],"rewrites":[{"source":"**","destination":"/index.html"}]},"flutter":{"platforms":{"android":{"default":{"projectId":"sovchess","appId":"1:476512650017:android:9a9fbe3259bbe1dd743460","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"sovchess","configurations":{"android":"1:476512650017:android:9a9fbe3259bbe1dd743460","ios":"1:476512650017:ios:fc053b600cefd1bc743460","macos":"1:476512650017:ios:fc053b600cefd1bc743460","web":"1:476512650017:web:ac7123131f9b7702743460","windows":"1:476512650017:web:692edd14c4a61acd743460"}}}}}}

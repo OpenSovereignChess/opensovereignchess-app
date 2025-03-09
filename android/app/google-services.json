@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "476512650017",
+    "project_id": "sovchess",
+    "storage_bucket": "sovchess.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:476512650017:android:9a9fbe3259bbe1dd743460",
+        "android_client_info": {
+          "package_name": "com.example.opensovereignchess_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjMMDInwiL6w8KvNHfXi2zqOrydU-LZUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
