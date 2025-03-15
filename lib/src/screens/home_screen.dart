@@ -115,8 +115,8 @@ class _Menu extends ConsumerWidget {
     final gameState = ref.watch(overTheBoardGameControllerProvider(initialFen));
 
     final turnMessage = gameState.position.isCheckmate
-        ? '${gameState.position.turn.opposite.name} wins!'
-        : '${gameState.position.turn.name} to move';
+        ? '${gameState.position.ownedColorOf(gameState.position.turn.opposite)} wins!'
+        : '${gameState.position.ownedColor} to move';
 
     return Expanded(
       child: ListView(

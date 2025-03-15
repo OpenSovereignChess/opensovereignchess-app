@@ -67,6 +67,9 @@ enum PieceColor {
         PieceColor.navy => 'n',
         PieceColor.violet => 'v',
       };
+
+  @override
+  String toString() => name[0].toUpperCase() + name.substring(1);
 }
 
 /// The chessboard castling side.

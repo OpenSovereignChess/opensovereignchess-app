@@ -80,6 +80,10 @@ abstract class Position<T extends Position<T>> {
   /// Returns whether the given [Side] can defect.
   bool canDefect(Side side) => board.controlledColorsOf(side).isNotEmpty;
 
+  PieceColor get ownedColor => board.ownedColorOf(turn);
+
+  PieceColor ownedColorOf(Side side) => board.ownedColorOf(side);
+
   ISet<PieceColor> get controlledColors => board.controlledColorsOf(turn);
 
   /// Tests if the position has at least one legal move.

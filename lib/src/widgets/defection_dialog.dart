@@ -20,8 +20,7 @@ Future<PieceColor?> showDefectionDialog(
               onPressed: () {
                 Navigator.of(context).pop(color);
               },
-              child:
-                  Text(color.name[0].toUpperCase() + color.name.substring(1)),
+              child: Text(color.toString()),
             ),
           )
           .toList(),
