@@ -226,11 +226,11 @@ void main() {
     expect(pos.isCheck, true);
     expect(pos.legalCastlingMoves[Square.i1], null);
 
-    // King cannot castle through check
+    // King cannot castle through check but can castle up to attacked square
     pos = SovereignChess.fromSetup(Setup.parseFen(
         '2vr1br3bk2br1yr2/16/16/16/16/16/16/16/16/6bq9/16/16/16/16/16/2pr1wr3wk2wr1gr2 1 w b CELNceln'));
     expect(pos.legalCastlingMoves[Square.i1]!,
-        SquareSet.fromSquares([Square.j1, Square.k1]));
+        SquareSet.fromSquares([Square.h1, Square.j1, Square.k1]));
   });
 
   test('playCastle', () {

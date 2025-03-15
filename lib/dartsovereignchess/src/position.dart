@@ -320,18 +320,19 @@ abstract class Position<T extends Position<T>> {
     }
     Map<Square, SquareSet> castlingMoves = {};
     SquareSet moves = SquareSet.empty;
-    for (final path in castles.paths[turn]!.values) {
+    for (final entry in castles.paths[turn]!.entries) {
+      final path = entry.value;
       // Cannot be any pieces in the path
       if (path.intersect(board.occupied).isNotEmpty) {
         continue;
       }
-      // King cannot move through check
-      if (path.squares
-          .map((s) => kingAttackers(s, turn.opposite))
-          .any((ss) => ss.isNotEmpty)) {
-        continue;
-      }
-      moves = moves | path;
+      // Cannot move through check, but can move until check
+      final orientedSquares = entry.key == CastlingSide.king
+          ? path.squares
+          : path.squares.toList().reversed;
+      final unattackedPath = orientedSquares
+          .takeWhile((s) => kingAttackers(s, turn.opposite).isEmpty);
+      moves = moves | SquareSet.fromSquares(unattackedPath);
     }
     castlingMoves[board.kingOf(turn)!] = moves;
     return castlingMoves.lock;
