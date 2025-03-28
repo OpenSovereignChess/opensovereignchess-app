@@ -14,6 +14,7 @@ flutter run -d chrome
 Before committing:
 
 ```bash
+flutter test
 dart format .
 dart analyze
 ```
