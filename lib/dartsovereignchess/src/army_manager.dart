@@ -136,9 +136,11 @@ class ArmyManager {
       case Side.player1:
         return copyWith(
           p1Controlled: p1Controlled.add(color),
+          p2Controlled: p2Controlled.remove(color),
         );
       case Side.player2:
         return copyWith(
+          p1Controlled: p1Controlled.remove(color),
           p2Controlled: p2Controlled.add(color),
         );
     }

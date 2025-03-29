@@ -291,12 +291,28 @@ abstract class Position<T extends Position<T>> {
       }
 
       if (ctx.checkers.isNotEmpty) {
+        // Ways to escape check:
+        // - Move king
+        // - Block checker
+        // - Capture checker
+        // - Control checker by capturing piece that leads to its control
+        // - Move king to a square of the same color as the checker (i.e. the owned color of the opponent)
+        // - Promote owned or controlled pawn to a king
         final checker = ctx.checkers.singleSquare;
         if (checker == null) {
-          return SquareSet.empty;
+          // If there are multiple checkers, only the king can move except for special cases
+          pseudo = SquareSet.empty;
+        } else {
+          // When king is in check, only include moves that could block the check
+          pseudo = pseudo & between(checker, ctx.king!).withSquare(checker);
+
+          // Allow capture that leads to control of the checker
+          final checkerPiece = board.pieceAt(checker);
+          final checkerColor = checkerPiece!.color;
+          final coloredSquaresOfChecker = board.coloredSquaresOf(checkerColor);
+          pseudo =
+              pseudo | (coloredSquaresOfChecker & board.bySide(turn.opposite));
         }
-        // When king is in check, only include moves that could block the check
-        pseudo = pseudo & between(checker, ctx.king!).withSquare(checker);
       }
 
       // TODO: Blocker should be able to move toward the sniper too,

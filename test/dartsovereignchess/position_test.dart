@@ -90,12 +90,27 @@ void main() {
     expect(pos.legalMoves[Square.h7]!.has(Square.h8), true);
   });
 
-  test('legalMoves, only king can move when in check', () {
+  test('legalMoves, piece cannot move if king in check', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '8bk7/wq15/16/16/16/16/16/16/16/16/16/16/16/16/16/br7wk7 1 w b -'));
     final legalMoves = pos.legalMoves;
     expect(legalMoves[Square.a15]!.isEmpty, true);
     expect(legalMoves[Square.i1]!.isNotEmpty, true);
+  });
+
+  test('legalMoves, can escape check by controlling checking piece', () {
+    Position pos = SovereignChess.fromSetup(Setup.parseFen(
+        '8bk7/16/6rq9/16/16/16/16/16/16/12bn3/16/11wp4/16/16/16/8wk7 2 w b -'));
+    final legalMoves = pos.legalMoves;
+    expect(pos.isCheck, true);
+    expect(pos.board.colorControlledBy(Side.player1, PieceColor.red), true);
+    expect(legalMoves[Square.i16]!.isNotEmpty, true);
+    expect(legalMoves[Square.m7]!.isNotEmpty, true);
+
+    pos = pos.play(NormalMove(from: Square.m7, to: Square.l5));
+    expect(pos.isCheck, false);
+    expect(pos.board.colorControlledBy(Side.player1, PieceColor.red), false);
+    expect(pos.board.colorControlledBy(Side.player2, PieceColor.red), true);
   });
 
   test('legalMoves, blocker should remain pinned to king', () {
