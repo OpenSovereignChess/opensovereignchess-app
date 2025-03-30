@@ -239,13 +239,23 @@ abstract class Position<T extends Position<T>> {
   }
 
   /// Gets all squares with pieces that lead to the control of [PieceColor].
-  SquareSet _squaresControllingColor(PieceColor color) {
+  SquareSet _squaresControllingColor(PieceColor color,
+      [Set<PieceColor>? visited]) {
+    visited ??= <PieceColor>{};
+
+    if (visited.contains(color)) {
+      return SquareSet.empty;
+    }
+
+    visited.add(color);
+
     SquareSet result = board.coloredSquaresOf(color) & board.occupied;
-    Square? occupiedSquare = result.lsb();
+    Square? occupiedSquare =
+        result.lsb(); // Only one sqaure can be occupied at a time
     if (occupiedSquare != null) {
       final piece = board.pieceAt(occupiedSquare);
       if (piece != null) {
-        result = result | _squaresControllingColor(piece.color);
+        result = result | _squaresControllingColor(piece.color, visited);
       }
     }
     return result;
