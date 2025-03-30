@@ -143,6 +143,13 @@ void main() {
     expect(pos.isCheck, false);
     expect(pos.board.colorControlledBy(Side.player1, PieceColor.violet), true);
     expect(pos.board.colorControlledBy(Side.player2, PieceColor.violet), false);
+
+    // Another scenario from bug report
+    pos = SovereignChess.fromSetup(Setup.parseFen(
+        'aqabvrvnbrbnbb1bk1bnbrynyrsbsq/aranvpvpbpbpbpbp1bpbp1ypyp1sr/nbnp10sn1opob/nqnp6bp5opoq/crcp9bp2rprr/cncp8bq3rprn/1gp12pppb/gq2gp3gbwb5pppq/yqyp12vpvq/ybyp4bb7vpvb/onop6wq5npnn/orop12npnr/rqrp4wpwpwp5cpcq/rbrp10an1cpcb/srsnppppwpwp3wp1wp1gp1ar/sqsbprpnwrwn1aq1wkwn1gr1ab1 1 w b celn 32'));
+    legalMoves = pos.legalMoves;
+    expect(pos.isCheck, true);
+    expect(legalMoves[Square.i9]!.squares, equals([Square.g7]));
   });
 
   test('legalMoves, blocker should remain pinned to king', () {

@@ -965,6 +965,9 @@ class Piece {
   /// The name of the piece.
   String get name => '${color.name} ${role.name}';
 
+  @override
+  String toString() => name;
+
   /// Gets the piece kind.
   PieceKind get kind => switch ((color, role)) {
         (PieceColor.white, Role.pawn) => PieceKind.whitePawn,

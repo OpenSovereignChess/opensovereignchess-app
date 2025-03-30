@@ -471,6 +471,11 @@ class Board {
 
   PieceColor ownedColorOf(Side side) => armyManager.colorOf(side);
 
+  /// Returns whether the [PieceColor] is owned by any [Side].
+  bool colorIsOwned(PieceColor color) =>
+      armyManager.colorOf(Side.player1) == color ||
+      armyManager.colorOf(Side.player2) == color;
+
   /// Returns true if the [PieceColor] belongs to the [Side].
   bool colorBelongsTo(Side side, PieceColor color) =>
       armyManager.colorsOf(side).contains(color);

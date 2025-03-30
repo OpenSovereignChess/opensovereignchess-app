@@ -243,13 +243,14 @@ abstract class Position<T extends Position<T>> {
       [Set<PieceColor>? visited]) {
     visited ??= <PieceColor>{};
 
-    if (visited.contains(color)) {
+    if (visited.contains(color) || board.colorIsOwned(color)) {
       return SquareSet.empty;
     }
 
     visited.add(color);
 
     SquareSet result = board.coloredSquaresOf(color) & board.occupied;
+
     Square? occupiedSquare =
         result.lsb(); // Only one sqaure can be occupied at a time
     if (occupiedSquare != null) {
@@ -328,15 +329,11 @@ abstract class Position<T extends Position<T>> {
           return SquareSet.empty;
         }
 
-        // When king is in check, only include moves that could block the check
-        //pseudo = pseudo & between(checker, ctx.king!).withSquare(checker);
-
-        // Allow capture that leads to control of the checker
-        final checkerPiece = board.pieceAt(checker);
-        final coloredSquaresOfChecker =
-            _squaresControllingColor(checkerPiece!.color);
         pseudo = pseudo &
-            ((coloredSquaresOfChecker & board.bySide(turn.opposite)) |
+            // Include captures that lead to control of the checker
+            ((_squaresControllingColor(board.pieceAt(checker)!.color) &
+                    board.bySide(turn.opposite)) |
+                // Include moves that block the check
                 between(checker, ctx.king!).withSquare(checker));
       }
 
