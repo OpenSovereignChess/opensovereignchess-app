@@ -238,6 +238,19 @@ abstract class Position<T extends Position<T>> {
     );
   }
 
+  /// Gets all squares with pieces that lead to the control of [PieceColor].
+  SquareSet _squaresControllingColor(PieceColor color) {
+    SquareSet result = board.coloredSquaresOf(color) & board.occupied;
+    Square? occupiedSquare = result.lsb();
+    if (occupiedSquare != null) {
+      final piece = board.pieceAt(occupiedSquare);
+      if (piece != null) {
+        result = result | _squaresControllingColor(piece.color);
+      }
+    }
+    return result;
+  }
+
   /// Gets the legal moves for that [Square].
   ///
   /// Optionally pass a [_Context] of the position, to optimize performance when
@@ -299,20 +312,22 @@ abstract class Position<T extends Position<T>> {
         // - Move king to a square of the same color as the checker (i.e. the owned color of the opponent)
         // - Promote owned or controlled pawn to a king
         final checker = ctx.checkers.singleSquare;
+
         if (checker == null) {
           // If there are multiple checkers, only the king can move except for special cases
-          pseudo = SquareSet.empty;
-        } else {
-          // When king is in check, only include moves that could block the check
-          pseudo = pseudo & between(checker, ctx.king!).withSquare(checker);
-
-          // Allow capture that leads to control of the checker
-          final checkerPiece = board.pieceAt(checker);
-          final checkerColor = checkerPiece!.color;
-          final coloredSquaresOfChecker = board.coloredSquaresOf(checkerColor);
-          pseudo =
-              pseudo | (coloredSquaresOfChecker & board.bySide(turn.opposite));
+          return SquareSet.empty;
         }
+
+        // When king is in check, only include moves that could block the check
+        //pseudo = pseudo & between(checker, ctx.king!).withSquare(checker);
+
+        // Allow capture that leads to control of the checker
+        final checkerPiece = board.pieceAt(checker);
+        final coloredSquaresOfChecker =
+            _squaresControllingColor(checkerPiece!.color);
+        pseudo = pseudo &
+            ((coloredSquaresOfChecker & board.bySide(turn.opposite)) |
+                between(checker, ctx.king!).withSquare(checker));
       }
 
       // TODO: Blocker should be able to move toward the sniper too,
