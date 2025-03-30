@@ -8,29 +8,30 @@ void main() {
       final manager = ArmyManager(
         p1Owned: PieceColor.white,
         p2Owned: PieceColor.black,
-        p1Controlled: ISet({}),
-        p2Controlled: ISet({}),
+        controlledBy: IMap({}),
       );
 
-      expect(manager.p1Owned, PieceColor.white);
-      expect(manager.p2Owned, PieceColor.black);
-      expect(manager.p1Controlled, isEmpty);
-      expect(manager.p2Controlled, isEmpty);
       expect(manager.colorOf(Side.player1), PieceColor.white);
       expect(manager.colorOf(Side.player2), PieceColor.black);
+      expect(manager.controlledColorsOf(Side.player1), isEmpty);
+      expect(manager.controlledColorsOf(Side.player2), isEmpty);
     });
 
     test('army control', () {
       final manager = ArmyManager(
         p1Owned: PieceColor.white,
         p2Owned: PieceColor.black,
-        p1Controlled: ISet({PieceColor.red, PieceColor.navy}),
-        p2Controlled: ISet({PieceColor.green, PieceColor.yellow}),
+        controlledBy: IMap({
+          PieceColor.red: PieceColor.white,
+          PieceColor.navy: PieceColor.white,
+          PieceColor.green: PieceColor.black,
+          PieceColor.yellow: PieceColor.black,
+        }),
       );
 
-      expect(
-          manager.p1Controlled, containsAll([PieceColor.red, PieceColor.navy]));
-      expect(manager.p2Controlled,
+      expect(manager.controlledColorsOf(Side.player1),
+          containsAll([PieceColor.red, PieceColor.navy]));
+      expect(manager.controlledColorsOf(Side.player2),
           containsAll([PieceColor.green, PieceColor.yellow]));
     });
 
@@ -38,8 +39,10 @@ void main() {
       ArmyManager manager = ArmyManager(
         p1Owned: PieceColor.white,
         p2Owned: PieceColor.black,
-        p1Controlled: ISet({PieceColor.red}),
-        p2Controlled: ISet({PieceColor.green}),
+        controlledBy: IMap({
+          PieceColor.red: PieceColor.white,
+          PieceColor.green: PieceColor.black,
+        }),
       );
 
       manager = manager.setOwnedColor(Side.player1, PieceColor.green);

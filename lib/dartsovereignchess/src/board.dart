@@ -487,14 +487,13 @@ class Board {
   ISet<PieceColor> controlledColorsOf(Side side) =>
       armyManager.controlledColorsOf(side);
 
-  Board addControlledColor(Side side, PieceColor color) {
-    return armyManager.controlledColorsOf(side).contains(color)
-        ? this
-        : copyWith(armyManager: armyManager.addControlledArmy(side, color));
+  Board addControlledColor(PieceColor controllerColor, PieceColor color) {
+    return copyWith(
+        armyManager: armyManager.addControlledArmy(controllerColor, color));
   }
 
-  Board removeControlledColor(Side side, PieceColor color) =>
-      copyWith(armyManager: armyManager.removeControlledArmy(side, color));
+  Board removeControlledColor(PieceColor color) =>
+      copyWith(armyManager: armyManager.removeControlledArmy(color));
 
   /// Returns a copy of this board with some fields updated.
   Board copyWith({

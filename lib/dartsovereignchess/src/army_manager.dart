@@ -8,41 +8,35 @@ class ArmyManager {
   const ArmyManager({
     required this.p1Owned,
     required this.p2Owned,
-    required this.p1Controlled,
-    required this.p2Controlled,
+    required this.controlledBy,
   });
 
   /// The color army player 1 owns.
   final PieceColor p1Owned;
 
-  /// The color armies that player 1 controls.
-  final ISet<PieceColor> p1Controlled;
-
   /// The color army player 2 owns.
   final PieceColor p2Owned;
 
-  /// The color armies that player 2 controls.
-  final ISet<PieceColor> p2Controlled;
+  /// Who controls a color army.
+  final IMap<PieceColor, PieceColor> controlledBy;
 
   /// Army Manager for an empty board.
   static const empty = ArmyManager(
     p1Owned: PieceColor.white,
     p2Owned: PieceColor.black,
-    p1Controlled: ISet.empty(),
-    p2Controlled: ISet.empty(),
+    controlledBy: IMap.empty(),
   );
 
   /// Army Manager for a standard board.
   static const standard = ArmyManager(
     p1Owned: PieceColor.white,
     p2Owned: PieceColor.black,
-    p1Controlled: ISet.empty(),
-    p2Controlled: ISet.empty(),
+    controlledBy: IMap.empty(),
   );
 
   @override
   String toString() {
-    return 'ArmyManager{p1Owned: $p1Owned, p2Owned: $p2Owned, p1Controlled: $p1Controlled, p2Controlled: $p2Controlled}';
+    return 'ArmyManager(p1Owned: $p1Owned, p2Owned: $p2Owned, controlledBy: $controlledBy)';
   }
 
   @override
@@ -52,53 +46,60 @@ class ArmyManager {
             runtimeType == other.runtimeType &&
             p1Owned == other.p1Owned &&
             p2Owned == other.p2Owned &&
-            p1Controlled == other.p1Controlled &&
-            p2Controlled == other.p2Controlled;
+            controlledBy == other.controlledBy;
   }
 
   @override
   int get hashCode => Object.hash(
         p1Owned,
         p2Owned,
-        p1Controlled,
-        p2Controlled,
+        controlledBy,
       );
 
   ArmyManager copyWith({
     PieceColor? p1Owned,
     PieceColor? p2Owned,
-    ISet<PieceColor>? p1Controlled,
-    ISet<PieceColor>? p2Controlled,
+    IMap<PieceColor, PieceColor>? controlledBy,
   }) {
     return ArmyManager(
       p1Owned: p1Owned ?? this.p1Owned,
       p2Owned: p2Owned ?? this.p2Owned,
-      p1Controlled: p1Controlled ?? this.p1Controlled,
-      p2Controlled: p2Controlled ?? this.p2Controlled,
+      controlledBy: controlledBy ?? this.controlledBy,
     );
+  }
+
+  /// Return the colors controlled by the given [PieceColor].
+  ISet<PieceColor> _controlledColorsOf(PieceColor color) {
+    // Find direct colors controlled by the given color
+    ISet<PieceColor> directlyControlled = controlledBy.entries
+        .where((entry) => entry.value == color)
+        .map((entry) => entry.key)
+        .toISet();
+
+    // For each directly controlled color, add colors they control
+    ISet<PieceColor> result = directlyControlled;
+    for (final controlledColor in directlyControlled) {
+      if (controlledColor != color) {
+        // Avoid infinite recursion
+        result = result.union(_controlledColorsOf(controlledColor));
+      }
+    }
+    return result;
   }
 
   /// Returns true if the given [Side] controls the [PieceColor].
   ///
   /// Returns false in the case where the given [Side] owns instead of controls
   /// the [PieceColor].
-  bool controls(Side turn, PieceColor color) => switch (turn) {
-        Side.player1 => p1Controlled.contains(color),
-        Side.player2 => p2Controlled.contains(color),
-      };
+  bool controls(Side turn, PieceColor color) =>
+      controlledColorsOf(turn).contains(color);
 
   /// Returns both owned and controlled [PieceColor]s for a given [Side].
   ISet<PieceColor> colorsOf(Side turn) {
-    return switch (turn) {
-      Side.player1 => [
-          p1Owned,
-          ...p1Controlled,
-        ].toISet(),
-      Side.player2 => [
-          p2Owned,
-          ...p2Controlled,
-        ].toISet(),
-    };
+    return [
+      colorOf(turn),
+      ...controlledColorsOf(turn),
+    ].toISet();
   }
 
   /// Returns the owned [PieceColor] for the given [Side].
@@ -108,77 +109,38 @@ class ArmyManager {
       };
 
   /// Returns the controlled [PieceColor]s for the given [Side].
-  ISet<PieceColor> controlledColorsOf(Side turn) => switch (turn) {
-        Side.player1 => p1Controlled,
-        Side.player2 => p2Controlled,
-      };
-
-  ArmyManager removeControlledArmy(Side turn, PieceColor color) {
-    switch (turn) {
-      case Side.player1:
-        return copyWith(
-          p1Controlled: p1Controlled.remove(color),
-        );
-      case Side.player2:
-        return copyWith(
-          p2Controlled: p2Controlled.remove(color),
-        );
-    }
+  ISet<PieceColor> controlledColorsOf(Side turn) {
+    final ownedColor = turn == Side.player1 ? p1Owned : p2Owned;
+    return _controlledColorsOf(ownedColor);
   }
 
-  ArmyManager addControlledArmy(Side turn, PieceColor color) {
+  ArmyManager removeControlledArmy(PieceColor color) {
+    return copyWith(
+      controlledBy: controlledBy.remove(color),
+    );
+  }
+
+  ArmyManager addControlledArmy(PieceColor controllerColor, PieceColor color) {
     // Cannot control an owned army
-    if (colorOf(turn) == color || colorOf(turn.opposite) == color) {
+    if (color == p1Owned || color == p2Owned) {
       return copyWith();
     }
 
-    switch (turn) {
-      case Side.player1:
-        return copyWith(
-          p1Controlled: p1Controlled.add(color),
-          p2Controlled: p2Controlled.remove(color),
-        );
-      case Side.player2:
-        return copyWith(
-          p1Controlled: p1Controlled.remove(color),
-          p2Controlled: p2Controlled.add(color),
-        );
-    }
+    return copyWith(
+      controlledBy: controlledBy.update(color, (v) => controllerColor,
+          ifAbsent: () => controllerColor),
+    );
   }
 
   ArmyManager setOwnedColor(Side turn, PieceColor color) {
-    return switch (turn) {
-      Side.player1 => p1Controlled.contains(color)
-          ? copyWith(
-              p1Owned: color,
-              p1Controlled:
-                  removeControlledArmy(Side.player1, color).p1Controlled,
-            )
-          : copyWith(),
-      Side.player2 => p2Controlled.contains(color)
-          ? copyWith(
-              p2Owned: color,
-              p2Controlled:
-                  removeControlledArmy(Side.player2, color).p2Controlled,
-            )
-          : copyWith(),
-    };
+    // Cannot change to a color you do not control
+    if (!controlledColorsOf(turn).contains(color)) {
+      return copyWith();
+    }
+    return copyWith(
+      p1Owned: turn == Side.player1 ? color : p1Owned,
+      p2Owned: turn == Side.player2 ? color : p2Owned,
+      controlledBy: controlledBy.remove(color),
+    );
   }
-
-  String get fenStr => [
-        p1Owned.letter,
-        p1Controlled.isNotEmpty
-            ? _sort(p1Controlled.fold('', (prev, i) => prev + i.letter))
-            : '-',
-        p2Owned.letter,
-        p2Controlled.isNotEmpty
-            ? _sort(p2Controlled.fold('', (prev, i) => prev + i.letter))
-            : '-',
-      ].join(' ');
-}
-
-String _sort(String s) {
-  final chars = s.split('');
-  chars.sort();
-  return chars.join('');
 }

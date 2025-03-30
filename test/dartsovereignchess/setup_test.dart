@@ -10,9 +10,10 @@ void main() {
     expect(setup.turn, Side.player1);
     expect(setup.board.armyManager.colorOf(Side.player1), PieceColor.white);
     expect(setup.board.armyManager.colorOf(Side.player2), PieceColor.black);
-    expect(setup.board.armyManager.p1Controlled,
+    expect(setup.board.controlledColorsOf(Side.player1),
         ISet({PieceColor.navy, PieceColor.cyan}));
-    expect(setup.board.armyManager.p2Controlled, ISet({PieceColor.pink}));
+    expect(
+        setup.board.controlledColorsOf(Side.player2), ISet({PieceColor.pink}));
     expect(setup.castlingRights, makeSquareSet('''
 . . 1 . 1 . . . . . . 1 . 1 . .
 . . . . . . . . . . . . . . . .

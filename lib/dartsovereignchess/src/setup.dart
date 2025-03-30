@@ -175,30 +175,10 @@ ArmyManager _parseControlledArmies(
     }
   }
 
-  PieceColor findFinalOwner(PieceColor color) {
-    color = controlledBy[color]!;
-    while (controlledBy[color] != null) {
-      color = controlledBy[color]!;
-    }
-    return color;
-  }
-
-  final p1Controlled = <PieceColor>{};
-  final p2Controlled = <PieceColor>{};
-
-  for (final key in controlledBy.keys) {
-    if (findFinalOwner(key) == p1Owned) {
-      p1Controlled.add(key);
-    } else if (findFinalOwner(key) == p2Owned) {
-      p2Controlled.add(key);
-    }
-  }
-
   return ArmyManager(
     p1Owned: p1Owned,
     p2Owned: p2Owned,
-    p1Controlled: p1Controlled.toISet(),
-    p2Controlled: p2Controlled.toISet(),
+    controlledBy: controlledBy.toIMap(),
   );
 }
 

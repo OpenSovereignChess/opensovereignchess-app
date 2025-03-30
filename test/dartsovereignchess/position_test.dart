@@ -113,13 +113,44 @@ void main() {
     expect(pos.board.colorControlledBy(Side.player2, PieceColor.red), true);
   });
 
+  test(
+      'legalMoves, can escape check by controlling checking piece - chain of control',
+      () {
+    // Test owned color making the capture that leads to controlling the checker
+    Position pos = SovereignChess.fromSetup(Setup.parseFen(
+        '8bk7/16/5wq10/16/11bp4/5np4yp5/16/16/16/16/7gp8/16/16/16/16/8wk1vq5 1 w b -'));
+    IMap<Square, SquareSet> legalMoves = pos.legalMoves;
+    expect(pos.isCheck, true);
+    expect(pos.board.colorControlledBy(Side.player2, PieceColor.violet), true);
+    expect(legalMoves[Square.i1]!.isNotEmpty, true);
+    expect(legalMoves[Square.f14]!.isNotEmpty, true);
+
+    pos = pos.play(NormalMove(from: Square.f14, to: Square.f11));
+    expect(pos.isCheck, false);
+    expect(pos.board.colorControlledBy(Side.player1, PieceColor.violet), true);
+    expect(pos.board.colorControlledBy(Side.player2, PieceColor.violet), false);
+
+    // Test controlled color making the capture that leads to controlling the checker
+    pos = SovereignChess.fromSetup(Setup.parseFen(
+        '8bk7/16/5rq10/16/11bp4/5np4yp5/16/16/16/16/7gp8/11wp4/16/16/16/8wk1vq5 1 w b -'));
+    legalMoves = pos.legalMoves;
+    expect(pos.isCheck, true);
+    expect(pos.board.colorControlledBy(Side.player2, PieceColor.violet), true);
+    expect(legalMoves[Square.i1]!.isNotEmpty, true);
+    expect(legalMoves[Square.f14]!.isNotEmpty, true);
+
+    pos = pos.play(NormalMove(from: Square.f14, to: Square.f11));
+    expect(pos.isCheck, false);
+    expect(pos.board.colorControlledBy(Side.player1, PieceColor.violet), true);
+    expect(pos.board.colorControlledBy(Side.player2, PieceColor.violet), false);
+  });
+
   test('legalMoves, blocker should remain pinned to king', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '8bk7/16/16/16/16/16/16/16/16/16/16/16/16/16/16/br3wq3wk7 1 w b -'));
     final legalMoves = pos.legalMoves;
     expect(legalMoves[Square.e1]!.has(Square.e2), false);
     expect(legalMoves[Square.e1]!.has(Square.f1), true);
-    //expect(legalMoves[Square.e1]!.has(Square.d1), true);
   });
 
   test('play, move onto colored squares', () {
@@ -180,7 +211,7 @@ void main() {
     expect(newPos.board.ownedColorOf(Side.player1), PieceColor.navy);
     expect(newPos.board.kingOf(Side.player1), Square.i1);
     expect(newPos.board.pieceAt(Square.i1), Piece.navyKing);
-    expect(newPos.board.armyManager.p1Controlled, isEmpty);
+    expect(newPos.board.controlledColorsOf(Side.player1), isEmpty);
   });
 
   test('legalCastlingMoves from initial position', () {

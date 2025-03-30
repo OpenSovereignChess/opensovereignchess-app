@@ -189,10 +189,10 @@ abstract class Position<T extends Position<T>> {
 
         // Update armies if we're moving on or off of colored squares
         if (from.color != null) {
-          newBoard = newBoard.removeControlledColor(turn, from.color!);
+          newBoard = newBoard.removeControlledColor(from.color!);
         }
         if (to.color != null) {
-          newBoard = newBoard.addControlledColor(turn, to.color!);
+          newBoard = newBoard.addControlledColor(newPiece.color, to.color!);
         }
 
         // Update castling rights when:
