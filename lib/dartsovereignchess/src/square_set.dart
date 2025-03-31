@@ -209,6 +209,9 @@ class SquareSet {
   // Starting rook positions for castling
   static const castlingRooks = SquareSet(0x28140000, 0, 0, 0, 0, 0, 0, 0x2814);
 
+  // Pawn promotion box mask
+  static const promotionBox = SquareSet(0, 0, 0, 0x3C00240, 0x24003C0, 0, 0, 0);
+
   /// Bitwise right shift
   SquareSet shr(int shift) {
     if (shift >= Square.values.length) {

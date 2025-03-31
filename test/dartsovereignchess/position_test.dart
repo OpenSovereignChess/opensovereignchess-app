@@ -152,6 +152,13 @@ void main() {
     expect(legalMoves[Square.i9]!.squares, equals([Square.g7]));
   });
 
+  test('legalMoves, can escape check by promoting pawn to king', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        'aqabvrvnbrbnbb1bkbbbnbrynyrsbsq/aranvpvpbpbpbpbpbpbpbpbpypypsnsr/nbnp12opob/nqnp12opoq/crcp12rprr/cncp12rprn/gbgp12pppb/gqgp12pppq/yqyp12vpvq/ybyp12vpvb/onop5wp6npnn/orop10bq1npnr/rqrp12cpcq/rbrp7wp4cpcb/srsnppppwpwpwp1wp1wpwpgpgpanar/sqsbprpnwrwnwbwqwkwbwnwrgngrabaq 1 w b CELNceln 0'));
+    expect(pos.isCheck, true);
+    expect(pos.legalMoves[Square.h6]!.squares, [Square.h7]);
+  });
+
   test('legalMoves, blocker should remain pinned to king', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         '8bk7/16/16/16/16/16/16/16/16/16/16/16/16/16/16/br3wq3wk7 1 w b -'));

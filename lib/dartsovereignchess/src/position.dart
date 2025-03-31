@@ -262,6 +262,22 @@ abstract class Position<T extends Position<T>> {
     return result;
   }
 
+  /// Return only promotion moves from a [SquareSet] of moves.
+  SquareSet _pawnPromotionMoves(SquareSet moves) {
+    return moves & SquareSet.promotionBox;
+  }
+
+  /// Return moves that are not being attacked by the opponent.
+  SquareSet _unattackedMoves(SquareSet moves) {
+    SquareSet result = SquareSet.empty;
+    for (final to in moves.squares) {
+      if (kingAttackers(to, turn.opposite).isEmpty) {
+        result = result.withSquare(to);
+      }
+    }
+    return result;
+  }
+
   /// Gets the legal moves for that [Square].
   ///
   /// Optionally pass a [_Context] of the position, to optimize performance when
@@ -326,15 +342,24 @@ abstract class Position<T extends Position<T>> {
 
         if (checker == null) {
           // If there are multiple checkers, only the king can move except for special cases
+          // If piece is a pawn, include promotion squares unless it is attacked
+          if (piece.role == Role.pawn) {
+            return _unattackedMoves(_pawnPromotionMoves(pseudo));
+          }
           return SquareSet.empty;
         }
 
         pseudo = pseudo &
-            // Include captures that lead to control of the checker
-            ((_squaresControllingColor(board.pieceAt(checker)!.color) &
-                    board.bySide(turn.opposite)) |
-                // Include moves that block the check
-                between(checker, ctx.king!).withSquare(checker));
+            (
+                // Include captures that lead to control of the checker
+                (_squaresControllingColor(board.pieceAt(checker)!.color) &
+                        board.bySide(turn.opposite)) |
+                    // Include moves that block the check
+                    between(checker, ctx.king!).withSquare(checker) |
+                    // Include pawn promotion moves so they can promote to a king
+                    (piece.role == Role.pawn
+                        ? _unattackedMoves(_pawnPromotionMoves(pseudo))
+                        : SquareSet.empty));
       }
 
       // TODO: Blocker should be able to move toward the sniper too,
