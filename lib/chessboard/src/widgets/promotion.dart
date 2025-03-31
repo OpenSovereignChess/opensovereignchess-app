@@ -1,3 +1,4 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/widgets.dart';
 import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
 import '../models.dart';
@@ -20,6 +21,8 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
     required this.onSelect,
     required this.onCancel,
     required this.pieceAssets,
+    this.roles = const ISetConst(
+        {Role.queen, Role.knight, Role.rook, Role.bishop, Role.king}),
   });
 
   /// The move that is being promoted.
@@ -43,6 +46,9 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
   /// Callback when the promotion is canceled.
   final void Function() onCancel;
 
+  /// The roles that we can promote to.
+  final ISet<Role> roles;
+
   /// The square the pawn is moving to.
   Square get square => move.to;
 
@@ -50,6 +56,33 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
   Widget build(BuildContext context) {
     final anchorSquare = square;
     final offset = squareOffset(anchorSquare);
+    final pieces = [
+      Piece(
+        color: color,
+        role: Role.queen,
+        promoted: true,
+      ),
+      Piece(
+        color: color,
+        role: Role.knight,
+        promoted: true,
+      ),
+      Piece(
+        color: color,
+        role: Role.rook,
+        promoted: true,
+      ),
+      Piece(
+        color: color,
+        role: Role.bishop,
+        promoted: true,
+      ),
+      Piece(
+        color: color,
+        role: Role.king,
+        promoted: true,
+      ),
+    ].where((piece) => roles.contains(piece.role)).toList(growable: false);
 
     return GestureDetector(
       onTap: () => onCancel(),
@@ -65,33 +98,7 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
               left: offset.dx,
               top: offset.dy,
               child: Column(
-                children: [
-                  Piece(
-                    color: color,
-                    role: Role.queen,
-                    promoted: true,
-                  ),
-                  Piece(
-                    color: color,
-                    role: Role.knight,
-                    promoted: true,
-                  ),
-                  Piece(
-                    color: color,
-                    role: Role.rook,
-                    promoted: true,
-                  ),
-                  Piece(
-                    color: color,
-                    role: Role.bishop,
-                    promoted: true,
-                  ),
-                  Piece(
-                    color: color,
-                    role: Role.king,
-                    promoted: true,
-                  ),
-                ].map((Piece piece) {
+                children: pieces.map((Piece piece) {
                   return GestureDetector(
                     onTap: () => onSelect(piece.role),
                     child: Stack(
