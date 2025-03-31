@@ -83,6 +83,7 @@ class _Body extends ConsumerWidget {
                         },
                         promotionMove: gameState.promotionMove,
                         promotionColor: gameState.promotionColor,
+                        promotionRoles: gameState.promotionRoles,
                         onPromotionSelection: ref
                             .read(overTheBoardGameControllerProvider(initialFen)
                                 .notifier)

@@ -21,8 +21,7 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
     required this.onSelect,
     required this.onCancel,
     required this.pieceAssets,
-    this.roles = const ISetConst(
-        {Role.queen, Role.knight, Role.rook, Role.bishop, Role.king}),
+    this.roles,
   });
 
   /// The move that is being promoted.
@@ -47,15 +46,19 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
   final void Function() onCancel;
 
   /// The roles that we can promote to.
-  final ISet<Role> roles;
+  final ISet<Role>? roles;
 
   /// The square the pawn is moving to.
   Square get square => move.to;
+
+  static const ISet<Role> defaultPromotionRoles =
+      ISetConst({Role.queen, Role.knight, Role.rook, Role.bishop, Role.king});
 
   @override
   Widget build(BuildContext context) {
     final anchorSquare = square;
     final offset = squareOffset(anchorSquare);
+    final effectiveRoles = roles ?? defaultPromotionRoles;
     final pieces = [
       Piece(
         color: color,
@@ -82,7 +85,9 @@ class PromotionSelector extends StatelessWidget with ChessboardGeometry {
         role: Role.king,
         promoted: true,
       ),
-    ].where((piece) => roles.contains(piece.role)).toList(growable: false);
+    ]
+        .where((piece) => effectiveRoles.contains(piece.role))
+        .toList(growable: false);
 
     return GestureDetector(
       onTap: () => onCancel(),

@@ -170,6 +170,7 @@ class _BoardState extends State<Chessboard> {
                 onCancel: () {
                   widget.game!.onPromotionSelection(null);
                 },
+                roles: widget.game!.promotionRoles,
               )
           ],
         ),

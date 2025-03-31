@@ -107,4 +107,7 @@ class OverTheBoardGameState {
   String get fen => position.fen;
 
   bool canDefect(Side side) => position.canDefect(side);
+
+  ISet<Role>? get promotionRoles =>
+      position.isCheck ? const ISetConst({Role.king}) : null;
 }

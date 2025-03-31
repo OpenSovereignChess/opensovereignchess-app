@@ -16,6 +16,7 @@ class GameData {
     required this.promotionMove,
     required this.promotionColor,
     required this.onPromotionSelection,
+    this.promotionRoles,
     this.isCheck,
     this.checkedKingColor,
   });
@@ -45,6 +46,9 @@ class GameData {
   ///
   /// If the argument is `null`, the promotion should be canceled.
   final void Function(Role? role) onPromotionSelection;
+
+  /// The roles that we can promote to.
+  final ISet<Role>? promotionRoles;
 
   /// Hightlight the king of current side to move
   final bool? isCheck;
