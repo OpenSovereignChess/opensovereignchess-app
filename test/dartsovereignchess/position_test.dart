@@ -213,6 +213,15 @@ void main() {
     expect(result.board.armyManager.colorOf(Side.player1), PieceColor.red);
   });
 
+  test('play, cannot promote to anything other than a king when in check', () {
+    final pos = SovereignChess.fromSetup(Setup.parseFen(
+        'aqabvrvnbrbnbb1bkbbbnbrynyrsbsq/aranvpvpbpbpbpbpbpbpbpbpypypsnsr/nbnp12opob/nqnp12opoq/crcp12rprr/cncp12rprn/gbgp12pppb/gqgp12pppq/yqyp12vpvq/ybyp12vpvb/onop5wp6npnn/orop10bq1npnr/rqrp12cpcq/rbrp7wp4cpcb/srsnppppwpwpwp1wp1wpwpgpgpanar/sqsbprpnwrwnwbwqwkwbwnwrgngrabaq 1 w b CELNceln 0'));
+    expect(pos.isCheck, true);
+    final illegalMove =
+        NormalMove(from: Square.h6, to: Square.h7, promotion: Role.queen);
+    expect(() => pos.play(illegalMove), throwsA(isA<PlayException>()));
+  });
+
   test('defect', () {
     final pos = SovereignChess.fromSetup(Setup.parseFen(
         'bk15/16/16/16/16/16/16/16/16/16/16/4wp11/16/16/16/8wk7 1 w b -'));

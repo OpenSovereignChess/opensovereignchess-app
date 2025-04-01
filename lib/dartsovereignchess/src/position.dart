@@ -108,6 +108,9 @@ abstract class Position<T extends Position<T>> {
             (!board.pawns.has(f) || !promotionSquares.contains(t))) {
           return false;
         }
+        if (isCheck && p != null && p != Role.king) {
+          return false;
+        }
         final legalMoves = _legalMovesOf(f);
         return legalMoves.has(t);
     }
