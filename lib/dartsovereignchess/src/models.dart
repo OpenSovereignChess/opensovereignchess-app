@@ -1169,6 +1169,12 @@ sealed class Move {
 
   /// The target square of this move.
   final Square to;
+
+  /// Gets the UCI notation of this move.
+  String get uci;
+
+  @override
+  String toString() => 'Move($uci)';
 }
 
 /// Represents a chess move, which is possibly a promotion.
@@ -1189,6 +1195,10 @@ class NormalMove extends Move {
   /// Returns a copy of this move with a [promotion] role.
   NormalMove withPromotion(Role? promotion) =>
       NormalMove(from: from, to: to, promotion: promotion);
+
+  /// Gets UCI notation, like `g1f3` for a normal move, `a7a8q` for promotion to a queen.
+  @override
+  String get uci => from.name + to.name + (promotion?.letter ?? '');
 }
 
 /// An enumeration of the possible causes of an illegal FEN string.
