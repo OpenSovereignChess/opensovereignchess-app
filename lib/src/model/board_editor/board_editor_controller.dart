@@ -116,7 +116,7 @@ class BoardEditorState with _$BoardEditorState {
     required int ply,
 
     /// When null, clears squares when in edit mode. Has no effect in drag mode.
-    required Piece? pieceToAddOnEdit,
+    Piece? pieceToAddOnEdit,
   }) = _BoardEditorState;
 
   //bool isCastlingAllowed(Side side, CastlingSide castlingSide) => switch (side) {
