@@ -77,9 +77,14 @@ void main() {
   });
 
   test('legalMoves, king cannot move into check', () {
-    final pos = SovereignChess.fromSetup(Setup.parseFen(
+    Position pos = SovereignChess.fromSetup(Setup.parseFen(
         '16/16/16/16/16/16/16/16/16/16/16/16/16/16/br15/8wk7 1 w b -'));
     expect(pos.legalMoves[Square.i1]!.has(Square.i2), false);
+
+    // King cannot move to a square attacked by a pawn (in NW quadrant)
+    pos = SovereignChess.fromSetup(Setup.parseFen(
+        'aqabvrvnbrbn1bq3yp1yrsbsq/aranvpvpbpbpbp1bnbk3yp1sr/1np10sn1opob/nq2np12/crcp9bb2rprr/cncp3wq1bp6rprn/gbgp12pppb/gqgp12pppq/yqyp8wb3vpvq/ybyp12vpvb/onop10np1npnn/orop5nr8/rqrp6wp5cpcq/rbrp12cpcb/srsnppppwpwpwpwp1wpwpwpgpgpanar/sqsbprpnwrwnwb1wk1wnwrgngrabaq 2 w b CELN'));
+    expect(pos.legalMoves[Square.j15]!.has(Square.k15), false);
   });
 
   test(

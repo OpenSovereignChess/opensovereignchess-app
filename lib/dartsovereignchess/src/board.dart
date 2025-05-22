@@ -356,7 +356,12 @@ class Board {
               .intersect(bishopsAndQueens))
           .union(knightAttacks(square).intersect(knights))
           .union(kingAttacks(square).intersect(kings))
-          .union(pawnAttacks(square).intersect(pawns)));
+          // Pawn attacks are not symmetrical, so can't use the same logic as other pieces
+          .union(pawns.squares.fold(
+              SquareSet.empty,
+              (prev, sq) => pawnAttacks(sq).has(square)
+                  ? (prev | SquareSet.fromSquare(sq))
+                  : prev)));
 
   /// Puts a [Piece] on a [Square] overriding the existing one, if any.
   Board setPieceAt(Square square, Piece piece) {

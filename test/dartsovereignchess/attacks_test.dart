@@ -206,6 +206,10 @@ void main() {
       pawnAttacks(Square.p13),
       SquareSet.fromSquares([Square.o12, Square.o14]),
     );
+    expect(
+      pawnAttacks(Square.l16),
+      SquareSet.fromSquares([Square.k15, Square.m15]),
+    );
 
     // On edge of quadrant
     expect(

@@ -8,6 +8,7 @@ import './models.dart';
 import './pawn_moves.dart';
 import './setup.dart';
 import './square_set.dart';
+//import './debug.dart';
 
 /// A base class for playable Sovereign Chess or variant positions.
 ///
