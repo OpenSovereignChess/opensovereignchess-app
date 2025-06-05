@@ -13,4 +13,15 @@ class AuthService extends _$AuthService {
     final client = ref.watch(supabaseClientProvider).value;
     return client?.auth.currentSession;
   }
+
+  Future<void> signInAnonymously() async {
+    final AsyncValue<SupabaseClient> client = ref.watch(supabaseClientProvider);
+
+    switch (client) {
+      case AsyncData(:final value):
+        await value.auth.signInAnonymously();
+      default:
+        throw Exception('Supabase client is not initialized');
+    }
+  }
 }

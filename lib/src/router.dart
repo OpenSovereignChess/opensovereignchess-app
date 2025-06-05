@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import './screens/board_editor_screen.dart';
+import './screens/game_screen.dart';
 import './screens/home_screen.dart';
 
 final router = GoRouter(
@@ -22,6 +23,12 @@ final router = GoRouter(
         String? fen = state.uri.queryParameters['fen'];
         fen = fen?.replaceAll('_', ' ');
         return BoardEditorScreen(initialFen: fen);
+      },
+    ),
+    GoRoute(
+      path: '/games',
+      builder: (BuildContext context, GoRouterState state) {
+        return GameScreen();
       },
     ),
   ],
