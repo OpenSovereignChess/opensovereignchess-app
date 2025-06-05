@@ -6,8 +6,11 @@ Flutter app for playing Sovereign Chess.
 
 To run site locally:
 
-```
-dart run build_runner watch # in separate terminal
+```bash
+# In a separate terminal, run riverpod and freezed code generators
+dart run build_runner watch -d
+
+# Start local dev server
 flutter run -d chrome
 ```
 
