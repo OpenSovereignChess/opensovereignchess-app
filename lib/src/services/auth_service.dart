@@ -10,18 +10,17 @@ part 'auth_service.g.dart';
 class AuthService extends _$AuthService {
   @override
   Future<Session?> build() async {
-    final client = ref.watch(supabaseClientProvider).value;
-    return client?.auth.currentSession;
+    final supabase = await ref.read(supabaseClientProvider.future);
+    return supabase.auth.currentSession;
   }
 
   Future<void> signInAnonymously() async {
-    final AsyncValue<SupabaseClient> client = ref.watch(supabaseClientProvider);
+    final supabase = await ref.read(supabaseClientProvider.future);
+    await supabase.auth.signInAnonymously();
+  }
 
-    switch (client) {
-      case AsyncData(:final value):
-        await value.auth.signInAnonymously();
-      default:
-        throw Exception('Supabase client is not initialized');
-    }
+  Future<User?> get currentUser async {
+    final supabase = await ref.read(supabaseClientProvider.future);
+    return supabase.auth.currentUser;
   }
 }
