@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 import './screens/board_editor_screen.dart';
+import './screens/create_game_screen.dart';
 import './screens/game_screen.dart';
 import './screens/home_screen.dart';
 
@@ -27,6 +28,12 @@ final router = GoRouter(
     ),
     GoRoute(
       path: '/games',
+      builder: (BuildContext context, GoRouterState state) {
+        return CreateGameScreen();
+      },
+    ),
+    GoRoute(
+      path: '/games/:gameId',
       builder: (BuildContext context, GoRouterState state) {
         return GameScreen();
       },

@@ -11,14 +11,12 @@ class GameService extends _$GameService {
     // This service does not need to initialize anything at the moment.
   }
 
-  Future<void> createGame(String userId) async {
+  Future<Map<String, dynamic>> createGame(String userId) async {
     final supabase = await ref.read(supabaseClientProvider.future);
-    final response = await supabase.from('games').insert({
+    final List<Map<String, dynamic>> data =
+        await supabase.from('games').insert({
       'player1_id': userId,
-    });
-
-    if (response.error != null) {
-      throw Exception('Failed to create game: ${response.error!.message}');
-    }
+    }).select();
+    return data[0];
   }
 }

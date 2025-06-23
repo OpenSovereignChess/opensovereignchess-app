@@ -7,9 +7,13 @@ part 'supabase_client.g.dart';
 
 @riverpod
 Future<SupabaseClient> supabaseClient(Ref ref) async {
-  await Supabase.initialize(
-    url: dotenv.get('SUPABASE_URL'),
-    anonKey: dotenv.get('SUPABASE_ANON_KEY'),
-  );
-  return Supabase.instance.client;
+  try {
+    return Supabase.instance.client;
+  } on AssertionError {
+    await Supabase.initialize(
+      url: dotenv.get('SUPABASE_URL'),
+      anonKey: dotenv.get('SUPABASE_ANON_KEY'),
+    );
+    return Supabase.instance.client;
+  }
 }
