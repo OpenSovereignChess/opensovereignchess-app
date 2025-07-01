@@ -1,4 +1,4 @@
-import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
+import 'package:dartsovereignchess/dartsovereignchess.dart';
 
 /// Returns `true` if the move is a pawn promotion move that is not yet
 /// promoted.

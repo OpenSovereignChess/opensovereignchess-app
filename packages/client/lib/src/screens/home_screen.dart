@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:opensovereignchess_app/chessboard/chessboard.dart';
-import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
+import 'package:chessboard/chessboard.dart';
+import 'package:dartsovereignchess/dartsovereignchess.dart';
 //import 'package:opensovereignchess_app/src/constants.dart';
 //import 'package:opensovereignchess_app/src/utils/screen.dart';
 

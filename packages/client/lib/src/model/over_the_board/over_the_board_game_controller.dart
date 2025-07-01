@@ -1,6 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'; // For testing purposes
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
+import 'package:dartsovereignchess/dartsovereignchess.dart';
 import 'package:opensovereignchess_app/src/model/common/sovereignchess.dart';
 
 part 'over_the_board_game_controller.g.dart';

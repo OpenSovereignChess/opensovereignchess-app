@@ -1,6 +1,6 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/material.dart';
-import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
+import 'package:dartsovereignchess/dartsovereignchess.dart';
 
 /// Displays a Dialog that lets the player choose which color to defect to.
 Future<PieceColor?> showDefectionDialog(

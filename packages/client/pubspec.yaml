@@ -54,6 +54,10 @@ dependencies:
   firebase_analytics: ^11.4.4
   supabase_flutter: ^2.9.0
   flutter_dotenv: ^5.2.1
+  chessboard:
+    path: ../chessboard
+  dartsovereignchess:
+    path: ../dartsovereignchess
 
 dev_dependencies:
   flutter_test:

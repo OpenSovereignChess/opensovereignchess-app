@@ -1,8 +1,8 @@
 import 'package:fast_immutable_collections/fast_immutable_collections.dart'; // For testing purposes
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:opensovereignchess_app/chessboard/chessboard.dart';
-import 'package:opensovereignchess_app/dartsovereignchess/dartsovereignchess.dart';
+import 'package:chessboard/chessboard.dart';
+import 'package:dartsovereignchess/dartsovereignchess.dart';
 
 part 'board_editor_controller.freezed.dart';
 part 'board_editor_controller.g.dart';
