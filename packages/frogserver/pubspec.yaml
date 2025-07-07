@@ -1,5 +1,5 @@
-name: server
-description: The backend server for opensovereignchess_app
+name: frogserver
+description: Deprecated backend server for opensovereignchess_app
 version: 1.0.0+1
 publish_to: none
 

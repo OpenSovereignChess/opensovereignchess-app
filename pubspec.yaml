@@ -7,3 +7,4 @@ workspace:
   - packages/dartsovereignchess
   - packages/client
   - packages/frogserver
+  - packages/server
