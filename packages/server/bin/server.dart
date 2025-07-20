@@ -1,12 +1,19 @@
 import 'dart:io';
 
-import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf.dart' show Pipeline, logRequests;
+import 'package:shelf_router/shelf_router.dart' show Router;
 import 'package:shelf/shelf_io.dart' as shelf_io;
+import 'package:server/server.dart' show rootHandler, echoHandler;
 
 void main() async {
-  var handler = const Pipeline()
+  final appRouter = Router();
+
+  appRouter.get('/', rootHandler);
+  appRouter.get('/<anything|.*>', echoHandler);
+
+  final handler = const Pipeline()
       .addMiddleware(logRequests())
-      .addHandler(_echoRequest);
+      .addHandler(appRouter.call);
 
   var server = await shelf_io.serve(handler, InternetAddress.anyIPv4, 8080);
 
@@ -14,8 +21,3 @@ void main() async {
 
   print('Serving at http://${server.address.host}:${server.port}');
 }
-
-Response _echoRequest(Request request) => Response.ok(
-  'Request for "${request.url}"',
-  headers: {'Content-Type': 'text/plain'},
-);
