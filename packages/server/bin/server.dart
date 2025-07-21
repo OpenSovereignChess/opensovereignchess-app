@@ -3,13 +3,22 @@ import 'dart:io';
 import 'package:shelf/shelf.dart' show Pipeline, logRequests;
 import 'package:shelf_router/shelf_router.dart' show Router;
 import 'package:shelf/shelf_io.dart' as shelf_io;
-import 'package:server/server.dart' show rootHandler, echoHandler;
+import 'package:server/server.dart'
+    show
+        rootHandler,
+        echoHandler,
+        createGameHandler,
+        joinGameHandler,
+        makeMoveHandler;
 
 void main() async {
   final appRouter = Router();
 
   appRouter.get('/', rootHandler);
   appRouter.get('/<anything|.*>', echoHandler);
+  appRouter.post('/games', createGameHandler);
+  appRouter.post('/games/<gameId>/players', joinGameHandler);
+  appRouter.post('/games/<gameId>/moves', makeMoveHandler);
 
   final handler = const Pipeline()
       .addMiddleware(logRequests())
