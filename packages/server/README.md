@@ -37,3 +37,19 @@ const like = 'sample';
 TODO: Tell users more about the package: where to find more information, how to 
 contribute to the package, how to file issues, what response they can expect 
 from the package authors, and more.
+
+## Development
+
+```bash
+# Run local server
+dart run packages/server/bin/server.dart
+```
+
+## Deploy
+
+```bash
+# If starting from project root
+cd packages/server
+./scripts/build.sh
+./scripts/deploy.sh
+```
