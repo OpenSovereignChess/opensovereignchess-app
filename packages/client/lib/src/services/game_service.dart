@@ -1,6 +1,5 @@
+import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import './supabase_client.dart';
 
 part 'game_service.g.dart';
 
@@ -11,12 +10,20 @@ class GameService extends _$GameService {
     // This service does not need to initialize anything at the moment.
   }
 
-  Future<Map<String, dynamic>> createGame(String userId) async {
-    final supabase = await ref.read(supabaseClientProvider.future);
-    final List<Map<String, dynamic>> data =
-        await supabase.from('games').insert({
-      'player1_id': userId,
-    }).select();
-    return data[0];
+  Future<void> createGame(String accessToken) async {
+    final response = await http.post(
+      Uri.parse(
+        'http://localhost:8080/games',
+      ),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      //return json.decode(response.body) as Map<String, dynamic>;
+    } else {
+      throw Exception('Failed to create game: ${response.statusCode}');
+    }
   }
 }

@@ -34,11 +34,15 @@ class CreateGameScreen extends ConsumerWidget {
                     print('User is logged in...');
                   }
                   print('Creating game...');
+                  final session = await ref
+                      .read(authServiceProvider.notifier)
+                      .currentSession;
+                  //print('User JWT: ${session!.accessToken}');
                   await ref.read(gameServiceProvider.notifier).createGame(
                         (await ref
                                 .read(authServiceProvider.notifier)
-                                .currentUser)!
-                            .id,
+                                .currentSession)!
+                            .accessToken,
                       );
                 },
                 child: const Text('Start game'),

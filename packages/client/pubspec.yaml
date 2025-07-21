@@ -58,6 +58,7 @@ dependencies:
     path: ../chessboard
   dartsovereignchess:
     path: ../dartsovereignchess
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:

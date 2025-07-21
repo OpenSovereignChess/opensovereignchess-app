@@ -30,7 +30,7 @@ class SupabaseService {
 
   Future<List<Map<String, dynamic>>> createGame(String userId) async {
     final data = await _client.from('games').insert({
-      'player_1_id': userId,
+      'player1_id': userId,
     }).select();
     return List<Map<String, dynamic>>.from(data as List);
   }

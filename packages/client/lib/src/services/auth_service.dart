@@ -23,4 +23,9 @@ class AuthService extends _$AuthService {
     final supabase = await ref.read(supabaseClientProvider.future);
     return supabase.auth.currentUser;
   }
+
+  Future<Session?> get currentSession async {
+    final supabase = await ref.read(supabaseClientProvider.future);
+    return supabase.auth.currentSession;
+  }
 }

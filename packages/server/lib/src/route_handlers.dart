@@ -23,14 +23,13 @@ Future<Response> createGameHandler(Request request) async {
   }
 
   final token = authHeader.substring(7); // Remove 'Bearer ' prefix
-  String? userId;
 
   try {
     final decodedToken = JWT.verify(token, SecretKey(supabase.jwtSecret));
-    print('Payload: ${decodedToken.payload}');
-    //userId = user.id;
-    //final data = await supabase.createGame(userId);
-    //print('New game created: $data');
+    print('Payload: ${decodedToken.payload["sub"]}');
+    String userId = decodedToken.payload['sub'];
+    final data = await supabase.createGame(userId);
+    print('New game created: $data');
   } catch (err) {
     print('Error getting user from token: $err');
     return Response.forbidden(
