@@ -1,4 +1,9 @@
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart' show JWT, SecretKey;
 import 'package:shelf/shelf.dart' show Request, Response;
+
+import './supabase_service.dart' show SupabaseService;
+
+final supabase = SupabaseService();
 
 Response rootHandler(Request request) =>
     Response.ok('Ok', headers: {'Content-Type': 'text/plain'});
@@ -8,9 +13,32 @@ Response echoHandler(Request request) => Response.ok(
   headers: {'Content-Type': 'text/plain'},
 );
 
-Response createGameHandler(Request request) {
-  // Here you would typically handle the creation of a game.
-  // For now, we just return a placeholder response.
+Future<Response> createGameHandler(Request request) async {
+  final authHeader = request.headers['Authorization'];
+  if (authHeader == null || !authHeader.startsWith('Bearer ')) {
+    return Response.forbidden(
+      'Authorization header is missing or invalid',
+      headers: {'Content-Type': 'text/plain'},
+    );
+  }
+
+  final token = authHeader.substring(7); // Remove 'Bearer ' prefix
+  String? userId;
+
+  try {
+    final decodedToken = JWT.verify(token, SecretKey(supabase.jwtSecret));
+    print('Payload: ${decodedToken.payload}');
+    //userId = user.id;
+    //final data = await supabase.createGame(userId);
+    //print('New game created: $data');
+  } catch (err) {
+    print('Error getting user from token: $err');
+    return Response.forbidden(
+      'Invalid token or user not found',
+      headers: {'Content-Type': 'text/plain'},
+    );
+  }
+
   return Response.ok(
     'Game created successfully',
     headers: {'Content-Type': 'text/plain'},
