@@ -6,9 +6,8 @@ FROM dart:stable AS build
 WORKDIR /app
 #COPY pubspec.* ./
 COPY ../.. .
-RUN ls
+# Remove packages with `flutter` dependency to avoid `flutter` and `dart` conflict
 RUN rm -rf packages/client
-RUN ls packages
 RUN sed -i '/packages\/client/d' pubspec.yaml
 RUN dart pub get
 RUN mkdir bin
