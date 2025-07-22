@@ -11,7 +11,7 @@ To run site locally:
 dart run build_runner watch -d
 
 # Start local dev server
-flutter run -d chrome
+./scripts/run.sh
 ```
 
 Before committing:
@@ -35,6 +35,6 @@ We precompile and optimize the SVGs.  This also allows us to create constant val
 We use Firebase Hosting for the web version of the app.  To deploy:
 
 ```
-flutter build web
+./scripts/build.sh
 firebase deploy
 ```

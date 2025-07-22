@@ -13,7 +13,8 @@ class GameService extends _$GameService {
   Future<void> createGame(String accessToken) async {
     final response = await http.post(
       Uri.parse(
-        'http://localhost:8080/games',
+        const String.fromEnvironment('API_BASE_URL',
+            defaultValue: 'http://localhost:8080/games'),
       ),
       headers: {
         'Authorization': 'Bearer $accessToken',

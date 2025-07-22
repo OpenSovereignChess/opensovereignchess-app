@@ -21,23 +21,23 @@ class GameScreen extends ConsumerWidget {
             ),
             OutlinedButton(
               onPressed: () async {
-                final user =
-                    await ref.read(authServiceProvider.notifier).currentUser;
-                if (user == null) {
-                  print('User is not logged in, signing in anonymously...');
-                  await ref
-                      .read(authServiceProvider.notifier)
-                      .signInAnonymously();
-                } else {
-                  print('User is logged in...');
-                }
-                print('Creating game...');
-                await ref.read(gameServiceProvider.notifier).createGame(
-                      (await ref
-                              .read(authServiceProvider.notifier)
-                              .currentUser)!
-                          .id,
-                    );
+                //final user =
+                //    await ref.read(authServiceProvider.notifier).currentUser;
+                //if (user == null) {
+                //  //print('User is not logged in, signing in anonymously...');
+                //  await ref
+                //      .read(authServiceProvider.notifier)
+                //      .signInAnonymously();
+                //} else {
+                //  //print('User is logged in...');
+                //}
+                //print('Creating game...');
+                //await ref.read(gameServiceProvider.notifier).createGame(
+                //      (await ref
+                //              .read(authServiceProvider.notifier)
+                //              .currentUser)!
+                //          .id,
+                //    );
               },
               child: const Text('Log in'),
             ),
