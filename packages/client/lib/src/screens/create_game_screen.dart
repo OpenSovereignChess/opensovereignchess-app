@@ -82,28 +82,27 @@ class _StartGameButtonState extends ConsumerState<StartGameButton> {
           child: ElevatedButton(
             onPressed: _isTokenReceived
                 ? () async {
-                    final user = await ref
+                    print('Starting game...');
+                    var session = await ref
                         .read(authServiceProvider.notifier)
-                        .currentUser;
-                    if (user == null) {
+                        .currentSession;
+                    if (session == null) {
                       print('User is not logged in, signing in anonymously...');
                       await ref
                           .read(authServiceProvider.notifier)
                           .signInAnonymously();
-                    } else {
-                      print('User is logged in...');
                     }
-                    print('Creating game...');
-                    final session = await ref
+                    session = await ref
                         .read(authServiceProvider.notifier)
                         .currentSession;
-                    //print('User JWT: ${session!.accessToken}');
-                    await ref.read(gameServiceProvider.notifier).createGame(
-                          (await ref
-                                  .read(authServiceProvider.notifier)
-                                  .currentSession)!
-                              .accessToken,
-                        );
+                    if (session != null) {
+                      print('Creating game...');
+                      await ref
+                          .read(gameServiceProvider.notifier)
+                          .createGame(session.accessToken);
+                    } else {
+                      throw Exception('Could not create anonymous user');
+                    }
                   }
                 : null,
             child: const Text('Start game'),
