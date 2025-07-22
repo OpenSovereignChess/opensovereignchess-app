@@ -45,6 +45,8 @@ class StartGameButton extends ConsumerStatefulWidget {
 
 class _StartGameButtonState extends ConsumerState<StartGameButton> {
   bool _isTokenReceived = false; // Has user passed the CAPTCHA?
+  bool _isSignedIn = false;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -77,37 +79,83 @@ class _StartGameButtonState extends ConsumerState<StartGameButton> {
             },
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
-            onPressed: _isTokenReceived
-                ? () async {
-                    print('Starting game...');
-                    var session = await ref
-                        .read(authServiceProvider.notifier)
-                        .currentSession;
-                    if (session == null) {
-                      print('User is not logged in, signing in anonymously...');
-                      await ref
-                          .read(authServiceProvider.notifier)
-                          .signInAnonymously();
+
+        // Sign in button
+        if (!_isSignedIn) ...[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: _isTokenReceived && !_isLoading
+                  ? () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      try {
+                        print('Signiing in anonymously...');
+                        await ref
+                            .read(authServiceProvider.notifier)
+                            .signInAnonymously();
+                        print('Sign in successful');
+                        setState(() {
+                          _isSignedIn = true;
+                        });
+                      } catch (e) {
+                        print('Sign in failed: $e');
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
                     }
-                    session = await ref
-                        .read(authServiceProvider.notifier)
-                        .currentSession;
-                    if (session != null) {
-                      print('Creating game...');
-                      await ref
-                          .read(gameServiceProvider.notifier)
-                          .createGame(session.accessToken);
-                    } else {
-                      throw Exception('Could not create anonymous user');
-                    }
-                  }
-                : null,
-            child: const Text('Start game'),
+                  : null,
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Sign in'),
+            ),
           ),
-        ),
+        ],
+
+        // Create game button
+        if (_isSignedIn) ...[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ElevatedButton(
+              onPressed: !_isLoading
+                  ? () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      try {
+                        print('Getting current session...');
+                        final session = ref
+                            .read(authServiceProvider.notifier)
+                            .currentSession;
+
+                        if (session != null) {
+                          print(
+                              'Creating game with token: ${session.accessToken}');
+                          await ref
+                              .read(gameServiceProvider.notifier)
+                              .createGame(session.accessToken);
+                          print('Game created successfully');
+                        } else {
+                          throw Exception('No session found');
+                        }
+                      } catch (e) {
+                        print('Create game failed: $e');
+                      } finally {
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    }
+                  : null,
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Start game'),
+            ),
+          ),
+        ],
       ],
     );
   }
