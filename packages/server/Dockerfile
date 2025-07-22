@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+#
 # Official Dart image: https://hub.docker.com/_/dart
 # Specify the Dart SDK base image version using dart:<version> (ex: dart:2.12)
 FROM dart:stable AS build
@@ -16,7 +18,12 @@ RUN mkdir bin
 #COPY . .
 # Ensure packages are still up-to-date if anything has changed
 #RUN dart pub get --offline
-RUN dart compile exe packages/server/bin/server.dart -o bin/server
+RUN --mount=type=secret,id=supabase \
+    . /run/secrets/supabase && \
+    dart compile exe packages/server/bin/server.dart -o bin/server \
+      --define=SUPABASE_URL=$SUPABASE_URL \
+      --define=SUPABASE_SERVICE_KEY=$SUPABASE_SERVICE_KEY \
+      --define=SUPABASE_JWT_SECRET=$SUPABASE_JWT_SECRET
 
 # Build minimal serving image from AOT-compiled `/server` and required system
 # libraries and configuration files stored in `/runtime/` from the build stage.

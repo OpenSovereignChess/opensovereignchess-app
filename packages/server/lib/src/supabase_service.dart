@@ -1,18 +1,15 @@
-import 'package:dotenv/dotenv.dart' show DotEnv;
 import 'package:supabase/supabase.dart' show SupabaseClient;
-
-final env = DotEnv()..load(['.env']);
 
 class SupabaseService {
   late final SupabaseClient _client;
   late final String _jwtSecret;
 
   SupabaseService() {
-    final supabaseUrl = env['SUPABASE_URL'];
-    final supabaseKey = env['SUPABASE_SERVICE_KEY'];
-    final jwtSecret = env['SUPABASE_JWT_SECRET'];
+    final supabaseUrl = const String.fromEnvironment('SUPABASE_URL');
+    final supabaseKey = const String.fromEnvironment('SUPABASE_SERVICE_KEY');
+    final jwtSecret = const String.fromEnvironment('SUPABASE_JWT_SECRET');
 
-    if (supabaseUrl == null || supabaseKey == null || jwtSecret == null) {
+    if (supabaseUrl.isEmpty || supabaseKey.isEmpty || jwtSecret.isEmpty) {
       throw Exception('Supabase environment variables are not set.');
     }
 
@@ -22,11 +19,6 @@ class SupabaseService {
 
   SupabaseClient get client => _client;
   String get jwtSecret => _jwtSecret;
-
-  //Future<String> getUserFromAuthHeader(String authHeaderValue) async {
-  //  final parts = authHeaderValue.split(' ');
-  //  return await _client.getUser(parts[1]);
-  //}
 
   Future<List<Map<String, dynamic>>> createGame(String userId) async {
     final data = await _client.from('games').insert({

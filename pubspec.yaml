@@ -5,5 +5,4 @@ environment:
 workspace:
   - packages/chessboard
   - packages/dartsovereignchess
-  - packages/client
   - packages/server
