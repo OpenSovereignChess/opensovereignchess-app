@@ -2,30 +2,24 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import './supabase_client.dart';
-
 part 'auth_service.g.dart';
 
 @riverpod
 class AuthService extends _$AuthService {
   @override
-  Future<Session?> build() async {
-    final supabase = await ref.read(supabaseClientProvider.future);
-    return supabase.auth.currentSession;
+  SupabaseClient build() {
+    return Supabase.instance.client;
   }
 
   Future<void> signInAnonymously() async {
-    final supabase = await ref.read(supabaseClientProvider.future);
-    await supabase.auth.signInAnonymously();
+    await Supabase.instance.client.auth.signInAnonymously();
   }
 
-  Future<User?> get currentUser async {
-    final supabase = await ref.read(supabaseClientProvider.future);
-    return supabase.auth.currentUser;
+  User? get currentUser {
+    return Supabase.instance.client.auth.currentUser;
   }
 
-  Future<Session?> get currentSession async {
-    final supabase = await ref.read(supabaseClientProvider.future);
-    return supabase.auth.currentSession;
+  Session? get currentSession {
+    return Supabase.instance.client.auth.currentSession;
   }
 }

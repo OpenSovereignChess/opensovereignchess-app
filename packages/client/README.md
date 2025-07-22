@@ -36,5 +36,5 @@ We use Firebase Hosting for the web version of the app.  To deploy:
 
 ```
 ./scripts/build.sh
-firebase deploy
+./scripts/deploy.sh
 ```
