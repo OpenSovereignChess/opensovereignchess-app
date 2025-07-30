@@ -91,7 +91,7 @@ class _StartGameButtonState extends ConsumerState<StartGameButton> {
                         _isLoading = true;
                       });
                       try {
-                        print('Signiing in anonymously...');
+                        print('Signing in anonymously...');
                         await ref
                             .read(authServiceProvider.notifier)
                             .signInAnonymously();
@@ -152,7 +152,7 @@ class _StartGameButtonState extends ConsumerState<StartGameButton> {
                   : null,
               child: _isLoading
                   ? const CircularProgressIndicator()
-                  : const Text('Start game'),
+                  : const Text('Start a game'),
             ),
           ),
         ],

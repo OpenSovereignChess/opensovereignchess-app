@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../../.env
+source .env
 
 dart run \
   --define=SUPABASE_URL=$SUPABASE_URL \

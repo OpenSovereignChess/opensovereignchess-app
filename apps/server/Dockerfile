@@ -6,21 +6,16 @@ FROM dart:stable AS build
 
 # Resolve app dependencies.
 WORKDIR /app
-#COPY pubspec.* ./
-COPY ../.. .
-# Remove packages with `flutter` dependency to avoid `flutter` and `dart` conflict
-RUN rm -rf packages/client
-RUN sed -i '/packages\/client/d' pubspec.yaml
+COPY pubspec.* ./
 RUN dart pub get
-RUN mkdir bin
 
 # Copy app source code and AOT compile it.
-#COPY . .
+COPY . .
 # Ensure packages are still up-to-date if anything has changed
-#RUN dart pub get --offline
+RUN dart pub get --offline
 RUN --mount=type=secret,id=supabase \
     . /run/secrets/supabase && \
-    dart compile exe packages/server/bin/server.dart -o bin/server \
+    dart compile exe bin/server.dart -o bin/server \
       --define=SUPABASE_URL=$SUPABASE_URL \
       --define=SUPABASE_SERVICE_KEY=$SUPABASE_SERVICE_KEY \
       --define=SUPABASE_JWT_SECRET=$SUPABASE_JWT_SECRET

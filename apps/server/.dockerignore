@@ -20,7 +20,7 @@
 **/*.*proj.user
 **/*.dbmdl
 **/*.jfm
-**/bin
+#**/bin
 **/charts
 **/docker-compose*
 **/compose.y*ml

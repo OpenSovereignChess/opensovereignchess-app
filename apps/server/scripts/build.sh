@@ -3,15 +3,14 @@
 echo "Building Docker image for Sovereign Chess Server..."
 
 # Get values for the build args
-source ../../.env
+source .env
 
 # We need to run this command from the root of the monorepo,
 # so it can copy the pubspec files from the workspace root.
-cd ../..
 docker build \
   --progress=plain \
   --tag sovereignchess-server:latest \
-  --file packages/server/Dockerfile \
+  --file Dockerfile \
   --secret id=supabase,src=.env \
   . # Run in current directory
 
