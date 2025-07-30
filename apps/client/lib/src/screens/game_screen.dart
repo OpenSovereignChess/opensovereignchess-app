@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../navigation.dart';
-import '../services/auth_service.dart';
-import '../services/game_service.dart';
+//import '../services/auth_service.dart';
+//import '../services/game_service.dart';
 
 class GameScreen extends ConsumerWidget {
   const GameScreen({super.key});

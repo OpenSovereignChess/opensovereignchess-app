@@ -2,7 +2,6 @@ name: dartsovereignchess
 publish_to: none
 environment:
   sdk: ^3.6.0
-resolution: workspace
 dev_dependencies:
   test: ^1.25.15
 

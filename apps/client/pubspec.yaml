@@ -21,8 +21,6 @@ version: 1.0.0+1
 environment:
   sdk: ^3.6.0-216.1.beta
 
-resolution: workspace
-
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -54,9 +52,9 @@ dependencies:
   firebase_analytics: ^11.4.4
   supabase_flutter: ^2.9.0
   chessboard:
-    path: ../chessboard
+    path: ../../packages/chessboard
   dartsovereignchess:
-    path: ../dartsovereignchess
+    path: ../../packages/dartsovereignchess
   http: ^1.4.0
   cloudflare_turnstile: ^3.3.1
 
