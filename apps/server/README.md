@@ -42,7 +42,7 @@ from the package authors, and more.
 
 ```bash
 # Run local server
-dart run packages/server/bin/server.dart
+dart run apps/server/bin/server.dart
 ```
 
 ## Deploy
