@@ -2,5 +2,10 @@ name: opensovereignchess
 publish_to: none
 environment:
   sdk: ^3.9.0
+workspace:
+  - packages/chessboard
+  - packages/dartsovereignchess
+  - packages/client
+  - packages/server
 dev_dependencies:
   melos: ^7.1.1
