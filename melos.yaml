@@ -3,3 +3,6 @@ name: opensovereignchess
 packages:
   - apps/**
   - packages/**
+
+scripts:
+  hello: echo 'Hello World'
