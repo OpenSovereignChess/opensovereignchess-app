@@ -7,6 +7,7 @@ FROM dart:stable AS build
 # Resolve app dependencies.
 WORKDIR /app
 COPY pubspec.* ./
+COPY pubspec_overrides.template ./pubspec_overrides.yaml
 RUN dart pub get
 
 # Copy app source code and AOT compile it.
