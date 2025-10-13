@@ -2,10 +2,13 @@ import 'package:cloudflare_turnstile/cloudflare_turnstile.dart'
     show CloudflareTurnstile, TurnstileOptions, TurnstileSize, TurnstileTheme;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logging/logging.dart';
 
 import '../navigation.dart';
 import '../services/auth_service.dart';
 import '../services/game_service.dart';
+
+final log = Logger('osc.ui.games');
 
 class CreateGameScreen extends ConsumerWidget {
   const CreateGameScreen({super.key});
@@ -66,13 +69,13 @@ class _StartGameButtonState extends ConsumerState<StartGameButton> {
                 defaultValue: 'http://localhost'),
             options: options,
             onTokenReceived: (String token) {
-              print('Turnstile success');
+              log.info('Turnstile token received: $token');
               setState(() {
                 _isTokenReceived = true;
               });
             },
             onTokenExpired: () {
-              print('Turnstile token expired');
+              log.info('Turnstile token expired');
               setState(() {
                 _isTokenReceived = false;
               });
@@ -91,16 +94,16 @@ class _StartGameButtonState extends ConsumerState<StartGameButton> {
                         _isLoading = true;
                       });
                       try {
-                        print('Signing in anonymously...');
+                        log.info('Signing in anonymously...');
                         await ref
                             .read(authServiceProvider.notifier)
                             .signInAnonymously();
-                        print('Sign in successful');
+                        log.info('Sign in successful');
                         setState(() {
                           _isSignedIn = true;
                         });
                       } catch (e) {
-                        print('Sign in failed: $e');
+                        log.warning('Sign in failed: $e');
                       } finally {
                         setState(() {
                           _isLoading = false;
@@ -126,23 +129,23 @@ class _StartGameButtonState extends ConsumerState<StartGameButton> {
                         _isLoading = true;
                       });
                       try {
-                        print('Getting current session...');
+                        log.info('Getting current session...');
                         final session = ref
                             .read(authServiceProvider.notifier)
                             .currentSession;
 
                         if (session != null) {
-                          print(
+                          log.info(
                               'Creating game with token: ${session.accessToken}');
                           await ref
                               .read(gameServiceProvider.notifier)
                               .createGame(session.accessToken);
-                          print('Game created successfully');
+                          log.info('Game created successfully');
                         } else {
                           throw Exception('No session found');
                         }
                       } catch (e) {
-                        print('Create game failed: $e');
+                        log.severe('Create game failed: $e');
                       } finally {
                         setState(() {
                           _isLoading = false;
