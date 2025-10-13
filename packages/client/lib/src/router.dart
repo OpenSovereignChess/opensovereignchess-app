@@ -27,15 +27,15 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/games',
-      builder: (BuildContext context, GoRouterState state) {
-        return CreateGameScreen();
-      },
-    ),
-    GoRoute(
       path: '/games/:gameId',
       builder: (BuildContext context, GoRouterState state) {
         return GameScreen();
+      },
+    ),
+    GoRoute(
+      path: '/games',
+      builder: (BuildContext context, GoRouterState state) {
+        return CreateGameScreen();
       },
     ),
   ],
