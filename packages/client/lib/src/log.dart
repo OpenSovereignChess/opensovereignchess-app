@@ -22,7 +22,7 @@ void setupLogger() {
   }
 }
 
-class ProviderLogger extends ProviderObserver {
+final class ProviderLogger extends ProviderObserver {
   final _logger = Logger('Provider');
 
   @override
@@ -31,7 +31,7 @@ class ProviderLogger extends ProviderObserver {
     Object? value,
   ) {
     _logger.info(
-      '${provider.name ?? provider.runtimeType} initialized',
+      '${context.provider.name ?? context.provider.runtimeType} initialized',
       value,
     );
   }
@@ -43,7 +43,7 @@ class ProviderLogger extends ProviderObserver {
     StackTrace stackTrace,
   ) {
     _logger.severe(
-      '${provider.name ?? provider.runtimeType} error',
+      '${context.provider.name ?? context.provider.runtimeType} error',
       error,
       stackTrace,
     );
