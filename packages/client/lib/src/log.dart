@@ -27,9 +27,8 @@ class ProviderLogger extends ProviderObserver {
 
   @override
   void didAddProvider(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object? value,
-    ProviderContainer container,
   ) {
     _logger.info(
       '${provider.name ?? provider.runtimeType} initialized',
@@ -39,10 +38,9 @@ class ProviderLogger extends ProviderObserver {
 
   @override
   void providerDidFail(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object error,
     StackTrace stackTrace,
-    ProviderContainer container,
   ) {
     _logger.severe(
       '${provider.name ?? provider.runtimeType} error',
