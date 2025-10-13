@@ -4,8 +4,8 @@ Web app for realtime head-to-head Sovereign Chess.
 
 ```bash
 # Analyze code
-melos analyze
+dart analyze
 
 # Format code
-melos format
+dart format .
 ```
